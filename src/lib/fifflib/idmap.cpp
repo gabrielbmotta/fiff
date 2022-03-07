@@ -4,27 +4,27 @@
 
 #include "fiff/idmap.hpp"
 
-const std::map<int,std::string>& tagKind()
-{
-  static std::map<int,std::string> _tagKind
-  {{100, "FIFF_FILE_ID"},
-   {102, "FIFF_DIR_POINTER"},
-   {103, "FIFF_BLOCK_ID"},
-   {104, "FIFF_BLOCK_START"},
-   {105, "FIFF_BLOCK_END"}};
+std::map<int,std::string> Fiff::Formatting::_tagKind
+{{100, "FIFF_FILE_ID"},
+ {102, "FIFF_DIR_POINTER"},
+ {103, "FIFF_BLOCK_ID"},
+ {104, "FIFF_BLOCK_START"},
+ {105, "FIFF_BLOCK_END"}};
 
+ std::map<int,std::string> Fiff::Formatting::_tagType
+ {{3, "int"}};
+
+const std::map<int,std::string>& Fiff::Formatting::tagKinds()
+{
   return _tagKind;
 }
 
-const std::map<int,std::string>& tagType()
+const std::map<int,std::string>& Fiff::Formatting::tagTypes()
 {
-  static std::map<int,std::string> _tagType
-  {{3, "int"}};
-
   return _tagType;
 }
 
-void replaceIdWithString(std::stringstream& stream,
+void Fiff::Formatting::replaceIdWithString(std::stringstream& stream,
                          const std::map<int,std::string>& map,
                          int id)
 {
@@ -36,15 +36,15 @@ void replaceIdWithString(std::stringstream& stream,
   }
 }
 
-std::stringstream Fiff::humanReadable(const Fiff::Tag& tag){
+std::string Fiff::Formatting::humanReadable(const Fiff::Tag& tag){
   std::stringstream out;
 
-  replaceIdWithString(out, tagKind(), tag.kind);
-  out << "\t\t";
-  replaceIdWithString(out, tagType(), tag.type);
-  out << "\t\t";
-  out << tag.size << "\t\t" << tag.next;
+  replaceIdWithString(out, _tagKind, tag.kind);
+  out << ", data type ";
+  replaceIdWithString(out, _tagType, tag.type);
+  out << ", ";
+  out << tag.size << " bytes, next:" << tag.next;
 
-  return out;
+  return out.str();
 }
 

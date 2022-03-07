@@ -1,4 +1,5 @@
 #include <fiff/file.hpp>
+#include <fiff/idmap.hpp>
 #include <iostream>
 #include <string>
 
@@ -10,7 +11,7 @@ int main(int argc, char* argv[])
   while(!fiffFile.isAtEnd())
   {
     auto tag = fiffFile.readNextTag();
-    std::cout << tag << "\n";
+    std::cout << Fiff::Formatting::humanReadable(tag) << "\n";
   }
 
   return 0;

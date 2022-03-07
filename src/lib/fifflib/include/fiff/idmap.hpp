@@ -12,7 +12,21 @@
 #include <map>
 
 namespace Fiff {
-std::stringstream humanReadable(const Fiff::Tag&);
+class Formatting{
+public:
+  static std::string humanReadable(const Fiff::Tag&);
+  static const std::map<int,std::string>& tagKinds();
+  static const std::map<int,std::string>& tagTypes();
+
+private:
+  static void replaceIdWithString(std::stringstream& stream,
+                           const std::map<int,std::string>& map,
+                           int id);
+
+  static std::map<int,std::string> _tagKind;
+  static std::map<int,std::string> _tagType;
+};
+
 }
 
 #endif //FIFFFILEEXPLORER_IDMAP_HPP
