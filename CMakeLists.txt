@@ -3,4 +3,6 @@ project(FiffFileExplorer)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(fromfiff fromfiff.cpp)
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/)
+
+add_subdirectory(src)

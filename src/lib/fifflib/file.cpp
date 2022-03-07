@@ -1,51 +1,15 @@
-//
-// Created by Gabriel Motta on 3/4/22.
-//
+#include "include/fiff/file.hpp"
 
-#ifndef FIFFFILEEXPLORER_FIFFREADER_HPP
-#define FIFFFILEEXPLORER_FIFFREADER_HPP
-
-#include "fifftag.hpp"
-#include "endian.hpp"
-
-#include <fstream>
-#include <string>
-
-class FiffFile {
-public:
-  FiffFile(): mFileIn() , mFileEndianess(RelativeEndian::undetermined){};
-  explicit FiffFile(const std::string &filename);
-  explicit FiffFile(const std::string &filename, bool sameEndianAsSystem);
-
-  void open(const std::string &filename);
-  void close();
-  bool isOpen() const;
-
-  Tag readNextTag();
-  Tag peekNextTag();
-
-  bool isAtEnd() const;
-
-private:
-  void checkEndianess();
-  void readTagFromFile(Tag& tag);
-  void swapEndianess(Tag& tag);
-  int fileStartKind();
-
-  RelativeEndian mFileEndianess;
-  std::ifstream mFileIn;
-};
-
-FiffFile::FiffFile(const std::string &filename)
-: mFileIn()
-, mFileEndianess(RelativeEndian::undetermined)
+Fiff::File::File(const std::string &filename)
+        : mFileIn()
+        , mFileEndianess(RelativeEndian::undetermined)
 {
   open(filename);
   checkEndianess();
 }
 
-FiffFile::FiffFile(const std::string &filename, bool sameEndianAsSystem)
-: mFileIn()
+Fiff::File::File(const std::string &filename, bool sameEndianAsSystem)
+        : mFileIn()
 {
   if(sameEndianAsSystem){
     mFileEndianess = RelativeEndian::same_as_system;
@@ -55,24 +19,24 @@ FiffFile::FiffFile(const std::string &filename, bool sameEndianAsSystem)
   open(filename);
 }
 
-void FiffFile::open(const std::string &filename)
+void Fiff::File::open(const std::string &filename)
 {
   mFileIn.open(filename.c_str(), std::ios::in | std::ios::binary);
 }
 
-void FiffFile::close()
+void Fiff::File::close()
 {
   mFileIn.close();
 }
 
-bool FiffFile::isOpen() const
+bool Fiff::File::isOpen() const
 {
   return mFileIn.is_open();
 }
 
-Tag FiffFile::readNextTag()
+Fiff::Tag Fiff::File::readNextTag()
 {
-  Tag tag;
+  Fiff::Tag tag;
   readTagFromFile(tag);
 
   if(mFileEndianess == RelativeEndian::different_from_system)
@@ -86,20 +50,20 @@ Tag FiffFile::readNextTag()
   return tag;
 }
 
-Tag FiffFile::peekNextTag()
+Fiff::Tag Fiff::File::peekNextTag()
 {
   std::streampos position = mFileIn.tellg();
-  Tag tag = readNextTag();
+  Fiff::Tag tag = readNextTag();
   mFileIn.seekg(position);
   return tag;
 }
 
-bool FiffFile::isAtEnd() const
+bool Fiff::File::isAtEnd() const
 {
   return mFileIn.eof();
 }
 
-void FiffFile::checkEndianess()
+void Fiff::File::checkEndianess()
 {
   mFileEndianess = RelativeEndian::undetermined;
   int32_t kind = fileStartKind();
@@ -117,7 +81,7 @@ void FiffFile::checkEndianess()
   }
 }
 
-void FiffFile::readTagFromFile(Tag& tag)
+void Fiff::File::readTagFromFile(Tag& tag)
 {
   mFileIn.read(reinterpret_cast<char*>(&tag.kind), sizeof(tag.kind));
   mFileIn.read(reinterpret_cast<char*>(&tag.type), sizeof(tag.type));
@@ -125,7 +89,7 @@ void FiffFile::readTagFromFile(Tag& tag)
   mFileIn.read(reinterpret_cast<char*>(&tag.next), sizeof(tag.next));
 }
 
-void FiffFile::swapEndianess(Tag& tag)
+void Fiff::File::swapEndianess(Tag& tag)
 {
   endswap(&tag.kind);
   endswap(&tag.type);
@@ -134,7 +98,7 @@ void FiffFile::swapEndianess(Tag& tag)
 }
 
 
-int FiffFile::fileStartKind()
+int Fiff::File::fileStartKind()
 {
   std::streampos position = mFileIn.tellg();
   int32_t kind;
@@ -142,5 +106,3 @@ int FiffFile::fileStartKind()
   mFileIn.seekg(position);
   return kind;
 }
-
-#endif //FIFFFILEEXPLORER_FIFFREADER_HPP
