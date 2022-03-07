@@ -32,7 +32,6 @@ private:
   void swapEndianess(Tag& tag);
   int fileStartKind();
 
-
   RelativeEndian mFileEndianess;
   std::ifstream mFileIn;
 };

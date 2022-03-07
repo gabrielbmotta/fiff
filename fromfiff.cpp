@@ -1,4 +1,3 @@
-
 #include "fifftag.hpp"
 #include "fiffreader.hpp"
 #include <iostream>
