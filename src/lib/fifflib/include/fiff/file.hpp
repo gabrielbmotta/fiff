@@ -16,12 +16,9 @@ namespace Fiff {
 
 class File {
 public:
-  File() : mFileIn(), mFileEndianess(RelativeEndian::undetermined)
-  {};
+  File() = default;
 
   explicit File(const std::string &filename);
-
-  explicit File(const std::string &filename, bool sameEndianAsSystem);
 
   void open(const std::string &filename);
   void close();
@@ -36,12 +33,7 @@ public:
   bool isAtEnd() const;
 
 private:
-  void checkEndianess();
-  void readTagFromFile(Tag &tag);
-  void swapEndianess(Tag &tag);
-  int fileStartKind();
-
-  RelativeEndian mFileEndianess;
+  TagLoader mTagLoader;
   std::ifstream mFileIn;
 };
 

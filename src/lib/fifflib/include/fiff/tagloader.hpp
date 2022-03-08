@@ -9,18 +9,25 @@
 
 #include <io/endian.hpp>
 #include <iostream>
+#include <fstream>
 
 namespace Fiff{
 
 class TagLoader
 {
+public:
+  TagLoader();
+  void determineEndianess(std::ifstream& stream, int expectedId);
+
   Tag loadNextTag(std::ifstream& stream);
 
 private:
   void loadMetaData(Tag& tag, std::ifstream& stream);
   void loadData(Tag& tag, std::ifstream& stream);
 
-  RelativeEndian endian;
+  void promptEndianessFromUser(int32_t opt1, int32_t opt2);
+
+  RelativeEndian m_RelativeEndian;
 };
 }
 
