@@ -6,7 +6,6 @@
 int main(int argc, char* argv[])
 {
   Fiff::File fiffFile(std::string{argv[1]});
-  Fiff::Formatting::humanReadablePrint(fiffFile);
-
+  std::cout << Fiff::Formatting::humanReadable(fiffFile);
   return 0;
 }

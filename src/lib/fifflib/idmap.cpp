@@ -288,42 +288,20 @@ const std::map<int,std::string>& Fiff::Formatting::tagTypes()
   return _tagType;
 }
 
-void Fiff::Formatting::replaceIdWithString(std::stringstream& stream,
-                         const std::map<int,std::string>& map,
-                         int id)
-{
-  auto mapEntry = map.find(id);
-  if (mapEntry != map.end()) {
-    stream << mapEntry->second;
-  } else {
-    stream << id;
-  }
+std::string Fiff::Formatting::humanReadable(const Fiff::Tag& tag){
+  std::stringstream stream;
+
+   stream << formatTagMetaData(tag) << formatTagData(tag);
+
+  return stream.str();
 }
 
-void Fiff::Formatting::humanReadablePrint(const Fiff::Tag& tag){
-  std::stringstream out;
-
-  replaceIdWithString(out, _tagKind, tag.kind);
-  out << ", ";
-  replaceIdWithString(out, _tagType, tag.type);
-  out << ", ";
-  out << tag.size << " bytes";
-  if (tag.size > 1000){
-    out.precision(1);
-    out << "("<<(tag.size/1000) << "KB)";
-  }
-  if (tag.next != 0){
-    out <<  ", next:" << tag.next;
-  }
-
-  std::cout << out.str();
-}
-
-void Fiff::Formatting::humanReadablePrint(Fiff::File& file)
+std::string Fiff::Formatting::humanReadable(Fiff::File& file)
 {
+  std::stringstream stream;
   if(!file.isOpen()){
     std::cerr << "Cannot print file that is not open.";
-    return;
+    return std::string{};
   }
 
   char padding = '\t';
@@ -335,13 +313,56 @@ void Fiff::Formatting::humanReadablePrint(Fiff::File& file)
       --indent;
     }
     for (int i = 0 ; i < indent ; ++i){
-      std::cout << padding;
+      stream << padding;
     }
-    humanReadablePrint(tag);
-    std::cout << "\n";
+    stream << humanReadable(tag);
+    stream << "\n";
     if(tag.kind == 104){
       ++indent;
     }
   }
+
+  return stream.str();
 }
+
+std::string Fiff::Formatting::getMapValue(const std::map<int,std::string>& map,
+                                          int id)
+{
+  std::stringstream stream;
+
+  auto mapEntry = map.find(id);
+  if (mapEntry != map.end()) {
+    stream << mapEntry->second;
+  } else {
+    stream << id;
+  }
+
+  return stream.str();
+}
+
+std::string Fiff::Formatting::formatTagMetaData(const Fiff::Tag &tag)
+{
+  std::stringstream stream;
+
+  stream << getMapValue(_tagKind, tag.kind);
+  stream << ", ";
+  stream << getMapValue(_tagType, tag.type);
+  stream << ", ";
+  stream << tag.size << " bytes";
+  if (tag.size > 1000){
+    stream.precision(1);
+    stream << "("<<(tag.size/1000) << "KB)";
+  }
+  if (tag.next != 0){
+    stream <<  ", next:" << tag.next;
+  }
+
+  return stream.str();
+}
+
+std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
+{
+  return std::string{};
+}
+
 
