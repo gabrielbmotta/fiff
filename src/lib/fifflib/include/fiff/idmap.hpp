@@ -6,6 +6,8 @@
 #define FIFFFILEEXPLORER_IDMAP_HPP
 
 #include "tag.hpp"
+#include "file.hpp"
+#include <io/endian.hpp>
 
 #include <string>
 #include <sstream>
@@ -14,7 +16,9 @@
 namespace Fiff {
 class Formatting{
 public:
-  static std::string humanReadable(const Fiff::Tag&);
+  static void humanReadablePrint(const Fiff::Tag&);
+  static void humanReadablePrint(Fiff::File&);
+
   static const std::map<int,std::string>& tagKinds();
   static const std::map<int,std::string>& tagTypes();
 

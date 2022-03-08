@@ -6,6 +6,7 @@
 #define FileEXPLORER_FIFFREADER_HPP
 
 #include "tag.hpp"
+#include "tagloader.hpp"
 
 #include <io/endian.hpp>
 #include <fstream>
@@ -23,24 +24,21 @@ public:
   explicit File(const std::string &filename, bool sameEndianAsSystem);
 
   void open(const std::string &filename);
-
   void close();
-
   bool isOpen() const;
 
   Tag readNextTag();
-
   Tag peekNextTag();
+
+  void seek(std::streampos pos);
+  std::streampos position();
 
   bool isAtEnd() const;
 
 private:
   void checkEndianess();
-
   void readTagFromFile(Tag &tag);
-
   void swapEndianess(Tag &tag);
-
   int fileStartKind();
 
   RelativeEndian mFileEndianess;

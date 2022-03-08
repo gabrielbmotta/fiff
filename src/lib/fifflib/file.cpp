@@ -1,4 +1,5 @@
 #include "include/fiff/file.hpp"
+#include "include/fiff/tagloader.hpp"
 
 Fiff::File::File(const std::string &filename)
         : mFileIn()
@@ -38,6 +39,7 @@ Fiff::Tag Fiff::File::readNextTag()
 {
   Fiff::Tag tag;
   readTagFromFile(tag);
+
 
   if(mFileEndianess == RelativeEndian::different_from_system)
   {
@@ -97,7 +99,6 @@ void Fiff::File::swapEndianess(Tag& tag)
   endswap(&tag.next);
 }
 
-
 int Fiff::File::fileStartKind()
 {
   std::streampos position = mFileIn.tellg();
@@ -105,4 +106,14 @@ int Fiff::File::fileStartKind()
   mFileIn.read(reinterpret_cast<char*>(&kind), sizeof(kind));
   mFileIn.seekg(position);
   return kind;
+}
+
+void Fiff::File::seek(std::streampos pos)
+{
+  mFileIn.seekg(pos);
+}
+
+std::streampos Fiff::File::position()
+{
+  return mFileIn.tellg();
 }
