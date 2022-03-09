@@ -31,6 +31,7 @@ private:
 
   static std::map<int,std::string> _tagKind;
   static std::map<int,std::string> _tagType;
+  static std::map<int,std::string> _blockID;
 };
 
 }

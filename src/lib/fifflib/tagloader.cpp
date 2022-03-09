@@ -3,6 +3,7 @@
 //
 
 #include "include/fiff/tagloader.hpp"
+#include "include/fiff/datatypes.hpp"
 
 Fiff::TagLoader::TagLoader()
 : m_RelativeEndian(RelativeEndian::undetermined)
@@ -55,9 +56,48 @@ void Fiff::TagLoader::loadMetaData(Fiff::Tag &tag, std::ifstream &stream)
 
 void Fiff::TagLoader::loadData(Fiff::Tag &tag, std::ifstream &stream)
 {
-  tag.data = new char[tag.size];
+  switch(tag.type)
+  {
+    case 3:
+    {
+      auto *temp = new int32_t;
+      stream.read(reinterpret_cast<char *>(temp), tag.size);
+      if(m_RelativeEndian == RelativeEndian::different_from_system)
+      {
+        endswap(temp);
+      }
+      tag.data = temp;
+      break;
+    }
+    case 30:
+    {
+    auto temp = new ch_info_rec;
+      stream.read(reinterpret_cast<char *>(&temp->scanNo), sizeof(int32_t));
+      stream.read(reinterpret_cast<char *>(&temp->logNo), sizeof(int32_t));
+      stream.read(reinterpret_cast<char *>(&temp->kind), sizeof(int32_t));
+      stream.read(reinterpret_cast<char *>(&temp->range), sizeof(float));
+      stream.read(reinterpret_cast<char *>(&temp->cal), sizeof(float));
 
-  stream.read(reinterpret_cast<char*>(tag.data), tag.size);
+
+      stream.read(reinterpret_cast<char *>(temp) + 20, 96-20);
+      if(m_RelativeEndian == RelativeEndian::different_from_system)
+      {
+        endswap(&temp->scanNo);
+        endswap(&temp->logNo);
+        endswap(&temp->kind);
+        endswap(&temp->range);
+        endswap(&temp->cal);
+      }
+      tag.data = temp;
+      break;
+    }
+
+    default:
+    {
+      tag.data = new char[tag.size];
+      stream.read(reinterpret_cast<char *>(tag.data), tag.size);
+    }
+  }
 }
 
 void Fiff::TagLoader::promptEndianessFromUser(int32_t opt1, int32_t opt2)
@@ -74,11 +114,3 @@ void Fiff::TagLoader::promptEndianessFromUser(int32_t opt1, int32_t opt2)
     m_RelativeEndian = RelativeEndian::different_from_system;
   }
 }
-
-
-
-
-
-
-
-

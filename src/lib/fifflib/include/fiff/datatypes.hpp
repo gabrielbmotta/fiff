@@ -37,7 +37,7 @@ struct ch_info_rec {
   int32_t kind;         // Kind of the channel described (MEG, EEG, EOG, etc.)
   float range;          // The raw data values must be multiplied by this to get into volts at the electronics output.
   float cal;            // Calibration of the channel. If the raw data values are multiplied by range*cal, the result is in units given by unit and unit_mul.
-  fiff_ch_pos_t chpos;  // Channel position.
+  ch_pos_t chpos;  // Channel position.
   int32_t unit;         // The real-world unit-of measure.
   int32_t unit_mul;     // The unit multiplier. The result given by range*cal*data is in units unit*10^unit_mul.
   char ch_name[16];     // Descriptive name for the channel.

@@ -3,6 +3,139 @@
 //
 
 #include "fiff/idmap.hpp"
+#include "fiff/datatypes.hpp"
+
+const std::map<int,std::string>& Fiff::Formatting::tagKinds()
+{
+  return _tagKind;
+}
+
+const std::map<int,std::string>& Fiff::Formatting::tagTypes()
+{
+  return _tagType;
+}
+
+std::string Fiff::Formatting::humanReadable(const Fiff::Tag& tag){
+  std::stringstream stream;
+
+   stream << formatTagMetaData(tag) << ", " << formatTagData(tag);
+
+  return stream.str();
+}
+
+std::string Fiff::Formatting::humanReadable(Fiff::File& file)
+{
+  std::stringstream stream;
+  if(!file.isOpen()){
+    std::cerr << "Cannot print file that is not open.";
+    return std::string{};
+  }
+
+  char padding = '\t';
+  int indent = 0;
+
+  while(file.isOpen() && !file.isAtEnd()){
+    auto tag = file.readNextTag();
+    if (tag.kind == 105){
+      --indent;
+    }
+    for (int i = 0 ; i < indent ; ++i){
+      stream << padding;
+    }
+    stream << humanReadable(tag);
+    stream << "\n";
+    if(tag.kind == 104){
+      ++indent;
+    }
+  }
+
+  return stream.str();
+}
+
+std::string Fiff::Formatting::getMapValue(const std::map<int,std::string>& map,
+                                          int id)
+{
+  std::stringstream stream;
+
+  auto mapEntry = map.find(id);
+  if (mapEntry != map.end()) {
+    stream << mapEntry->second;
+  } else {
+    stream << id;
+  }
+
+  return stream.str();
+}
+
+std::string Fiff::Formatting::formatTagMetaData(const Fiff::Tag &tag)
+{
+  std::stringstream stream;
+
+  stream << getMapValue(_tagKind, tag.kind);
+  stream << ", ";
+  stream << getMapValue(_tagType, tag.type);
+  stream << ", ";
+  stream << tag.size << " bytes";
+  stream <<  ", next: " << tag.next;
+
+  return stream.str();
+}
+
+std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
+{
+  std::stringstream stream;
+
+  switch (tag.type){
+    case 3:
+    {
+      stream << "data: ";
+      if(tag.kind == 104 || tag.kind == 105)
+      {
+        stream << getMapValue(_blockID, *static_cast<int *>(tag.data));
+      } else
+      {
+        stream << std::to_string(*static_cast<int *>(tag.data));
+      }
+      break;
+    }
+    case 30:
+    {
+      stream << "data: ";
+      auto info = static_cast<ch_info_rec *>(tag.data);
+      stream << "scanNo " << info->scanNo << ", ";
+      stream << "logNo " << info->logNo << ", ";
+      stream << "kind " << info->kind << ", ";
+      stream.precision(9);
+      stream << "range " << info->range << ", ";
+      stream << "cal " << info->cal;
+    }
+  }
+
+
+//  {0, "(0)void"},
+//  {1, "(1)byte"},
+//  {2, "(2)short"},
+//  {3, "(3)int"},
+//  {4, "(4)float"},
+//  {5, "(5)double"},
+//  {6, "(6)julian"},
+//  {7, "(7)ushort"},
+//  {8, "(8)uint"},
+//  {10, "(10)string"},
+//  {13, "(13)dau_pack13"},
+//  {14, "(14)dau_pack14"},
+//  {16, "(16)dau_pack16"},
+//  {23, "(23)old_pack"},
+//  {30, "(30)ch_info_struct"},
+//  {31, "(31)id_struct"},
+//  {32, "(32)dir_entry_struct"},
+//  {33, "(33)dig_point_struct"},
+//  {34, "(34)ch_pos_struct"},
+//  {35, "(35)coord_trans_struct"},
+//  {36, "(36)dig_string_struct"},
+//  {37, "(37)stream_segment_struct"},};
+  return stream.str();
+}
 
 std::map<int,std::string> Fiff::Formatting::_tagKind
         {{1, "(1)new_file"},
@@ -278,91 +411,33 @@ std::map<int, std::string> Fiff::Formatting::_tagType
          {36, "(36)dig_string_struct"},
          {37, "(37)stream_segment_struct"},};
 
-const std::map<int,std::string>& Fiff::Formatting::tagKinds()
-{
-  return _tagKind;
-}
 
-const std::map<int,std::string>& Fiff::Formatting::tagTypes()
-{
-  return _tagType;
-}
-
-std::string Fiff::Formatting::humanReadable(const Fiff::Tag& tag){
-  std::stringstream stream;
-
-   stream << formatTagMetaData(tag) << formatTagData(tag);
-
-  return stream.str();
-}
-
-std::string Fiff::Formatting::humanReadable(Fiff::File& file)
-{
-  std::stringstream stream;
-  if(!file.isOpen()){
-    std::cerr << "Cannot print file that is not open.";
-    return std::string{};
-  }
-
-  char padding = '\t';
-  int indent = 0;
-
-  while(file.isOpen() && !file.isAtEnd()){
-    auto tag = file.readNextTag();
-    if (tag.kind == 105){
-      --indent;
-    }
-    for (int i = 0 ; i < indent ; ++i){
-      stream << padding;
-    }
-    stream << humanReadable(tag);
-    stream << "\n";
-    if(tag.kind == 104){
-      ++indent;
-    }
-  }
-
-  return stream.str();
-}
-
-std::string Fiff::Formatting::getMapValue(const std::map<int,std::string>& map,
-                                          int id)
-{
-  std::stringstream stream;
-
-  auto mapEntry = map.find(id);
-  if (mapEntry != map.end()) {
-    stream << mapEntry->second;
-  } else {
-    stream << id;
-  }
-
-  return stream.str();
-}
-
-std::string Fiff::Formatting::formatTagMetaData(const Fiff::Tag &tag)
-{
-  std::stringstream stream;
-
-  stream << getMapValue(_tagKind, tag.kind);
-  stream << ", ";
-  stream << getMapValue(_tagType, tag.type);
-  stream << ", ";
-  stream << tag.size << " bytes";
-  if (tag.size > 1000){
-    stream.precision(1);
-    stream << "("<<(tag.size/1000) << "KB)";
-  }
-  if (tag.next != 0){
-    stream <<  ", next:" << tag.next;
-  }
-
-  return stream.str();
-}
-
-std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
-{
-  return std::string{};
-}
-
-
+std::map<int, std::string> Fiff::Formatting::_blockID
+        {{999, "(999)root"},
+         {100, "(100)meas"},
+         {101, "(101)meas_info"},
+         {102, "(102)raw_data"},
+         {103, "(103)processed_data"},
+         {104, "(104)evoked"},
+         {105, "(105)aspect"},
+         {106, "(106)subject"},
+         {107, "(107)isotrak"},
+         {108, "(108)hpi_meas"},
+         {109, "(109)hpi_result"},
+         {110, "(110)hpi_coil"},
+         {111, "(111)project"},
+         {112, "(112)continuous_data"},
+         {113, "(113)ch_info"},
+         {114, "(114)void"},
+         {115, "(115)events"},
+         {116, "(116)index"},
+         {117, "(117)dacq_pars"},
+         {118, "(118)ref"},
+         {119, "(119)ias_raw_data"},
+         {120, "(120)ias_aspect"},
+         {121, "(121)hpi_subsystem"},
+         {122, "(122)phantom_subsystem"},
+         {123, "(123)status_subsystem"},
+         {124, "(124)device_info"},
+         {125, "(125)helium_info"},
+         {126, "(126)channel_info"}};
