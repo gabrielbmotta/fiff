@@ -71,9 +71,9 @@ std::string Fiff::Formatting::formatTagMetaData(const Fiff::Tag &tag)
 {
   std::stringstream stream;
 
-  stream << getMapValue(_tagKind, tag.kind);
+  stream << "(" << tag.kind << ")" << getMapValue(_tagKind, tag.kind);
   stream << ", ";
-  stream << getMapValue(_tagType, tag.type);
+  stream << "(" << tag.type << ")" << getMapValue(_tagType, tag.type);
   stream << ", ";
   stream << tag.size << " bytes";
   stream <<  ", next: " << tag.next;
@@ -91,7 +91,7 @@ std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
       stream << "data: ";
       if(tag.kind == 104 || tag.kind == 105)
       {
-        stream << getMapValue(_blockID, *static_cast<int *>(tag.data));
+        stream << "(" << *static_cast<int *>(tag.data) << ")" << getMapValue(_blockID, *static_cast<int *>(tag.data));
       } else
       {
         stream << std::to_string(*static_cast<int *>(tag.data));
