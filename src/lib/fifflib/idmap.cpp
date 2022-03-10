@@ -15,22 +15,17 @@ const std::map<int,std::string>& Fiff::Formatting::tagTypes()
   return _tagType;
 }
 
-std::string Fiff::Formatting::humanReadable(const Fiff::Tag& tag){
+std::string Fiff::Formatting::fullTagAsString(const Fiff::Tag& tag){
   std::stringstream stream;
 
-   stream << formatTagMetaData(tag) << ", " << formatTagData(tag);
+  stream << formatTagMetaData(tag) << ", " << formatTagData(tag);
 
   return stream.str();
 }
 
-std::string Fiff::Formatting::humanReadable(Fiff::File& file)
+std::string Fiff::Formatting::fullFileAsString(Fiff::File& file)
 {
   std::stringstream stream;
-  if(!file.isOpen()){
-    std::cerr << "Cannot print file that is not open.";
-    return std::string{};
-  }
-
   char padding = '\t';
   int indent = 0;
 
@@ -42,7 +37,41 @@ std::string Fiff::Formatting::humanReadable(Fiff::File& file)
     for (int i = 0 ; i < indent ; ++i){
       stream << padding;
     }
-    stream << humanReadable(tag);
+    stream << fullTagAsString(tag);
+    stream << "\n";
+    if(tag.kind == 104){
+      ++indent;
+    }
+  }
+
+  return stream.str();
+}
+
+std::string Fiff::Formatting::toString(const Fiff::Tag &tag)
+{
+  std::stringstream stream;
+
+  stream << formatTagMetaData(tag) << ", " << formatTagData(tag);
+
+  return stream.str();
+}
+
+std::string Fiff::Formatting::toString(Fiff::File &file)
+{
+  std::stringstream stream;
+  char padding = '\t';
+  int indent = 0;
+
+  while(file.isOpen() && !file.isAtEnd()){
+    auto tag = file.readNextTag();
+
+    if (tag.kind == 105){
+      --indent;
+    }
+    for (int i = 0 ; i < indent ; ++i){
+      stream << padding;
+    }
+    stream << toString(tag);
     stream << "\n";
     if(tag.kind == 104){
       ++indent;
@@ -110,30 +139,6 @@ std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
       stream << "cal " << info->cal;
     }
   }
-
-
-//  {0, "(0)void"},
-//  {1, "(1)byte"},
-//  {2, "(2)short"},
-//  {3, "(3)int"},
-//  {4, "(4)float"},
-//  {5, "(5)double"},
-//  {6, "(6)julian"},
-//  {7, "(7)ushort"},
-//  {8, "(8)uint"},
-//  {10, "(10)string"},
-//  {13, "(13)dau_pack13"},
-//  {14, "(14)dau_pack14"},
-//  {16, "(16)dau_pack16"},
-//  {23, "(23)old_pack"},
-//  {30, "(30)ch_info_struct"},
-//  {31, "(31)id_struct"},
-//  {32, "(32)dir_entry_struct"},
-//  {33, "(33)dig_point_struct"},
-//  {34, "(34)ch_pos_struct"},
-//  {35, "(35)coord_trans_struct"},
-//  {36, "(36)dig_string_struct"},
-//  {37, "(37)stream_segment_struct"},};
   return stream.str();
 }
 

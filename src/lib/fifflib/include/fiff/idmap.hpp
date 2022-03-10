@@ -12,12 +12,16 @@
 #include <string>
 #include <sstream>
 #include <map>
+#include <unordered_set>
 
 namespace Fiff {
 class Formatting{
 public:
-  static std::string humanReadable(const Fiff::Tag&);
-  static std::string humanReadable(Fiff::File&);
+  static std::string fullTagAsString(const Fiff::Tag&);
+  static std::string fullFileAsString(Fiff::File&);
+
+  std::string toString(const Fiff::Tag&);
+  std::string toString(Fiff::File&);
 
   static const std::map<int,std::string>& tagKinds();
   static const std::map<int,std::string>& tagTypes();
@@ -34,6 +38,7 @@ private:
   static std::map<int,std::string> _blockID;
 };
 
+  std::unordered_set<int> tagFilter;
 }
 
 #endif //FIFFFILEEXPLORER_IDMAP_HPP

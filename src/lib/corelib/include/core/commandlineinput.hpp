@@ -13,8 +13,8 @@ class CommandLineInput {
 public:
   CommandLineInput(int &argc, char *argv[]);
   std::string getValueForTag(const std::string &option) const;
-  bool charTagExists(const std::string &option) const;
-  bool stringTagExists(const std::string &option) const;
+  std::string getValueThatEndsWith(const std::string& substr);
+  bool tagExists(const std::string &option) const;
 
 private:
   std::vector <std::string> args;

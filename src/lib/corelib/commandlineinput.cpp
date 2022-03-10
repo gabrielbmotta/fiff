@@ -21,12 +21,12 @@ std::string Core::CommandLineInput::getValueForTag(const std::string &option) co
   return {};
 }
 
-bool Core::CommandLineInput::charTagExists(const std::string &option) const
+bool Core::CommandLineInput::tagExists(const std::string &option) const
 {
   return std::find(this->args.begin(), this->args.end(), option) != this->args.end();
 }
 
-bool Core::CommandLineInput::stringTagExists(const std::string &option) const
+std::string Core::CommandLineInput::getValueThatEndsWith(const std::string &substr)
 {
-  return std::find(this->args.begin(), this->args.end(), option) != this->args.end();
+  return std::string();
 }
