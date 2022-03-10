@@ -8,10 +8,6 @@ int main(int argc, char* argv[])
 {
   Fiff::File fiffFile(std::string{argv[1]});
 
-  std::string file;
-//  if ()
-  Fiff::Formatting formater;
-
-  std::cout << formater.toString(fiffFile);
+  std::cout << Fiff::Formatting::fullFileAsString(fiffFile);
   return 0;
 }
