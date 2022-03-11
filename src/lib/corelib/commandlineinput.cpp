@@ -32,9 +32,11 @@ std::pair<bool, std::string> Core::CommandLineInput::getValueForTag(const std::s
   return {false,{}};
 }
 
-bool Core::CommandLineInput::tagExists(const std::string &option) const
+bool Core::CommandLineInput::tagExists(const std::string &option, const std::string &shortoption) const
 {
-  return std::find(this->args.begin(), this->args.end(), option) != this->args.end();
+  return std::find(this->args.begin(), this->args.end(), option) != this->args.end() ||
+         std::find(this->args.begin(), this->args.end(), shortoption) != this->args.end();
+
 }
 
 std::string Core::CommandLineInput::getValueThatEndsWith(const std::string &substr)

@@ -15,6 +15,16 @@ int main(int argc, char* argv[])
   std::map<int,std::string> map;
   std::string user_input;
 
+  if(cmdin.tagExists("--help","-h")){
+    std::cout << "|---       qfiff       ---|\n\n"
+              << "Only one of the following can be used at a time. No subsequent input interpreted as 'all'.\n"
+              << "-k --tag-kind <input>\t Prints fiff tag kinds with matching number / name.\n"
+              << "-t --data-type <input>\t Prints fiff data types with matching number / name.\n"
+              << "-b --block-id <input>\t Prints block IDs with matching number / name.\n\n"
+              << "-h --help \t\t Prints help text.\n";
+
+  }
+
   auto kind_input = cmdin.getValueForTag("--tag-kind", "-k");
   auto type_input = cmdin.getValueForTag("--data-type", "-t");
   auto block_input = cmdin.getValueForTag("--block-id", "-b");

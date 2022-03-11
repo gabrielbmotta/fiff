@@ -10,13 +10,20 @@ int main(int argc, char* argv[])
   Core::CommandLineInput cmdin(argc, argv);
   Fiff::Formatting formater;
 
-  std::string filePath = cmdin.getValueThatEndsWith(".fif");
-  if(filePath.empty()){
-    std::cerr <<"Could not find file.\n";
-    return 1;
+  if(cmdin.tagExists("--help","-h")){
+    std::cout << "|---      printfiff      ---|\n\n"
+              << "Usage: printfiff /path/to/file.fif [--tag-kind kind1,kind1,...]\n\n"
+              << "-k --tag-kind <input>\t Prints only the tags with matching tag type number.\n\n"
+              << "-h --help \t\t Prints help text.\n";
   }
 
-  std::string tags = cmdin.getValueForTag("--tags", "-t").second;
+
+  std::string filePath = cmdin.getValueThatEndsWith(".fif");
+  if(filePath.empty()){
+    return 0;
+  }
+
+  std::string tags = cmdin.getValueForTag("--tag-kind", "-k").second;
   if(!tags.empty()) {
     std::vector tag_set = Core::StringManipulation::getVectorFrom<int>(tags, ',');
     formater.setTagFilter(tag_set);
