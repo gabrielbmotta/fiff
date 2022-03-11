@@ -13,6 +13,7 @@
 #include <sstream>
 #include <map>
 #include <unordered_set>
+#include <vector>
 
 namespace Fiff {
 class Formatting{
@@ -26,6 +27,8 @@ public:
   static const std::map<int,std::string>& tagKinds();
   static const std::map<int,std::string>& tagTypes();
 
+  void setTagFilter(const std::vector<int>&);
+
 private:
   static std::string getMapValue(const std::map<int,std::string>& map,
                                  int id);
@@ -37,7 +40,7 @@ private:
   static std::map<int,std::string> _tagType;
   static std::map<int,std::string> _blockID;
 
-  std::unordered_set<int> tagFilter;
+  std::vector<int> m_tagFilter;
 };
 }
 

@@ -23,6 +23,11 @@ std::string Fiff::Formatting::fullTagAsString(const Fiff::Tag& tag){
   return stream.str();
 }
 
+void Fiff::Formatting::setTagFilter(const std::vector<int>& tagFilter)
+{
+  m_tagFilter = tagFilter;
+}
+
 std::string Fiff::Formatting::fullFileAsString(Fiff::File& file)
 {
   std::stringstream stream;
@@ -64,6 +69,9 @@ std::string Fiff::Formatting::toString(Fiff::File &file)
 
   while(file.isOpen() && !file.isAtEnd()){
     auto tag = file.readNextTag();
+    if(!m_tagFilter.empty() &&  std::find(m_tagFilter.begin(), m_tagFilter.end(), tag.kind) == m_tagFilter.end()){
+      continue;
+    }
 
     if (tag.kind == 105){
       --indent;
@@ -536,3 +544,5 @@ std::map<int, std::string> Fiff::Formatting::_blockID
          {124, "device_info"},
          {125, "helium_info"},
          {126, "channel_info"}};
+
+

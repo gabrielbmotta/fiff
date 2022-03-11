@@ -12,7 +12,7 @@ namespace Core {
 class CommandLineInput {
 public:
   CommandLineInput(int &argc, char *argv[]);
-  std::string getValueForTag(const std::string &option) const;
+  std::string getValueForTag(const std::string &option, const std::string &shortoption = "") const;
   std::string getValueThatEndsWith(const std::string& substr);
   bool tagExists(const std::string &option) const;
 
