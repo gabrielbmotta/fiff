@@ -25,6 +25,8 @@ public:
     }
     return tag_set;
   }
+
+  static bool isNumber(const std::string& s);
 };
 }
 

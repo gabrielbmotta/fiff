@@ -15,6 +15,11 @@ const std::map<int,std::string>& Fiff::Formatting::tagTypes()
   return _tagType;
 }
 
+const std::map<int, std::string> &Fiff::Formatting::blockIds()
+{
+  return _blockID;
+}
+
 std::string Fiff::Formatting::fullTagAsString(const Fiff::Tag& tag){
   std::stringstream stream;
 
@@ -544,5 +549,4 @@ std::map<int, std::string> Fiff::Formatting::_blockID
          {124, "device_info"},
          {125, "helium_info"},
          {126, "channel_info"}};
-
 

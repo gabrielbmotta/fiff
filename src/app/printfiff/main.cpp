@@ -4,7 +4,6 @@
 #include <core/stringmanip.hpp>
 #include <iostream>
 #include <string>
-#include <sstream>
 
 int main(int argc, char* argv[])
 {
@@ -17,7 +16,7 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  std::string tags = cmdin.getValueForTag("--tags", "-t");
+  std::string tags = cmdin.getValueForTag("--tags", "-t").second;
   if(!tags.empty()) {
     std::vector tag_set = Core::StringManipulation::getVectorFrom<int>(tags, ',');
     formater.setTagFilter(tag_set);

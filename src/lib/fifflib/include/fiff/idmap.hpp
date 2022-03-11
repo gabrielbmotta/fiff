@@ -26,6 +26,7 @@ public:
 
   static const std::map<int,std::string>& tagKinds();
   static const std::map<int,std::string>& tagTypes();
+  static const std::map<int,std::string>& blockIds();
 
   void setTagFilter(const std::vector<int>&);
 
