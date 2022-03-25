@@ -1,6 +1,6 @@
-//
-// Created by Gabriel Motta on 3/24/22.
-//
+/**
+ *  @file   filein.hpp
+ **/
 
 #ifndef FIFFFILEEXPLORER_FILEIN_HPP
 #define FIFFFILEEXPLORER_FILEIN_HPP
@@ -12,6 +12,9 @@
 
 namespace Fiff{
 
+/**
+ * Class to read in a fiff file tag by tag.
+ */
 class FileIn{
 public:
   FileIn();
