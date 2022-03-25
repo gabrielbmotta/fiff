@@ -27,6 +27,7 @@ public:
 
   void goToReadPosition(std::streampos pos);
   std::streampos currentReadPosition();
+  bool atEnd();
 
 private:
   void setEndianess();

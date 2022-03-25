@@ -1,4 +1,4 @@
-#include <fiff/file.hpp>
+#include <fiff/filein.hpp>
 #include <fiff/idmap.hpp>
 #include <core/commandlineinput.hpp>
 #include <core/stringmanip.hpp>
@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
     formater.setTagFilter(tag_set);
   }
 
-  Fiff::File fiffFile(filePath);
+  Fiff::FileIn fiffFile(filePath);
 
   std::cout << formater.toString(fiffFile);
   return 0;

@@ -128,6 +128,15 @@ std::streampos Fiff::FileIn::currentReadPosition()
 
 //==============================================================================
 /**
+ * Returns whether the read head is at the end of the file.
+ */
+bool Fiff::FileIn::atEnd()
+{
+  return m_ifstream.eof();
+}
+
+//==============================================================================
+/**
  * Tries to determine the file's endianness by peeking at the next tag.
  * Call this function when read position is at start.
  *

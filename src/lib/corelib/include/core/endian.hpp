@@ -18,14 +18,7 @@ enum class RelativeEndian{
   undetermined
 };
 
-Endian systemEndian()
-{
-  int i = 1;
-  if(*(char *)&i == 1)
-    return Endian::little;
-  else
-    return Endian::big;
-}
+Endian systemEndian();
 
 template <class T>
 void endswap(T *objp)

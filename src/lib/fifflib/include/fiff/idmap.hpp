@@ -19,10 +19,10 @@ namespace Fiff {
 class Formatting{
 public:
   static std::string fullTagAsString(const Fiff::Tag&);
-  static std::string fullFileAsString(Fiff::File&);
+  static std::string fullFileAsString(Fiff::FileIn&);
 
   std::string toString(const Fiff::Tag&);
-  std::string toString(Fiff::File&);
+  std::string toString(Fiff::FileIn&);
 
   static const std::map<int,std::string>& tagKinds();
   static const std::map<int,std::string>& tagTypes();

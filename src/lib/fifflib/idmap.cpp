@@ -3,6 +3,7 @@
 //
 
 #include "fiff/idmap.hpp"
+
 #include "fiff/datatypes.hpp"
 
 const std::map<int,std::string>& Fiff::Formatting::tagKinds()
@@ -33,13 +34,13 @@ void Fiff::Formatting::setTagFilter(const std::vector<int>& tagFilter)
   m_tagFilter = tagFilter;
 }
 
-std::string Fiff::Formatting::fullFileAsString(Fiff::InFile& file)
+std::string Fiff::Formatting::fullFileAsString(Fiff::FileIn& file)
 {
   std::stringstream stream;
   char padding = '\t';
   int indent = 0;
 
-  while(file.isOpen() && !file.isAtEnd()){
+  while(file.isOpen() && !file.atEnd()){
     auto tag = file.readNextTag();
     if (tag.kind == 105){
       --indent;
@@ -66,13 +67,13 @@ std::string Fiff::Formatting::toString(const Fiff::Tag &tag)
   return stream.str();
 }
 
-std::string Fiff::Formatting::toString(Fiff::File &file)
+std::string Fiff::Formatting::toString(Fiff::FileIn &file)
 {
   std::stringstream stream;
   char padding = '\t';
   int indent = 0;
 
-  while(file.isOpen() && !file.isAtEnd()){
+  while(file.isOpen() && !file.atEnd()){
     auto tag = file.readNextTag();
     if(!m_tagFilter.empty() &&  std::find(m_tagFilter.begin(), m_tagFilter.end(), tag.kind) == m_tagFilter.end()){
       continue;
