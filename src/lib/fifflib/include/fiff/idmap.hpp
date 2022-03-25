@@ -5,9 +5,9 @@
 #ifndef FIFFFILEEXPLORER_IDMAP_HPP
 #define FIFFFILEEXPLORER_IDMAP_HPP
 
-#include "tag.hpp"
-#include "file.hpp"
-#include <io/endian.hpp>
+#include "fiff/tag.hpp"
+#include "fiff/filein.hpp"
+#include <core/endian.hpp>
 
 #include <string>
 #include <sstream>
@@ -37,9 +37,9 @@ private:
   static std::string formatTagMetaData(const Fiff::Tag& tag);
   static std::string formatTagData(const Fiff::Tag& tag);
 
-  static std::map<int,std::string> _tagKind;
-  static std::map<int,std::string> _tagType;
-  static std::map<int,std::string> _blockID;
+  static const std::map<int,std::string> _tagKind;
+  static const std::map<int,std::string> _tagType;
+  static const std::map<int,std::string> _blockID;
 
   std::vector<int> m_tagFilter;
 };

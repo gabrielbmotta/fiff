@@ -33,7 +33,7 @@ void Fiff::Formatting::setTagFilter(const std::vector<int>& tagFilter)
   m_tagFilter = tagFilter;
 }
 
-std::string Fiff::Formatting::fullFileAsString(Fiff::File& file)
+std::string Fiff::Formatting::fullFileAsString(Fiff::InFile& file)
 {
   std::stringstream stream;
   char padding = '\t';
@@ -155,7 +155,7 @@ std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
   return stream.str();
 }
 
-std::map<int,std::string> Fiff::Formatting::_tagKind
+const std::map<int,std::string> Fiff::Formatting::_tagKind
         {{1, "new_file"},
          {2, "close_file"},
          {3, "discard_file"},
@@ -495,7 +495,7 @@ std::map<int,std::string> Fiff::Formatting::_tagKind
          {3802, "mne_epochs_reject"},
          {3803, "mne_epochs_raw_sfreq"}};
 
-std::map<int, std::string> Fiff::Formatting::_tagType
+const std::map<int, std::string> Fiff::Formatting::_tagType
         {{0, "void"},
          {1, "byte"},
          {2, "short"},
@@ -520,7 +520,7 @@ std::map<int, std::string> Fiff::Formatting::_tagType
          {37, "stream_segment_struct"},};
 
 
-std::map<int, std::string> Fiff::Formatting::_blockID
+const std::map<int, std::string> Fiff::Formatting::_blockID
         {{999, "root"},
          {100, "meas"},
          {101, "meas_info"},

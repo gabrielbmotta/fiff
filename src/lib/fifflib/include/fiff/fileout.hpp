@@ -15,6 +15,14 @@ class FileOut : TagOutStream{
   void open(const std::string &filePath);
   void open();
   bool isOpen();
+
+  void writeTag(const Tag& tag);
+
+  void goToWritePosition(std::streampos pos);
+  std::streampos currentWritePosition();
+
+protected:
+  std::ofstream m_ofstream
 };
 
 

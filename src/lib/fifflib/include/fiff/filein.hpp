@@ -5,18 +5,39 @@
 #ifndef FIFFFILEEXPLORER_FILEIN_HPP
 #define FIFFFILEEXPLORER_FILEIN_HPP
 
-#include "fiff/taginstream.hp"
+#include "fiff/tag.hpp"
+#include "core/endian.hpp"
+
 #include <fstream>
 
-class FileIn : TagInStream{
+namespace Fiff{
+
+class FileIn{
 public:
-  FileIn() = default;
-  FileIn(const std::string& filePath);
+  FileIn();
+  explicit FileIn(const std::string &filePath);
+  FileIn(const std::string &filePath, Endian fileEndian);
 
   void open(const std::string &filePath);
-  void open();
-  bool isOpen();
+  void open(const std::string &filePath, Endian fileEndian);
+  bool isOpen()const;
+
+  Tag readNextTag();
+  Tag peekNextTag();
+
+  void goToReadPosition(std::streampos pos);
+  std::streampos currentReadPosition();
+
+private:
+  void setEndianess();
+  void setEndianess(Endian fileEndian);
+
+  void readMetaData(Tag& tag);
+  void readData(Tag& tag);
+
+  std::ifstream m_ifstream;
+  RelativeEndian m_relativeEndian;
 };
 
-
+} //namespace
 #endif //FIFFFILEEXPLORER_FILEIN_HPP
