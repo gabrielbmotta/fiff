@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.20)
 project(fifflib)
 
 add_library(${PROJECT_NAME} tag.cpp include/fiff/tag.hpp
-                            filein.cpp include/fiff/filein.hpp
-                            fileout.cpp include/fiff/fileout.hpp
+        input.cpp include/fiff/input.hpp
+        output.cpp include/fiff/output.hpp
         formatting.cpp include/fiff/formatting.hpp)
 
 target_include_directories( ${PROJECT_NAME}

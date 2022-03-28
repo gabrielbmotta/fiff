@@ -6,7 +6,7 @@
 #define FIFFFILEEXPLORER_FORMATTING_HPP
 
 #include "fiff/tag.hpp"
-#include "fiff/filein.hpp"
+#include "fiff/input.hpp"
 #include <core/endian.hpp>
 
 #include <string>
@@ -19,10 +19,10 @@ namespace Fiff {
 class Formatting{
 public:
   static std::string fullTagAsString(const Fiff::Tag&);
-  static std::string fullFileAsString(Fiff::FileIn&);
+  static std::string fullFileAsString(Fiff::Input&);
 
   std::string toString(const Fiff::Tag&);
-  std::string toString(Fiff::FileIn&);
+  std::string toString(Fiff::Input&);
 
   static const std::map<int,std::string>& tagKinds();
   static const std::map<int,std::string>& tagTypes();

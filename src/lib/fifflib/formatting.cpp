@@ -34,7 +34,7 @@ void Fiff::Formatting::setTagFilter(const std::vector<int>& tagFilter)
   m_tagFilter = tagFilter;
 }
 
-std::string Fiff::Formatting::fullFileAsString(Fiff::FileIn& file)
+std::string Fiff::Formatting::fullFileAsString(Fiff::Input& file)
 {
   std::stringstream stream;
   char padding = '\t';
@@ -67,7 +67,7 @@ std::string Fiff::Formatting::toString(const Fiff::Tag &tag)
   return stream.str();
 }
 
-std::string Fiff::Formatting::toString(Fiff::FileIn &file)
+std::string Fiff::Formatting::toString(Fiff::Input &file)
 {
   std::stringstream stream;
   char padding = '\t';

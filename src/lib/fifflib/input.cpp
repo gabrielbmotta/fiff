@@ -1,14 +1,14 @@
-#include "fiff/filein.hpp"
+#include "fiff/input.hpp"
 
 #include "fiff/datatypes.hpp"
 
 //==============================================================================
 /**
- * Constructs a FileIn object.
+ * Constructs a Input object.
  *
  * Prefer a constructor that also accepts a path to file.
  */
-Fiff::FileIn::FileIn()
+Fiff::Input::Input()
 :m_relativeEndian(RelativeEndian::undetermined)
 {
 
@@ -16,72 +16,9 @@ Fiff::FileIn::FileIn()
 
 //==============================================================================
 /**
- * Constructs a FileIn object and opens a file at the path passed to it.
- * @param filename  Path to fiff file to be opened.
- *
- * Endianness will be determined automatically.
- */
-Fiff::FileIn::FileIn(const std::string &filename)
-{
-  open(filename);
-}
-
-//==============================================================================
-/**
- * Constructs a FileIn object and opens a file at the path passed to it.
- * @param filePath  Path to fiff file to be opened.
- * @param fileEndian    Endianess of file to be opened.
- *
- * Endianness will not be determined automatically. Prefer a call that does
- * it automatically to this.
- */
-Fiff::FileIn::FileIn(const std::string &filePath, Endian fileEndian)
-{
-  open(filePath, fileEndian);
-}
-
-//==============================================================================
-/**
- * Opens a fiff file at the given path.
- * @param filePath  Path to fiff file to be opened.
- *
- * Endianness will be determined automatically.
- */
-void Fiff::FileIn::open(const std::string &filePath)
-{
-  m_ifstream.open(filePath.c_str(), std::ios::binary);
-  setEndianess();
-}
-
-//==============================================================================
-/**
- * Opens a file at the path passed to it.
- * @param filePath  Path to fiff file to be opened.
- * @param fileEndian    Endianess of file to be opened.
- *
- * Endianness will not be determined automatically. Prefer a call that does
- * it automatically to this.
- */
-void Fiff::FileIn::open(const std::string &filePath, Endian fileEndian)
-{
-  open(filePath);
-  setEndianess(fileEndian);
-}
-
-//==============================================================================
-/**
- * Returns whether the file is open for reading.
- */
-bool Fiff::FileIn::isOpen() const
-{
-  return m_ifstream.is_open();
-}
-
-//==============================================================================
-/**
  * Returns next tag in the file, and moves the read head one tag forward.
  */
-Fiff::Tag Fiff::FileIn::readNextTag()
+Fiff::Tag Fiff::Input::readNextTag()
 {
   Fiff::Tag tag;
 
@@ -95,7 +32,7 @@ Fiff::Tag Fiff::FileIn::readNextTag()
 /**
  * Returns next tag in the file. Read head does not move.
  */
-Fiff::Tag Fiff::FileIn::peekNextTag()
+Fiff::Tag Fiff::Input::peekNextTag()
 {
   std::streampos position = currentReadPosition();
   Fiff::Tag tag = readNextTag();
@@ -108,27 +45,47 @@ Fiff::Tag Fiff::FileIn::peekNextTag()
  * Moves the read head to a position given by input parameter.
  * @param pos   Where to move the read head.
  */
-void Fiff::FileIn::goToReadPosition(std::streampos pos)
+void Fiff::Input::goToReadPosition(std::streampos pos)
 {
-  m_ifstream.seekg(pos);
+  m_istream->seekg(pos);
 }
 
 //==============================================================================
 /**
  * Gets the current position of the read head.
  */
-std::streampos Fiff::FileIn::currentReadPosition()
+std::streampos Fiff::Input::currentReadPosition()
 {
-  return m_ifstream.tellg();
+  return m_istream->tellg();
 }
 
 //==============================================================================
 /**
  * Returns whether the read head is at the end of the file.
  */
-bool Fiff::FileIn::atEnd()
+bool Fiff::Input::atEnd()
 {
-  return m_ifstream.eof();
+  return m_istream->eof();
+}
+
+//==============================================================================
+
+Fiff::Input Fiff::Input::fromFile(const std::string &filePath)
+{
+  Input in;
+  in.m_istream = std::make_unique<std::ifstream>(filePath, std::ios::binary);
+  in.setEndianess();
+  return in;
+}
+
+//==============================================================================
+
+Fiff::Input Fiff::Input::fromFile(const std::string &filePath, Endian fileEndian)
+{
+  Input in;
+  in.m_istream = std::make_unique<std::ifstream>(filePath, std::ios::binary);
+  in.setEndianess(fileEndian);
+  return in;
 }
 
 //==============================================================================
@@ -141,7 +98,7 @@ bool Fiff::FileIn::atEnd()
  * endian possibilities, it checks which endianness produces a tag kind in a
  * "reasonable" range, ie. not in the millions.
  */
-void Fiff::FileIn::setEndianess()
+void Fiff::Input::setEndianess()
 {
   Tag tag = peekNextTag();
   if(tag.kind == 100) {
@@ -169,7 +126,7 @@ void Fiff::FileIn::setEndianess()
  * Determines the file's endianness based on user input.
  * @param fileEndian    Endianness of the file.
  */
-void Fiff::FileIn::setEndianess(Endian fileEndian)
+void Fiff::Input::setEndianess(Endian fileEndian)
 {
   if (systemEndian() == fileEndian){
     m_relativeEndian = RelativeEndian::same_as_system;
@@ -183,12 +140,12 @@ void Fiff::FileIn::setEndianess(Endian fileEndian)
  * Reads tag metadata and adds it to a tag, swapping endianness if needed.
  * @param tag   Tag object where the read data will be placed.
  */
-void Fiff::FileIn::readMetaData(Fiff::Tag &tag)
+void Fiff::Input::readMetaData(Fiff::Tag &tag)
 {
-  m_ifstream.read(reinterpret_cast<char*>(&tag.kind), sizeof(tag.kind));
-  m_ifstream.read(reinterpret_cast<char*>(&tag.type), sizeof(tag.type));
-  m_ifstream.read(reinterpret_cast<char*>(&tag.size), sizeof(tag.size));
-  m_ifstream.read(reinterpret_cast<char*>(&tag.next), sizeof(tag.next));
+  m_istream->read(reinterpret_cast<char*>(&tag.kind), sizeof(tag.kind));
+  m_istream->read(reinterpret_cast<char*>(&tag.type), sizeof(tag.type));
+  m_istream->read(reinterpret_cast<char*>(&tag.size), sizeof(tag.size));
+  m_istream->read(reinterpret_cast<char*>(&tag.next), sizeof(tag.next));
 
   if(m_relativeEndian == RelativeEndian::different_from_system){
     endswap(&tag.kind);
@@ -213,12 +170,12 @@ void Fiff::FileIn::readMetaData(Fiff::Tag &tag)
  * Because some data types are structs, we need to swap bytes of each field
  * individually.
  */
-void Fiff::FileIn::readData(Fiff::Tag &tag)
+void Fiff::Input::readData(Fiff::Tag &tag)
 {
   //TODO: actually sort the endianness of that data in a way that is
   //      not a giant switch statement.
   char* tempData = new char[tag.size];
-  m_ifstream.read(reinterpret_cast<char *>(tempData), tag.size);
+  m_istream->read(reinterpret_cast<char *>(tempData), tag.size);
 
   switch(tag.type){
     case 3:
@@ -244,5 +201,4 @@ void Fiff::FileIn::readData(Fiff::Tag &tag)
       break;
     }
   }
-
 }

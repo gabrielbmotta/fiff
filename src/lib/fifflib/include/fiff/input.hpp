@@ -2,28 +2,23 @@
  *  @file   filein.hpp
  **/
 
-#ifndef FIFFFILEEXPLORER_FILEIN_HPP
-#define FIFFFILEEXPLORER_FILEIN_HPP
+#ifndef FIFFFILEEXPLORER_INPUT_HPP
+#define FIFFFILEEXPLORER_INPUT_HPP
 
 #include "fiff/tag.hpp"
 #include "core/endian.hpp"
 
 #include <fstream>
+#include <memory>
 
 namespace Fiff{
 
 /**
  * Class to read in a fiff file tag by tag.
  */
-class FileIn{
+class Input{
 public:
-  FileIn();
-  explicit FileIn(const std::string &filePath);
-  FileIn(const std::string &filePath, Endian fileEndian);
-
-  void open(const std::string &filePath);
-  void open(const std::string &filePath, Endian fileEndian);
-  bool isOpen()const;
+  Input();
 
   Tag readNextTag();
   Tag peekNextTag();
@@ -32,6 +27,9 @@ public:
   std::streampos currentReadPosition();
   bool atEnd();
 
+  static Input fromFile(const std::string &filePath);
+  static Input fromFile(const std::string &filePath, Endian fileEndian);
+
 private:
   void setEndianess();
   void setEndianess(Endian fileEndian);
@@ -39,9 +37,9 @@ private:
   void readMetaData(Tag& tag);
   void readData(Tag& tag);
 
-  std::ifstream m_ifstream;
+  std::unique_ptr<std::istream> m_istream;
   RelativeEndian m_relativeEndian;
 };
 
 } //namespace
-#endif //FIFFFILEEXPLORER_FILEIN_HPP
+#endif //FIFFFILEEXPLORER_INPUT_HPP
