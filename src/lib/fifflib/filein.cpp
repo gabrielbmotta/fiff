@@ -157,7 +157,7 @@ void Fiff::FileIn::setEndianess()
   }
 
   // fallback test if file does not begin with correct tag
-  if(tag.kind > 1000000 || tag.kind < 1000000){
+  if(tag.kind > 1000000 || tag.kind < -1000000){
     m_relativeEndian = RelativeEndian::different_from_system;
   } else {
     m_relativeEndian = RelativeEndian::same_as_system;
@@ -232,7 +232,7 @@ void Fiff::FileIn::readData(Fiff::Tag &tag)
     }
     case 30:
     {
-      auto* dataPtr = reinterpret_cast<ch_info_rec*>(tag.data);
+      auto* dataPtr = reinterpret_cast<Type::ch_info_rec*>(tag.data);
       if(m_relativeEndian == RelativeEndian::different_from_system)
       {
         endswap(&dataPtr->scanNo);

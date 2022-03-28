@@ -4,7 +4,7 @@
 
 #include <core/commandlineinput.hpp>
 #include <core/stringmanip.hpp>
-#include <fiff/idmap.hpp>
+#include <fiff/formatting.hpp>
 
 #include <iostream>
 #include <string>

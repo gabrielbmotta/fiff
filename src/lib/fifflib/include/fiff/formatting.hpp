@@ -2,8 +2,8 @@
 // Created by Gabriel Motta on 3/7/22.
 //
 
-#ifndef FIFFFILEEXPLORER_IDMAP_HPP
-#define FIFFFILEEXPLORER_IDMAP_HPP
+#ifndef FIFFFILEEXPLORER_FORMATTING_HPP
+#define FIFFFILEEXPLORER_FORMATTING_HPP
 
 #include "fiff/tag.hpp"
 #include "fiff/filein.hpp"
@@ -45,4 +45,4 @@ private:
 };
 }
 
-#endif //FIFFFILEEXPLORER_IDMAP_HPP
+#endif //FIFFFILEEXPLORER_FORMATTING_HPP

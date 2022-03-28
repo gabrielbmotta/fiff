@@ -2,7 +2,7 @@
 // Created by Gabriel Motta on 3/7/22.
 //
 
-#include "fiff/idmap.hpp"
+#include "fiff/formatting.hpp"
 
 #include "fiff/datatypes.hpp"
 

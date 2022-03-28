@@ -1,5 +1,5 @@
 #include <fiff/filein.hpp>
-#include <fiff/idmap.hpp>
+#include <fiff/formatting.hpp>
 #include <core/commandlineinput.hpp>
 #include <core/stringmanip.hpp>
 #include <iostream>

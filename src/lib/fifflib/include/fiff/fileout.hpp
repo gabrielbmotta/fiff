@@ -6,25 +6,27 @@
 #define FIFFFILEEXPLORER_FILEOUT_HPP
 
 #include "fiff/tag.hpp"
+#include "core/endian.hpp"
 
 #include <fstream>
 
-class FileOut{
-//  FileOut() = default;
-//  FileOut(const std::string& filePath);
-//
-//  void open(const std::string &filePath);
-//  void open();
-//  bool isOpen();
-//
-//  void writeTag(const Tag& tag);
-//
-//  void goToWritePosition(std::streampos pos);
-//  std::streampos currentWritePosition();
+namespace Fiff {
+
+class FileOut {
+  FileOut() = default;
+  explicit FileOut(const std::string &filePath);
+
+  void open(const std::string &filePath);
+  bool isOpen()const;
+
+  void writeTag(const Tag &tag);
+
+  void goToWritePosition(std::streampos pos);
+  std::streampos currentWritePosition();
 
 protected:
   std::ofstream m_ofstream;
 };
-
+}//namespace
 
 #endif //FIFFFILEEXPLORER_FILEOUT_HPP
