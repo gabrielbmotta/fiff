@@ -18,7 +18,7 @@ Fiff::Input::Input()
 /**
  * Returns next tag in the file, and moves the read head one tag forward.
  */
-Fiff::Tag Fiff::Input::readNextTag()
+Fiff::Tag Fiff::Input::getTag()
 {
   Fiff::Tag tag;
 
@@ -32,10 +32,10 @@ Fiff::Tag Fiff::Input::readNextTag()
 /**
  * Returns next tag in the file. Read head does not move.
  */
-Fiff::Tag Fiff::Input::peekNextTag()
+Fiff::Tag Fiff::Input::peekTag()
 {
   std::streampos position = currentReadPosition();
-  Fiff::Tag tag = readNextTag();
+  Fiff::Tag tag = getTag();
   goToReadPosition(position);
   return tag;
 }

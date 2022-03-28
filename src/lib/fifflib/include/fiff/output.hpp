@@ -14,6 +14,7 @@
 namespace Fiff {
 
 class Output {
+public:
   Output() = default;
 
   void writeTag(const Tag &tag);

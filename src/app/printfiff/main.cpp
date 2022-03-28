@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
   int indent = 0;
 
   while(!inFile.atEnd()){
-    auto tag = inFile.readNextTag();
+    auto tag = inFile.getTag();
     if(!tag_set.empty() &&  std::find(tag_set.begin(), tag_set.end(), tag.kind) == tag_set.end()){
       continue;
     }

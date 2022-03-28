@@ -20,8 +20,8 @@ class Input{
 public:
   Input();
 
-  Tag readNextTag();
-  Tag peekNextTag();
+  Tag getTag();
+  Tag peekTag();
 
   void goToReadPosition(std::streampos pos);
   std::streampos currentReadPosition() const;
@@ -30,7 +30,7 @@ public:
   static Input fromFile(const std::string &filePath);
   static Input fromFile(const std::string &filePath, Endian fileEndian);
 
-private:
+protected:
   void setEndianess();
   void setEndianess(Endian fileEndian);
 

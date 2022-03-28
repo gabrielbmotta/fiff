@@ -36,7 +36,7 @@ std::string Fiff::Formatting::asString(Fiff::Input& file)
   int indent = 0;
 
   while(!file.atEnd()){
-    auto tag = file.readNextTag();
+    auto tag = file.getTag();
     if (tag.kind == 105){
       --indent;
     }
@@ -349,7 +349,6 @@ const std::map<int,std::string> Fiff::Formatting::_tagKind
          {3415, "proj_item_vectors"},
          {3416, "proj_item_definition"},
          {3417, "proj_item_ch_name_list"},
-         {3501, "xplotter_layout"},
          {4001, "vol_id"},
          {4002, "vol_name"},
          {4003, "vol_owner_id"},
@@ -479,7 +478,7 @@ const std::map<int, std::string> Fiff::Formatting::_tagType
          {34, "ch_pos_struct"},
          {35, "coord_trans_struct"},
          {36, "dig_string_struct"},
-         {37, "stream_segment_struct"},};
+         {37, "stream_segment_struct"}};
 
 
 const std::map<int, std::string> Fiff::Formatting::_blockID
