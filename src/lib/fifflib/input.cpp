@@ -54,7 +54,7 @@ void Fiff::Input::goToReadPosition(std::streampos pos)
 /**
  * Gets the current position of the read head.
  */
-std::streampos Fiff::Input::currentReadPosition()
+std::streampos Fiff::Input::currentReadPosition() const
 {
   return m_istream->tellg();
 }
@@ -63,7 +63,7 @@ std::streampos Fiff::Input::currentReadPosition()
 /**
  * Returns whether the read head is at the end of the file.
  */
-bool Fiff::Input::atEnd()
+bool Fiff::Input::atEnd() const
 {
   return m_istream->eof();
 }
@@ -100,25 +100,30 @@ Fiff::Input Fiff::Input::fromFile(const std::string &filePath, Endian fileEndian
  */
 void Fiff::Input::setEndianess()
 {
-  Tag tag = peekNextTag();
-  if(tag.kind == 100) {
+  auto pos = m_istream->tellg();
+  int32_t kind = 0;
+  m_istream->read(reinterpret_cast<char*>(&kind), sizeof(kind));
+  if(kind == 100) {
     m_relativeEndian = RelativeEndian::same_as_system;
+    m_istream->seekg(pos);
     return;
   }
 
-  int swapkind = tag.kind;
+  int32_t swapkind = kind;
   endswap(&swapkind);
-  if(tag.kind == 100) {
+  if(swapkind == 100) {
     m_relativeEndian = RelativeEndian::different_from_system;
+    m_istream->seekg(pos);
     return;
   }
 
   // fallback test if file does not begin with correct tag
-  if(tag.kind > 1000000 || tag.kind < -1000000){
+  if(kind > 1000000 || kind < -1000000){
     m_relativeEndian = RelativeEndian::different_from_system;
   } else {
     m_relativeEndian = RelativeEndian::same_as_system;
   }
+  m_istream->seekg(pos);
 }
 
 //==============================================================================
@@ -174,8 +179,8 @@ void Fiff::Input::readData(Fiff::Tag &tag)
 {
   //TODO: actually sort the endianness of that data in a way that is
   //      not a giant switch statement.
-  char* tempData = new char[tag.size];
-  m_istream->read(reinterpret_cast<char *>(tempData), tag.size);
+  tag.data = new char[tag.size];
+  m_istream->read(reinterpret_cast<char *>(tag.data), tag.size);
 
   switch(tag.type){
     case 3:

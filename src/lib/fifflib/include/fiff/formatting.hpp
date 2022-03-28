@@ -18,17 +18,12 @@
 namespace Fiff {
 class Formatting{
 public:
-  static std::string fullTagAsString(const Fiff::Tag&);
-  static std::string fullFileAsString(Fiff::Input&);
-
-  std::string toString(const Fiff::Tag&);
-  std::string toString(Fiff::Input&);
+  static std::string asString(const Fiff::Tag&);
+  static std::string asString(Fiff::Input&);
 
   static const std::map<int,std::string>& tagKinds();
   static const std::map<int,std::string>& tagTypes();
   static const std::map<int,std::string>& blockIds();
-
-  void setTagFilter(const std::vector<int>&);
 
 private:
   static std::string getMapValue(const std::map<int,std::string>& map,
@@ -40,8 +35,6 @@ private:
   static const std::map<int,std::string> _tagKind;
   static const std::map<int,std::string> _tagType;
   static const std::map<int,std::string> _blockID;
-
-  std::vector<int> m_tagFilter;
 };
 }
 

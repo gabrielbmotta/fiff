@@ -8,7 +8,6 @@
 int main(int argc, char* argv[])
 {
   Core::CommandLineInput cmdin(argc, argv);
-  Fiff::Formatting formater;
 
   if(cmdin.tagExists("--help","-h")){
     std::cout << "|---      printfiff      ---|\n\n"
@@ -17,20 +16,41 @@ int main(int argc, char* argv[])
               << "-h --help \t\t Prints help text.\n";
   }
 
-
   std::string filePath = cmdin.getValueThatEndsWith(".fif");
   if(filePath.empty()){
     return 0;
   }
 
   std::string tags = cmdin.getValueForTag("--tag-kind", "-k").second;
+
+  std::vector<int> tag_set;
   if(!tags.empty()) {
-    std::vector tag_set = Core::StringManipulation::getVectorFrom<int>(tags, ',');
-    formater.setTagFilter(tag_set);
+    tag_set = Core::StringManipulation::getVectorFrom<int>(tags, ',');
   }
 
-  Fiff::Input fiffFile(filePath);
+  auto inFile = Fiff::Input::fromFile(filePath);
 
-  std::cout << formater.toString(fiffFile);
+  std::string padding = "    ";
+  int indent = 0;
+
+  while(!inFile.atEnd()){
+    auto tag = inFile.readNextTag();
+    if(!tag_set.empty() &&  std::find(tag_set.begin(), tag_set.end(), tag.kind) == tag_set.end()){
+      continue;
+    }
+
+    if (tag.kind == 105){
+      --indent;
+    }
+    for (int i = 0 ; i < indent ; ++i){
+      std::cout << padding;
+    }
+    std::cout << Fiff::Formatting::asString(tag);
+    std::cout << "\n";
+    if(tag.kind == 104){
+      ++indent;
+    }
+  }
+
   return 0;
 }

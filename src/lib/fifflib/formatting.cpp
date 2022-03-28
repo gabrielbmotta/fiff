@@ -21,7 +21,7 @@ const std::map<int, std::string> &Fiff::Formatting::blockIds()
   return _blockID;
 }
 
-std::string Fiff::Formatting::fullTagAsString(const Fiff::Tag& tag){
+std::string Fiff::Formatting::asString(const Fiff::Tag& tag){
   std::stringstream stream;
 
   stream << formatTagMetaData(tag) << ", " << formatTagData(tag);
@@ -29,18 +29,13 @@ std::string Fiff::Formatting::fullTagAsString(const Fiff::Tag& tag){
   return stream.str();
 }
 
-void Fiff::Formatting::setTagFilter(const std::vector<int>& tagFilter)
-{
-  m_tagFilter = tagFilter;
-}
-
-std::string Fiff::Formatting::fullFileAsString(Fiff::Input& file)
+std::string Fiff::Formatting::asString(Fiff::Input& file)
 {
   std::stringstream stream;
   char padding = '\t';
   int indent = 0;
 
-  while(file.isOpen() && !file.atEnd()){
+  while(!file.atEnd()){
     auto tag = file.readNextTag();
     if (tag.kind == 105){
       --indent;
@@ -48,44 +43,7 @@ std::string Fiff::Formatting::fullFileAsString(Fiff::Input& file)
     for (int i = 0 ; i < indent ; ++i){
       stream << padding;
     }
-    stream << fullTagAsString(tag);
-    stream << "\n";
-    if(tag.kind == 104){
-      ++indent;
-    }
-  }
-
-  return stream.str();
-}
-
-std::string Fiff::Formatting::toString(const Fiff::Tag &tag)
-{
-  std::stringstream stream;
-
-  stream << formatTagMetaData(tag) << ", " << formatTagData(tag);
-
-  return stream.str();
-}
-
-std::string Fiff::Formatting::toString(Fiff::Input &file)
-{
-  std::stringstream stream;
-  char padding = '\t';
-  int indent = 0;
-
-  while(file.isOpen() && !file.atEnd()){
-    auto tag = file.readNextTag();
-    if(!m_tagFilter.empty() &&  std::find(m_tagFilter.begin(), m_tagFilter.end(), tag.kind) == m_tagFilter.end()){
-      continue;
-    }
-
-    if (tag.kind == 105){
-      --indent;
-    }
-    for (int i = 0 ; i < indent ; ++i){
-      stream << padding;
-    }
-    stream << toString(tag);
+    stream << asString(tag);
     stream << "\n";
     if(tag.kind == 104){
       ++indent;
@@ -126,6 +84,9 @@ std::string Fiff::Formatting::formatTagMetaData(const Fiff::Tag &tag)
 
 std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
 {
+  if(tag.data == nullptr){
+    return {};
+  }
   std::stringstream stream;
 
   switch (tag.type){
@@ -144,7 +105,7 @@ std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
     case 30:
     {
       stream << "data: ";
-      auto info = static_cast<ch_info_rec *>(tag.data);
+      auto info = static_cast<Type::ch_info_rec *>(tag.data);
       stream << "scanNo " << info->scanNo << ", ";
       stream << "logNo " << info->logNo << ", ";
       stream << "kind " << info->kind << ", ";

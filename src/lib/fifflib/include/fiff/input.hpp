@@ -24,8 +24,8 @@ public:
   Tag peekNextTag();
 
   void goToReadPosition(std::streampos pos);
-  std::streampos currentReadPosition();
-  bool atEnd();
+  std::streampos currentReadPosition() const;
+  bool atEnd() const;
 
   static Input fromFile(const std::string &filePath);
   static Input fromFile(const std::string &filePath, Endian fileEndian);
@@ -37,7 +37,7 @@ private:
   void readMetaData(Tag& tag);
   void readData(Tag& tag);
 
-  std::unique_ptr<std::istream> m_istream;
+  std::unique_ptr<std::ifstream> m_istream;
   RelativeEndian m_relativeEndian;
 };
 
