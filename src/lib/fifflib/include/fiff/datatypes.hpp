@@ -374,6 +374,37 @@ enum Type{
   fiff_stream_segment_struct = 37
 };
 
+enum Block{
+  b_root = 999,
+  b_meas = 100,
+  b_meas_info = 101,
+  b_raw_data = 102,
+  b_processed_data = 103,
+  b_evoked = 104,
+  b_aspect = 105,
+  b_subject = 106,
+  b_isotrak = 107,
+  b_hpi_meas = 108,
+  b_hpi_result = 109,
+  b_hpi_coil = 110,
+  b_project = 111,
+  b_continuous_data = 112,
+  b_ch_info = 113,
+  b_void = 114,
+  b_events = 115,
+  b_index = 116,
+  b_dacq_pars = 117,
+  b_ref = 118,
+  b_ias_raw_data = 119,
+  b_ias_aspect = 120,
+  b_hpi_subsystem = 121,
+  b_phantom_subsystem = 122,
+  b_status_subsystem = 123,
+  b_device_info = 124,
+  b_helium_info = 125,
+  b_channel_inf = 126
+};
+
 }//namespace Id
 
 namespace Type {

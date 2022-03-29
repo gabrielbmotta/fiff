@@ -17,7 +17,6 @@ int main(int argc, char* argv[])
               << "-o --output <output>\t Path to output file.\n";
   }
 
-
   std::string inputPath = cmdin.getValueForTag("--input", "-i").second;
   std::string outputPath = cmdin.getValueForTag("--output", "-o").second;
 

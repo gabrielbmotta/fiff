@@ -14,8 +14,18 @@ void Anonymizer::anonymize()
 {
   while(!m_input.atEnd()){
     auto tag = m_input.getTag();
+    trackBlockTypes(tag);
     censorTag(tag);
     m_output.writeTag(tag);
+  }
+}
+
+void Anonymizer::trackBlockTypes(const Fiff::Tag &tag)
+{
+  if(tag.kind == Fiff::Id::Kind::block_start){
+    m_blockHierarchy.push(*reinterpret_cast<int32_t*>(tag.data));
+  } else if (tag.kind == Fiff::Id::Kind::block_end){
+    m_blockHierarchy.pop();
   }
 }
 
@@ -46,16 +56,18 @@ void Anonymizer::censorTag(Fiff::Tag& tag){
     }
     case Fiff::Id::Kind::description:
     {
-//      QString inStr(tag.data());
-//      emit readingFileComment(inStr);
-//
-//      if(m_pBlockTypeList->top() == FIFFB_MEAS_INFO)
-//      {
-//        QString outStr(m_sDefaultString);
-//        tag.resize(outStr.size());
-//        memcpy(tag.data(),outStr.toUtf8(),static_cast<size_t>(outStr.size()));
-//        printIfVerbose("Description of the measurement block changed: " + inStr + " -> " + outStr);
-//      }
+      if(m_blockHierarchy.top() == Fiff::Id::Block::b_meas_info)
+      {
+        std::cout << "Found description: " << reinterpret_cast<char*>(tag.data) << "\n";
+        delete [] reinterpret_cast<char*>(tag.data);
+        tag.size = 1;
+        tag.data = new char[1];
+
+        auto* name = reinterpret_cast<char*>(tag.data);
+        for(int i = 0; i < tag.size; ++i){
+          name[i] = ' ';
+        }
+      }
       break;
     }
     case Fiff::Id::Kind::experimenter:

@@ -6,7 +6,7 @@
 #include <fiff/datatypes.hpp>
 
 #include <string>
-#include <vector>
+#include <stack>
 
 class Anonymizer {
 public:
@@ -16,12 +16,12 @@ public:
   void anonymize();
 
 private:
+  void trackBlockTypes(const Fiff::Tag& tag);
   void censorTag(Fiff::Tag& tag);
 
   Fiff::Input m_input;
   Fiff::Output m_output;
-  std::vector<int> m_blockHierarchy;
+  std::stack<int> m_blockHierarchy;
 };
-
 
 #endif //FIFFFILEEXPLORER_ANONYMIZER_HPP
