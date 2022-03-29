@@ -3,7 +3,8 @@ project(anonymizer)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME}  main.cpp
+                                anonymizer.cpp anonymizer.hpp)
 
 target_link_libraries(${PROJECT_NAME}
         corelib fifflib)

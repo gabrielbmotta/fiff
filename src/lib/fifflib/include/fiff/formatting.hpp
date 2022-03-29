@@ -19,7 +19,6 @@ namespace Fiff {
 class Formatting{
 public:
   static std::string asString(const Fiff::Tag&);
-  static std::string asString(Fiff::Input&);
 
   static const std::map<int,std::string>& tagKinds();
   static const std::map<int,std::string>& tagTypes();

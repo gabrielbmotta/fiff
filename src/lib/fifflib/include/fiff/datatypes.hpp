@@ -1,7 +1,3 @@
-//
-// Created by Gabriel Motta on 3/8/22.
-//
-
 #ifndef FIFFFILEEXPLORER_DATATYPES_HPP
 #define FIFFFILEEXPLORER_DATATYPES_HPP
 

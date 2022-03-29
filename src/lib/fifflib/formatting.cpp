@@ -1,7 +1,3 @@
-//
-// Created by Gabriel Motta on 3/7/22.
-//
-
 #include "fiff/formatting.hpp"
 
 #include "fiff/datatypes.hpp"
@@ -25,30 +21,6 @@ std::string Fiff::Formatting::asString(const Fiff::Tag& tag){
   std::stringstream stream;
 
   stream << formatTagMetaData(tag) << ", " << formatTagData(tag);
-
-  return stream.str();
-}
-
-std::string Fiff::Formatting::asString(Fiff::Input& file)
-{
-  std::stringstream stream;
-  char padding = '\t';
-  int indent = 0;
-
-  while(!file.atEnd()){
-    auto tag = file.getTag();
-    if (tag.kind == 105){
-      --indent;
-    }
-    for (int i = 0 ; i < indent ; ++i){
-      stream << padding;
-    }
-    stream << asString(tag);
-    stream << "\n";
-    if(tag.kind == 104){
-      ++indent;
-    }
-  }
 
   return stream.str();
 }
