@@ -223,7 +223,8 @@ void Fiff::Input::readData(Fiff::Tag &tag)
       }
       // 8 bytes:
       case 5: //double
-      case 11: //unit64
+      case 9: //uint64
+      case 11: //int64
       {
         auto *dataPtr = reinterpret_cast<int64_t*>(tag.data);
         endswap(dataPtr);
