@@ -2,6 +2,10 @@
 
 #include "fiff/datatypes.hpp"
 
+namespace {
+
+}
+
 //==============================================================================
 /**
  * Constructs a Input object.
@@ -177,33 +181,96 @@ void Fiff::Input::readMetaData(Fiff::Tag &tag)
  */
 void Fiff::Input::readData(Fiff::Tag &tag)
 {
-  //TODO: actually sort the endianness of that data in a way that is
-  //      not a giant switch statement.
+  //TODO: check time of switch statement vs function map vs other possible implementations
   tag.data = new char[tag.size];
   m_istream->read(reinterpret_cast<char *>(tag.data), tag.size);
 
-  switch(tag.type){
-    case 3:
+  if(m_relativeEndian == RelativeEndian::different_from_system)
+  {
+    switch(tag.type)
     {
-      auto* dataPtr = reinterpret_cast<int32_t*>(tag.data);
-      if(m_relativeEndian == RelativeEndian::different_from_system)
+      case 0: //void
       {
+        break;
+      }
+      // 1 byte
+      case 1: //byte
+      {
+        auto *dataPtr = reinterpret_cast<int8_t*>(tag.data);
         endswap(dataPtr);
+        break;
       }
-      break;
-    }
-    case 30:
-    {
-      auto* dataPtr = reinterpret_cast<Type::ch_info_rec*>(tag.data);
-      if(m_relativeEndian == RelativeEndian::different_from_system)
+      // 2 bytes
+      case 2: //short
+      case 7: //ushort
+      case 13: //dau_pack13
+      case 14: //dau_pack14
+      case 16: //dau_pack16
       {
-        endswap(&dataPtr->scanNo);
-        endswap(&dataPtr->logNo);
-        endswap(&dataPtr->kind);
-        endswap(&dataPtr->range);
-        endswap(&dataPtr->cal);
+        auto *dataPtr = reinterpret_cast<int16_t*>(tag.data);
+        endswap(dataPtr);
+        break;
       }
-      break;
+      // 4 bytes
+      case 3: //int32
+      case 4: //float
+      case 6: //julian
+      case 8: //uint32
+      {
+        auto *dataPtr = reinterpret_cast<int32_t*>(tag.data);
+        endswap(dataPtr);
+        break;
+      }
+      // 8 bytes:
+      case 5: //double
+      case 9: //uint64
+      case 11: //int64
+      {
+        auto *dataPtr = reinterpret_cast<int64_t*>(tag.data);
+        endswap(dataPtr);
+        break;
+      }
+      // array of 1 byte
+      case 10: //string
+      {
+        auto *dataPtr = reinterpret_cast<int8_t*>(tag.data);
+        for (int i = 0; i < tag.size; ++i){
+          endswap(dataPtr + i);
+        }
+        break;
+      }
+      case 23: //old_pack TODO: tricky, variable length
+      {
+        break;
+      }
+      // sequential 4 bytes with added array of 1 byte
+      case 30: //ch_info_rec
+      {
+        auto* ptr4byte = reinterpret_cast<int32_t*>(tag.data);
+        for(int i = 0; i < 20; ++i){
+          endswap(ptr4byte + i);
+        }
+        auto* ptr1byte = reinterpret_cast<int8_t*>(tag.data) + 80;
+        for(int j = 0; j < 16; ++j){
+          endswap(ptr1byte + j);
+        }
+        break;
+      }
+      // sequential 4 bytes
+      case 31: //id_struct
+      case 32: //dir_entry_struct
+      case 33: //dig_point_struct
+      case 34: //ch_pos_struct
+      case 35: //coord_trans_struct
+      {
+        auto sizeInBytes = tag.size / 4;
+        auto* ptr4byte = reinterpret_cast<int32_t*>(tag.data);
+        for(int i = 0; i < sizeInBytes; ++i){
+          endswap(ptr4byte + i);
+        }
+        break;
+      }
     }
   }
 }
+
