@@ -9,7 +9,6 @@ namespace Fiff {
 
 namespace Type {
 
-
 struct ch_info_t {
   int32_t scanNo;       /**< Position of this channel in scanning order. */
   int32_t logNo;        /**< Logical channel number. These must be unique within channels of the same kind. */
