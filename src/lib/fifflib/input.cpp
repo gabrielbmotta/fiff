@@ -181,7 +181,7 @@ void Fiff::Input::readMetaData(Fiff::Tag &tag)
  */
 void Fiff::Input::readData(Fiff::Tag &tag)
 {
-  //TODO: check time of switch statment vs function map vs other possible implementations
+  //TODO: check time of switch statement vs function map vs other possible implementations
   tag.data = new char[tag.size];
   m_istream->read(reinterpret_cast<char *>(tag.data), tag.size);
 
@@ -229,6 +229,7 @@ void Fiff::Input::readData(Fiff::Tag &tag)
         endswap(dataPtr);
         break;
       }
+      // array of 1 byte
       case 10: //string
       {
         auto *dataPtr = reinterpret_cast<int8_t*>(tag.data);
@@ -241,7 +242,8 @@ void Fiff::Input::readData(Fiff::Tag &tag)
       {
         break;
       }
-      case 30:
+      // sequential 4 bytes with added array of 1 byte
+      case 30: //ch_info_rec
       {
         auto* ptr4byte = reinterpret_cast<int32_t*>(tag.data);
         for(int i = 0; i < 20; ++i){
@@ -253,47 +255,20 @@ void Fiff::Input::readData(Fiff::Tag &tag)
         }
         break;
       }
-      case 31:
-      case 33:
+      // sequential 4 bytes
+      case 31: //id_struct
+      case 32: //dir_entry_struct
+      case 33: //dig_point_struct
+      case 34: //ch_pos_struct
+      case 35: //coord_trans_struct
       {
+        auto sizeInBytes = tag.size / 4;
         auto* ptr4byte = reinterpret_cast<int32_t*>(tag.data);
-        for(int i = 0; i < 5; ++i){
+        for(int i = 0; i < sizeInBytes; ++i){
           endswap(ptr4byte + i);
         }
         break;
       }
-      case 32:
-      {
-        auto* ptr4byte = reinterpret_cast<int32_t*>(tag.data);
-        for(int i = 0; i < 4; ++i){
-          endswap(ptr4byte + i);
-        }
-        break;
-      }
-      case 34:
-      {
-        auto* ptr4byte = reinterpret_cast<int32_t*>(tag.data);
-        for(int i = 0; i < 13; ++i){
-          endswap(ptr4byte + i);
-        }
-        break;
-      }
-      case 35:
-      {
-        auto* ptr4byte = reinterpret_cast<int32_t*>(tag.data);
-        for(int i = 0; i < 26; ++i){
-          endswap(ptr4byte + i);
-        }
-        break;
-      }
-//      case 36:
-//      {
-//        break;
-//      }
-//      case 37:
-//      {
-//        break;
-//      }
     }
   }
 }
