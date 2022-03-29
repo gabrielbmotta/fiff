@@ -239,6 +239,14 @@ void Fiff::Input::readData(Fiff::Tag &tag)
         }
         break;
       }
+      case 21: //complex_double
+      {
+        auto* ptr8byte = reinterpret_cast<int64_t*>(tag.data);
+        for(int i = 0; i < 2; ++i){
+          endswap(ptr8byte + i);
+        }
+        break;
+      }
       case 23: //old_pack TODO: tricky, variable length
       {
         break;
@@ -257,6 +265,7 @@ void Fiff::Input::readData(Fiff::Tag &tag)
         break;
       }
       // sequential 4 bytes
+      case 20: //complex_float
       case 31: //id_struct
       case 32: //dir_entry_struct
       case 33: //dig_point_struct
