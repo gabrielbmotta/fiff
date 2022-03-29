@@ -1,6 +1,7 @@
 #include <fiff/input.hpp>
 #include <fiff/output.hpp>
 #include <fiff/datatypes.hpp>
+#include <fiff/formatting.hpp>
 #include <core/commandlineinput.hpp>
 #include <core/stringmanip.hpp>
 #include <iostream>
@@ -47,8 +48,6 @@ int main(int argc, char* argv[])
 void censorTag(Fiff::Tag& tag){
   switch (tag.kind)
   {
-    //all these 'kinds' of tags contain a fileID struct, which contains info related to
-    //measurement date
     case Fiff::Id::Kind::file_id:
     case Fiff::Id::Kind::block_id:
     case Fiff::Id::Kind::parent_file_id:
@@ -87,7 +86,11 @@ void censorTag(Fiff::Tag& tag){
     }
     case Fiff::Id::Kind::experimenter:
     {
-      //TODO: actually change to empty string or another string by resizing.
+      std::cout << "Found experimenter: " << reinterpret_cast<char*>(tag.data) << "\n";
+      delete [] reinterpret_cast<char*>(tag.data);
+      tag.size = 1;
+      tag.data = new char[1];
+
       auto* name = reinterpret_cast<char*>(tag.data);
       for(int i = 0; i < tag.size; ++i){
         name[i] = ' ';
@@ -102,7 +105,10 @@ void censorTag(Fiff::Tag& tag){
     }
     case Fiff::Id::Kind::subj_first_name:
     {
-      //TODO: actually change to empty string or another string by resizing.
+      std::cout << "Found subj first name: " << reinterpret_cast<char*>(tag.data) << "\n";
+      delete [] reinterpret_cast<char*>(tag.data);
+      tag.size = 1;
+      tag.data = new char[1];
       auto* name = reinterpret_cast<char*>(tag.data);
       for(int i = 0; i < tag.size; ++i){
         name[i] = ' ';
@@ -111,7 +117,10 @@ void censorTag(Fiff::Tag& tag){
     }
     case Fiff::Id::Kind::subj_middle_name:
     {
-      //TODO: actually change to empty string or another string by resizing.
+      std::cout << "Found subj middle name: " << reinterpret_cast<char*>(tag.data) << "\n";
+      delete [] reinterpret_cast<char*>(tag.data);
+      tag.size = 1;
+      tag.data = new char[1];
       auto* name = reinterpret_cast<char*>(tag.data);
       for(int i = 0; i < tag.size; ++i){
         name[i] = ' ';
@@ -120,7 +129,10 @@ void censorTag(Fiff::Tag& tag){
     }
     case Fiff::Id::Kind::subj_last_name:
     {
-      //TODO: actually change to empty string or another string by resizing.
+      std::cout << "Found subj last name: " << reinterpret_cast<char*>(tag.data) << "\n";
+      delete [] reinterpret_cast<char*>(tag.data);
+      tag.size = 1;
+      tag.data = new char[1];
       auto* name = reinterpret_cast<char*>(tag.data);
       for(int i = 0; i < tag.size; ++i){
         name[i] = ' ';
@@ -157,7 +169,9 @@ void censorTag(Fiff::Tag& tag){
     }
     case Fiff::Id::Kind::subj_comment:
     {
-      //TODO: actually change to empty string or another string by resizing.
+      delete [] reinterpret_cast<char*>(tag.data);
+      tag.size = 1;
+      tag.data = new char[1];
       auto* name = reinterpret_cast<char*>(tag.data);
       for(int i = 0; i < tag.size; ++i){
         name[i] = ' ';
@@ -166,7 +180,10 @@ void censorTag(Fiff::Tag& tag){
     }
     case Fiff::Id::Kind::subj_his_id:
     {
-      //TODO: actually change to empty string or another string by resizing.
+      std::cout << "Found subj his id: " << reinterpret_cast<char*>(tag.data) << "\n";
+      delete [] reinterpret_cast<char*>(tag.data);
+      tag.size = 1;
+      tag.data = new char[1];
       auto* name = reinterpret_cast<char*>(tag.data);
       for(int i = 0; i < tag.size; ++i){
         name[i] = ' ';
@@ -181,7 +198,10 @@ void censorTag(Fiff::Tag& tag){
     }
     case Fiff::Id::Kind::proj_name:
     {
-      //TODO: actually change to empty string or another string by resizing.
+      std::cout << "Found proj name: " << reinterpret_cast<char*>(tag.data) << "\n";
+      delete [] reinterpret_cast<char*>(tag.data);
+      tag.size = 1;
+      tag.data = new char[1];
       auto* name = reinterpret_cast<char*>(tag.data);
       for(int i = 0; i < tag.size; ++i){
         name[i] = ' ';
@@ -190,7 +210,10 @@ void censorTag(Fiff::Tag& tag){
     }
     case Fiff::Id::Kind::proj_aim:
     {
-      //TODO: actually change to empty string or another string by resizing.
+      std::cout << "Found proj aim: " << reinterpret_cast<char*>(tag.data) << "\n";
+      delete [] reinterpret_cast<char*>(tag.data);
+      tag.size = 1;
+      tag.data = new char[1];
       auto* name = reinterpret_cast<char*>(tag.data);
       for(int i = 0; i < tag.size; ++i){
         name[i] = ' ';
@@ -199,7 +222,10 @@ void censorTag(Fiff::Tag& tag){
     }
     case Fiff::Id::Kind::proj_persons:
     {
-      //TODO: actually change to empty string or another string by resizing.
+      std::cout << "Found proj persons: " << reinterpret_cast<char*>(tag.data) << "\n";
+      delete [] reinterpret_cast<char*>(tag.data);
+      tag.size = 1;
+      tag.data = new char[1];
       auto* name = reinterpret_cast<char*>(tag.data);
       for(int i = 0; i < tag.size; ++i){
         name[i] = ' ';
@@ -208,7 +234,10 @@ void censorTag(Fiff::Tag& tag){
     }
     case Fiff::Id::Kind::proj_comment:
     {
-      //TODO: actually change to empty string or another string by resizing.
+      std::cout << "Found proj comments: " << reinterpret_cast<char*>(tag.data) << "\n";
+      delete [] reinterpret_cast<char*>(tag.data);
+      tag.size = 1;
+      tag.data = new char[1];
       auto* name = reinterpret_cast<char*>(tag.data);
       for(int i = 0; i < tag.size; ++i){
         name[i] = ' ';
@@ -222,7 +251,10 @@ void censorTag(Fiff::Tag& tag){
     }
     case Fiff::Id::Kind::mne_env_working_dir:
     {
-      //TODO: actually change to empty string or another string by resizing.
+      std::cout << "Found mne working dir: " << reinterpret_cast<char*>(tag.data) << "\n";
+      delete [] reinterpret_cast<char*>(tag.data);
+      tag.size = 1;
+      tag.data = new char[1];
       auto* name = reinterpret_cast<char*>(tag.data);
       for(int i = 0; i < tag.size; ++i){
         name[i] = ' ';
@@ -231,7 +263,10 @@ void censorTag(Fiff::Tag& tag){
     }
     case Fiff::Id::Kind::mne_env_command_line:
     {
-      //TODO: actually change to empty string or another string by resizing.
+      std::cout << "Found mne cmd line: " << reinterpret_cast<char*>(tag.data) << "\n";
+      delete [] reinterpret_cast<char*>(tag.data);
+      tag.size = 1;
+      tag.data = new char[1];
       auto* name = reinterpret_cast<char*>(tag.data);
       for(int i = 0; i < tag.size; ++i){
         name[i] = ' ';
