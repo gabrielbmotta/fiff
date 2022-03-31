@@ -189,49 +189,50 @@ void Fiff::Input::readData(Fiff::Tag &tag)
   {
     switch(tag.type)
     {
-      case 0: //void
+      // 0 bytes
+      case Fiff::Type::void_:
       {
         break;
       }
       // 1 byte
-      case 1: //byte
+      case Fiff::Type::byte_:
       {
         auto *dataPtr = reinterpret_cast<int8_t*>(tag.data);
         endswap(dataPtr);
         break;
       }
       // 2 bytes
-      case 2: //short
-      case 7: //ushort
-      case 13: //dau_pack13
-      case 14: //dau_pack14
-      case 16: //dau_pack16
+      case Fiff::Type::short_:
+      case Fiff::Type::ushort_:
+      case Fiff::Type::dau_pack13_:
+      case Fiff::Type::dau_pack14_:
+      case Fiff::Type::dau_pack16_:
       {
         auto *dataPtr = reinterpret_cast<int16_t*>(tag.data);
         endswap(dataPtr);
         break;
       }
       // 4 bytes
-      case 3: //int32
-      case 4: //float
-      case 6: //julian
-      case 8: //uint32
+      case Fiff::Type::int32_:
+      case Fiff::Type::float_:
+      case Fiff::Type::julian_:
+      case Fiff::Type::uint32_:
       {
         auto *dataPtr = reinterpret_cast<int32_t*>(tag.data);
         endswap(dataPtr);
         break;
       }
       // 8 bytes:
-      case 5: //double
-      case 9: //uint64
-      case 11: //int64
+      case Fiff::Type::double_:
+      case Fiff::Type::uint64_:
+      case Fiff::Type::int64_:
       {
         auto *dataPtr = reinterpret_cast<int64_t*>(tag.data);
         endswap(dataPtr);
         break;
       }
       // array of 1 byte
-      case 10: //string
+      case Fiff::Type::string_:
       {
         auto *dataPtr = reinterpret_cast<int8_t*>(tag.data);
         for (int i = 0; i < tag.size; ++i){
@@ -239,7 +240,7 @@ void Fiff::Input::readData(Fiff::Tag &tag)
         }
         break;
       }
-      case 21: //complex_double
+      case Fiff::Type::complex_double_:
       {
         auto* ptr8byte = reinterpret_cast<int64_t*>(tag.data);
         for(int i = 0; i < 2; ++i){
@@ -247,12 +248,12 @@ void Fiff::Input::readData(Fiff::Tag &tag)
         }
         break;
       }
-      case 23: //old_pack TODO: tricky, variable length
+      case Fiff::Type::old_pack_: // TODO: tricky, variable length
       {
         break;
       }
       // sequential 4 bytes with added array of 1 byte
-      case 30: //ch_info_rec
+      case Fiff::Type::ch_info_struct_:
       {
         auto* ptr4byte = reinterpret_cast<int32_t*>(tag.data);
         for(int i = 0; i < 20; ++i){
@@ -265,12 +266,12 @@ void Fiff::Input::readData(Fiff::Tag &tag)
         break;
       }
       // sequential 4 bytes
-      case 20: //complex_float
-      case 31: //id_struct
-      case 32: //dir_entry_struct
-      case 33: //dig_point_struct
-      case 34: //ch_pos_struct
-      case 35: //coord_trans_struct
+      case Fiff::Type::complex_float_:
+      case Fiff::Type::id_struct_:
+      case Fiff::Type::dir_entry_struct_:
+      case Fiff::Type::dig_point_struct_:
+      case Fiff::Type::ch_pos_struct_:
+      case Fiff::Type::coord_trans_struct_:
       {
         auto sizeInBytes = tag.size / 4;
         auto* ptr4byte = reinterpret_cast<int32_t*>(tag.data);

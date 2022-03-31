@@ -2,21 +2,41 @@
 
 #include "fiff/datatypes.hpp"
 
+//==============================================================================
+/**
+ * Returns a map of tag kinds where the keys are the Ids and the content is the
+ * name of the tag kind.
+ */
 const std::map<int,std::string>& Fiff::Formatting::tagKinds()
 {
   return _tagKind;
 }
 
+//==============================================================================
+/**
+ * Returns a map of fiff data types where the keys are the Ids and the content
+ * is the name of the fiff types.
+ */
 const std::map<int,std::string>& Fiff::Formatting::tagTypes()
 {
   return _tagType;
 }
 
+//==============================================================================
+/**
+ * Returns a map of fiff blocks where the keys are the Ids and the content is
+ * the name of the fiff block.
+ */
 const std::map<int, std::string> &Fiff::Formatting::blockIds()
 {
   return _blockID;
 }
 
+//==============================================================================
+/**
+ * Formats passed tag a human- readable string.
+ * @param tag   tag to be formatted as a string.
+ */
 std::string Fiff::Formatting::asString(const Fiff::Tag& tag){
   std::stringstream stream;
 
@@ -25,6 +45,13 @@ std::string Fiff::Formatting::asString(const Fiff::Tag& tag){
   return stream.str();
 }
 
+//==============================================================================
+/**
+ * Convenience function for getting entry from map without creating an entry,
+ * and simply returning a string version of the key value if there is no entry.
+ * @param map   Map to be read from.
+ * @param id    key to use to read.
+ */
 std::string Fiff::Formatting::getMapValue(const std::map<int,std::string>& map,
                                           int id)
 {
@@ -40,6 +67,11 @@ std::string Fiff::Formatting::getMapValue(const std::map<int,std::string>& map,
   return stream.str();
 }
 
+//==============================================================================
+/**
+ * Formats tag metadata as a string.
+ * @param tag   tag to be formatted as a string.
+ */
 std::string Fiff::Formatting::formatTagMetaData(const Fiff::Tag &tag)
 {
   std::stringstream stream;
@@ -54,6 +86,11 @@ std::string Fiff::Formatting::formatTagMetaData(const Fiff::Tag &tag)
   return stream.str();
 }
 
+//==============================================================================
+/**
+ * Formats tag data as a string.
+ * @param tag   tag to be formatted as a string.
+ */
 std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
 {
   if(tag.data == nullptr){
@@ -89,6 +126,11 @@ std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
   return stream.str();
 }
 
+//==============================================================================
+/**
+ * Map of fiff tag kinds where the keys are the Ids and the content is the
+ * name of the tag kind.
+ */
 const std::map<int,std::string> Fiff::Formatting::_tagKind
         {{1, "new_file"},
          {2, "close_file"},
@@ -428,6 +470,11 @@ const std::map<int,std::string> Fiff::Formatting::_tagKind
          {3802, "mne_epochs_reject"},
          {3803, "mne_epochs_raw_sfreq"}};
 
+//==============================================================================
+/**
+ * Map of fiff data types where the keys are the Ids and the content is the
+ * name of the fiff data type.
+ */
 const std::map<int, std::string> Fiff::Formatting::_tagType
         {{0, "void"},
          {1, "byte"},
@@ -456,7 +503,11 @@ const std::map<int, std::string> Fiff::Formatting::_tagType
          {36, "dig_string_struct"},
          {37, "stream_segment_struct"}};
 
-
+//==============================================================================
+/**
+ * Map of fiff blocks where the keys are the Ids and the content is the
+ * name of the fiff blocks.
+ */
 const std::map<int, std::string> Fiff::Formatting::_blockID
         {{999, "root"},
          {100, "meas"},
@@ -486,4 +537,3 @@ const std::map<int, std::string> Fiff::Formatting::_blockID
          {124, "device_info"},
          {125, "helium_info"},
          {126, "channel_info"}};
-

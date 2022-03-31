@@ -18,14 +18,10 @@ struct Tag {
   void *data;   // Pointer to data.
 
   Tag();
-
   Tag(const Tag &);
-
   ~Tag();
 
   Tag &operator=(const Tag &rhs);
-
-  friend std::ostream &operator<<(std::ostream &os, const Tag &tag);
 };
   std::ostream &operator<<(std::ostream &os, const Tag &tag);
 }

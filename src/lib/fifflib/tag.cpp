@@ -4,6 +4,10 @@
 
 #include "include/fiff/tag.hpp"
 
+//==============================================================================
+/**
+ *
+ */
 Fiff::Tag::Tag()
 {
   kind = 0;
@@ -13,6 +17,11 @@ Fiff::Tag::Tag()
   data = nullptr;
 }
 
+//==============================================================================
+/**
+ *
+ * @param other
+ */
 Fiff::Tag::Tag(const Tag& other)
 {
   kind = other.kind;
@@ -29,6 +38,10 @@ Fiff::Tag::Tag(const Tag& other)
   }
 }
 
+//==============================================================================
+/**
+ *
+ */
 Fiff::Tag::~Tag()
 {
   if (data)
@@ -37,6 +50,12 @@ Fiff::Tag::~Tag()
   }
 }
 
+//==============================================================================
+/**
+ *
+ * @param rhs
+ * @return
+ */
 Fiff::Tag &Fiff::Tag::operator=(const Fiff::Tag &rhs)
 {
   if(this != &rhs)
@@ -58,11 +77,3 @@ Fiff::Tag &Fiff::Tag::operator=(const Fiff::Tag &rhs)
   }
   return *this;
 }
-
-std::ostream& Fiff::operator<<(std::ostream& os, const Fiff::Tag& tag)
-{
-  os << tag.kind << "\t\t" << tag.type << "\t\t" << tag.size << "\t\t" << tag.next;
-  return os;
-}
-
-

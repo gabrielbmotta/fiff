@@ -1,11 +1,10 @@
 #ifndef FIFFFILEEXPLORER_DATATYPES_HPP
 #define FIFFFILEEXPLORER_DATATYPES_HPP
 
-namespace Fiff{
+namespace Fiff {
 
-namespace Id {
-
-enum Kind {
+namespace Kind{
+enum K : int32_t {
   new_file = 1,
   close_file = 2,
   discard_file = 3,
@@ -344,71 +343,73 @@ enum Kind {
   mne_epochs_raw_sfreq = 3803,
   mem_data_buffer = 10300
 };
-
-enum Type{
-  fiff_void = 0,
-  fiff_byte = 1,
-  fiff_short = 2,
-  fiff_int32 = 3,
-  fiff_float = 4,
-  fiff_double = 5,
-  fiff_julian = 6,
-  fiff_ushort = 7,
-  fiff_uint32 = 8,
-  fiff_uint64 = 9,
-  fiff_string = 10,
-  fiff_int64 = 11,
-  fiff_dau_pack13 = 13,
-  fiff_dau_pack14 = 14,
-  fiff_dau_pack16 = 16,
-  fiff_complex_float = 20,
-  fiff_complex_double = 21,
-  fiff_old_pack = 23,
-  fiff_ch_info_struct = 30,
-  fiff_id_struct = 31,
-  fiff_dir_entry_struct = 32,
-  fiff_dig_point_struct = 33,
-  fiff_ch_pos_struct = 34,
-  fiff_coord_trans_struct = 35,
-  fiff_dig_string_struct = 36,
-  fiff_stream_segment_struct = 37
-};
-
-enum Block{
-  b_root = 999,
-  b_meas = 100,
-  b_meas_info = 101,
-  b_raw_data = 102,
-  b_processed_data = 103,
-  b_evoked = 104,
-  b_aspect = 105,
-  b_subject = 106,
-  b_isotrak = 107,
-  b_hpi_meas = 108,
-  b_hpi_result = 109,
-  b_hpi_coil = 110,
-  b_project = 111,
-  b_continuous_data = 112,
-  b_ch_info = 113,
-  b_void = 114,
-  b_events = 115,
-  b_index = 116,
-  b_dacq_pars = 117,
-  b_ref = 118,
-  b_ias_raw_data = 119,
-  b_ias_aspect = 120,
-  b_hpi_subsystem = 121,
-  b_phantom_subsystem = 122,
-  b_status_subsystem = 123,
-  b_device_info = 124,
-  b_helium_info = 125,
-  b_channel_inf = 126
-};
-
-}//namespace Id
+}
 
 namespace Type {
+enum T : int32_t {
+  void_ = 0,
+  byte_ = 1,
+  short_ = 2,
+  int32_ = 3,
+  float_ = 4,
+  double_ = 5,
+  julian_ = 6,
+  ushort_ = 7,
+  uint32_ = 8,
+  uint64_ = 9,
+  string_ = 10,
+  int64_ = 11,
+  dau_pack13_ = 13,
+  dau_pack14_ = 14,
+  dau_pack16_ = 16,
+  complex_float_ = 20,
+  complex_double_ = 21,
+  old_pack_ = 23,
+  ch_info_struct_ = 30,
+  id_struct_ = 31,
+  dir_entry_struct_ = 32,
+  dig_point_struct_ = 33,
+  ch_pos_struct_ = 34,
+  coord_trans_struct_ = 35,
+  dig_string_struct_ = 36,
+  stream_segment_struct_ = 37
+};
+}
 
+namespace Block {
+enum B : int32_t {
+  root = 999,
+  meas = 100,
+  meas_info = 101,
+  raw_data = 102,
+  processed_data = 103,
+  evoked = 104,
+  aspect = 105,
+  subject = 106,
+  isotrak = 107,
+  hpi_meas = 108,
+  hpi_result = 109,
+  hpi_coil = 110,
+  project = 111,
+  continuous_data = 112,
+  ch_info = 113,
+  void_block = 114,
+  events = 115,
+  index = 116,
+  dacq_pars = 117,
+  ref = 118,
+  ias_raw_data = 119,
+  ias_aspect = 120,
+  hpi_subsystem = 121,
+  phantom_subsystem = 122,
+  status_subsystem = 123,
+  device_info = 124,
+  helium_info = 125,
+  channel_inf = 126
+};
+}
+
+namespace Type {
 struct ch_info_t {
   int32_t scanNo;       /**< Position of this channel in scanning order. */
   int32_t logNo;        /**< Logical channel number. These must be unique within channels of the same kind. */
