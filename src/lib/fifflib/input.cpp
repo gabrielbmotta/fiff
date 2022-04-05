@@ -151,17 +151,24 @@ void Fiff::Input::setEndianess(Endian fileEndian)
  */
 void Fiff::Input::readMetaData(Fiff::Tag &tag)
 {
-  m_istream->read(reinterpret_cast<char*>(&tag.kind), sizeof(tag.kind));
-  m_istream->read(reinterpret_cast<char*>(&tag.type), sizeof(tag.type));
+  int32_t kind;
+  m_istream->read(reinterpret_cast<char*>(&kind), sizeof(kind));
+
+  int32_t type;
+  m_istream->read(reinterpret_cast<char*>(&type), sizeof(type));
+
   m_istream->read(reinterpret_cast<char*>(&tag.size), sizeof(tag.size));
   m_istream->read(reinterpret_cast<char*>(&tag.next), sizeof(tag.next));
 
   if(m_relativeEndian == RelativeEndian::different_from_system){
-    endswap(&tag.kind);
-    endswap(&tag.type);
+    endswap(&kind);
+    endswap(&type);
     endswap(&tag.size);
     endswap(&tag.next);
   }
+
+  tag.kind = static_cast<Kind>(kind);
+  tag.type = static_cast<Type>(type);
 }
 
 //==============================================================================
@@ -280,6 +287,10 @@ void Fiff::Input::readData(Fiff::Tag &tag)
         }
         break;
       }
+      case Type::dig_string_struct_:
+        break;
+      case Type::stream_segment_struct_:
+        break;
     }
   }
 }

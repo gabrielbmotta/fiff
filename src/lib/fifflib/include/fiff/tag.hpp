@@ -5,19 +5,19 @@
 #ifndef FIFFFILEEXPLORER_FIFFTAG_HPP
 #define FIFFFILEEXPLORER_FIFFTAG_HPP
 
+#include "datatypes.hpp"
 #include <iostream>
 #include <cstdint>
 
 namespace Fiff {
 
 struct Tag {
-  int32_t kind;   // Tag number.
-  int32_t type;   // Data type.
+  Kind kind;   // Tag number.
+  Type type;   // Data type.
   int32_t size;   // Size of data.
   int32_t next;   // Next object. 0 is sequential, -1 if end of file.
   void *data;   // Pointer to data.
-
-  Tag();
+  Tag() = default;
   Tag(const Tag &);
   ~Tag();
 

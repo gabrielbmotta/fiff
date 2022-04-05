@@ -42,7 +42,7 @@ void Anonymizer::anonymize()
 void Anonymizer::trackBlockTypes(const Fiff::Tag &tag)
 {
   if(tag.kind == Fiff::Kind::block_start){
-    m_blockHierarchy.push(*reinterpret_cast<int32_t*>(tag.data));
+    m_blockHierarchy.push(*reinterpret_cast<Fiff::Block*>(tag.data));
   } else if (tag.kind == Fiff::Kind::block_end){
     m_blockHierarchy.pop();
   }
@@ -63,7 +63,7 @@ void Anonymizer::censorTag(Fiff::Tag& tag){
     case Fiff::Kind::ref_file_id:
     case Fiff::Kind::ref_block_id:
     {
-      auto* id = reinterpret_cast<Fiff::Type::id_t*>(tag.data);
+      auto* id = reinterpret_cast<Fiff::Data::id_t*>(tag.data);
 
       id->machid[0] = 0;
       id->machid[1] = 0;

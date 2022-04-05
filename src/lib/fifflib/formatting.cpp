@@ -76,9 +76,9 @@ std::string Fiff::Formatting::formatTagMetaData(const Fiff::Tag &tag)
 {
   std::stringstream stream;
 
-  stream << "(" << tag.kind << ")" << getMapValue(_tagKind, tag.kind);
+  stream << "(" << static_cast<int32_t>(tag.kind) << ")" << getMapValue(_tagKind, static_cast<int32_t>(tag.kind));
   stream << ", ";
-  stream << "(" << tag.type << ")" << getMapValue(_tagType, tag.type);
+  stream << "(" << static_cast<int32_t>(tag.type) << ")" << getMapValue(_tagType, static_cast<int32_t>(tag.type));
   stream << ", ";
   stream << tag.size << " bytes";
   stream <<  ", next: " << tag.next;
@@ -99,10 +99,10 @@ std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
   std::stringstream stream;
 
   switch (tag.type){
-    case 3:
+    case Type::int32_:
     {
       stream << "data: ";
-      if(tag.kind == 104 || tag.kind == 105)
+      if(tag.kind == Kind::block_start || tag.kind == Kind::block_end)
       {
         stream << "(" << *static_cast<int *>(tag.data) << ")" << getMapValue(_blockID, *static_cast<int *>(tag.data));
       } else
@@ -111,10 +111,10 @@ std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
       }
       break;
     }
-    case 30:
+    case Type::ch_info_struct_:
     {
       stream << "data: ";
-      auto info = static_cast<Type::ch_info_rec *>(tag.data);
+      auto info = static_cast<Data::ch_info_rec *>(tag.data);
       stream << "scanNo " << info->scanNo << ", ";
       stream << "logNo " << info->logNo << ", ";
       stream << "kind " << info->kind << ", ";
@@ -122,6 +122,8 @@ std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
       stream << "range " << info->range << ", ";
       stream << "cal " << info->cal;
     }
+    default:
+      break;
   }
   return stream.str();
 }

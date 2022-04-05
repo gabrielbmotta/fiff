@@ -1,10 +1,11 @@
 #ifndef FIFFFILEEXPLORER_DATATYPES_HPP
 #define FIFFFILEEXPLORER_DATATYPES_HPP
 
+#include <cstdint>
+
 namespace Fiff {
 
-namespace Kind{
-enum K : int32_t {
+enum class Kind : int32_t {
   new_file = 1,
   close_file = 2,
   discard_file = 3,
@@ -343,10 +344,8 @@ enum K : int32_t {
   mne_epochs_raw_sfreq = 3803,
   mem_data_buffer = 10300
 };
-}
 
-namespace Type {
-enum T : int32_t {
+enum class Type : int32_t {
   void_ = 0,
   byte_ = 1,
   short_ = 2,
@@ -374,10 +373,8 @@ enum T : int32_t {
   dig_string_struct_ = 36,
   stream_segment_struct_ = 37
 };
-}
 
-namespace Block {
-enum B : int32_t {
+enum class Block : int32_t {
   root = 999,
   meas = 100,
   meas_info = 101,
@@ -407,9 +404,8 @@ enum B : int32_t {
   helium_info = 125,
   channel_inf = 126
 };
-}
 
-namespace Type {
+namespace Data {
 struct ch_info_t {
   int32_t scanNo;       /**< Position of this channel in scanning order. */
   int32_t logNo;        /**< Logical channel number. These must be unique within channels of the same kind. */

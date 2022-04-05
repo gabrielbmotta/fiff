@@ -21,7 +21,7 @@ private:
 
   Fiff::Input m_input;
   Fiff::Output m_output;
-  std::stack<int> m_blockHierarchy;
+  std::stack<Fiff::Block> m_blockHierarchy;
 };
 
 #endif //FIFFFILEEXPLORER_ANONYMIZER_HPP

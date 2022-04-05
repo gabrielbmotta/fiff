@@ -11,9 +11,12 @@
  */
 void Fiff::Output::writeTag(const Fiff::Tag &tag)
 {
+  auto kind = static_cast<int32_t>(tag.kind);
+  auto type = static_cast<int32_t>(tag.type);
+
   //TODO: ability to write in either endianness.
-  m_ostream->write(reinterpret_cast<const char*>(&tag.kind), sizeof (tag.kind));
-  m_ostream->write(reinterpret_cast<const char*>(&tag.type), sizeof (tag.type));
+  m_ostream->write(reinterpret_cast<const char*>(&kind), sizeof (kind));
+  m_ostream->write(reinterpret_cast<const char*>(&type), sizeof (type));
   m_ostream->write(reinterpret_cast<const char*>(&tag.size), sizeof (tag.size));
   m_ostream->write(reinterpret_cast<const char*>(&tag.next), sizeof (tag.next));
   m_ostream->write(reinterpret_cast<const char*>(tag.data), tag.size);

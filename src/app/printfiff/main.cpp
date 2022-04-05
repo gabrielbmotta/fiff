@@ -35,11 +35,11 @@ int main(int argc, char* argv[])
 
   while(!inFile.atEnd()){
     auto tag = inFile.getTag();
-    if(!tag_set.empty() &&  std::find(tag_set.begin(), tag_set.end(), tag.kind) == tag_set.end()){
+    if(!tag_set.empty() &&  std::find(tag_set.begin(), tag_set.end(), static_cast<int32_t>(tag.kind)) == tag_set.end()){
       continue;
     }
 
-    if (tag.kind == 105){
+    if (tag.kind == Fiff::Kind::block_end){
       --indent;
     }
     for (int i = 0 ; i < indent ; ++i){
@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
     }
     std::cout << Fiff::Formatting::asString(tag);
     std::cout << "\n";
-    if(tag.kind == 104){
+    if(tag.kind == Fiff::Kind::block_start){
       ++indent;
     }
   }
