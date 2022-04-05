@@ -1,0 +1,29 @@
+if [ $1 == '-c' ]
+then
+    if [ "$2" ]
+    then
+        echo Clearing out/$2
+        rm -rf out/$2
+    else
+        echo Clearing all outputs
+        rm -rf out/
+    fi
+else
+    if [ "$1" ]
+    then
+        if [ "$2" ]
+        then
+            cmake -Bout/$2/build -DCMAKE_BUILD_TYPE=$1 -DMY_BUILD_NAME=$2
+            make -Cout/$2/build
+        else
+            cmake -Bout/$1/build -DCMAKE_BUILD_TYPE=$1 -DMY_BUILD_NAME=$1
+            make -Cout/$1/build
+        fi
+    else
+        cmake -Bout/Release/build -DCMAKE_BUILD_TYPE=Release -DMY_BUILD_NAME=Release
+        make -Cout/Release/build
+    fi
+fi
+
+
+
