@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(corelib)
+project(core)
 
 add_library(${PROJECT_NAME} commandlineinput.cpp include/core/commandlineinput.hpp
                             stringmanip.cpp include/core/stringmanip.hpp
