@@ -2,8 +2,11 @@
 #define FIFFFILEEXPLORER_DATATYPES_HPP
 
 #include <cstdint>
+#include <climits>
 
 namespace Fiff {
+
+static_assert(CHAR_BIT == 8, "Only 8-bit byte systems supported.");
 
 enum class Kind : int32_t {
   new_file = 1,

@@ -2,7 +2,8 @@
 // Created by Gabriel Motta on 3/7/22.
 //
 
-#include "include/core/commandlineinput.hpp"
+#include "core/commandlineinput.hpp"
+#include "core/stringmanip.hpp"
 #include <algorithm>
 
 Core::CommandLineInput::CommandLineInput(int &argc, char *argv[])
@@ -42,12 +43,8 @@ bool Core::CommandLineInput::tagExists(const std::string &option, const std::str
 std::string Core::CommandLineInput::getValueThatEndsWith(const std::string &substr)
 {
   for (auto& entry : args){
-    if(entry.length() > substr.length())
-    {
-      if(0 == entry.compare(entry.length() - substr.length(), substr.length(), substr))
-      {
+    if(Core::StringManipulation::endsWith(entry, substr)){
         return entry;
-      }
     }
   }
   return {};

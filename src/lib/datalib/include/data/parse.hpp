@@ -6,3 +6,11 @@
 #define FIFFFILEEXPLORER_PARSE_HPP
 
 #endif //FIFFFILEEXPLORER_PARSE_HPP
+
+#include <map>
+#include <any>
+#include <string>
+
+namespace Data{
+std::map<std::string, std::any> parse(const std::string& filePath);
+}

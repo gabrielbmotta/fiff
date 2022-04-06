@@ -15,7 +15,11 @@ namespace {
 Fiff::Input::Input()
 :m_relativeEndian(RelativeEndian::undetermined)
 {
-
+  if (CHAR_BIT != 8){
+    std::cout << ""
+    << CHAR_BIT
+    << "-bit bytes. Errors likely to occur.\n";
+  }
 }
 
 //==============================================================================
