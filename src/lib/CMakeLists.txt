@@ -5,3 +5,4 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_subdirectory(corelib)
 add_subdirectory(fifflib)
+add_subdirectory(datalib)

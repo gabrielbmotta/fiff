@@ -1,0 +1,8 @@
+//
+// Created by Gabriel Motta on 4/6/22.
+//
+
+#ifndef FIFFFILEEXPLORER_PARSE_HPP
+#define FIFFFILEEXPLORER_PARSE_HPP
+
+#endif //FIFFFILEEXPLORER_PARSE_HPP
