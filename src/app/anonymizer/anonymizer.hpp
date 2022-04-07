@@ -3,7 +3,7 @@
 
 #include <fiff/input.hpp>
 #include <fiff/output.hpp>
-#include <fiff/datatypes.hpp>
+#include <fiff/types.hpp>
 
 #include <string>
 #include <stack>

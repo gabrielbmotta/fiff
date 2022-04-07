@@ -19,6 +19,12 @@ namespace Fiff {
 class Formatting{
 public:
   static std::string asString(const Fiff::Tag&);
+  static std::string asString(const ChannelPosition&);
+  static std::string asString(const ChannelInfo&);
+  static std::string asString(const ID&);
+  static std::string asString(const DirectoryEntry&);
+  static std::string asString(const DigitizerPoint&);
+  static std::string asString(const DigitizerString&);
 
   static const std::map<int,std::string>& tagKinds();
   static const std::map<int,std::string>& tagTypes();

@@ -19,7 +19,7 @@ void Fiff::Output::writeTag(const Fiff::Tag &tag)
   m_ostream->write(reinterpret_cast<const char*>(&type), sizeof (type));
   m_ostream->write(reinterpret_cast<const char*>(&tag.size), sizeof (tag.size));
   m_ostream->write(reinterpret_cast<const char*>(&tag.next), sizeof (tag.next));
-  m_ostream->write(reinterpret_cast<const char*>(tag.data), tag.size);
+  m_ostream->write(reinterpret_cast<const char*>(tag.data.byteArray), tag.size);
 }
 
 //==============================================================================

@@ -1,6 +1,6 @@
 #include "fiff/formatting.hpp"
 
-#include "fiff/datatypes.hpp"
+#include "fiff/types.hpp"
 
 //==============================================================================
 /**
@@ -43,6 +43,36 @@ std::string Fiff::Formatting::asString(const Fiff::Tag& tag){
   stream << formatTagMetaData(tag) << ", " << formatTagData(tag);
 
   return stream.str();
+}
+
+std::string Fiff::Formatting::asString(const Fiff::ChannelPosition &)
+{
+  return std::string();
+}
+
+std::string Fiff::Formatting::asString(const Fiff::ChannelInfo &)
+{
+  return std::string();
+}
+
+std::string Fiff::Formatting::asString(const Fiff::ID &)
+{
+  return std::string();
+}
+
+std::string Fiff::Formatting::asString(const Fiff::DirectoryEntry &)
+{
+  return std::string();
+}
+
+std::string Fiff::Formatting::asString(const Fiff::DigitizerPoint &)
+{
+  return std::string();
+}
+
+std::string Fiff::Formatting::asString(const Fiff::DigitizerString &)
+{
+  return std::string();
 }
 
 //==============================================================================
@@ -93,7 +123,7 @@ std::string Fiff::Formatting::formatTagMetaData(const Fiff::Tag &tag)
  */
 std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
 {
-  if(tag.data == nullptr){
+  if(tag.data.byteArray == nullptr){
     return {};
   }
   std::stringstream stream;
@@ -104,17 +134,17 @@ std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
       stream << "data: ";
       if(tag.kind == Kind::block_start || tag.kind == Kind::block_end)
       {
-        stream << "(" << *static_cast<int *>(tag.data) << ")" << getMapValue(_blockID, *static_cast<int *>(tag.data));
+        stream << "(" << *static_cast<int *>(tag.data.byteArray) << ")" << getMapValue(_blockID, *static_cast<int *>(tag.data.byteArray));
       } else
       {
-        stream << std::to_string(*static_cast<int *>(tag.data));
+        stream << std::to_string(*static_cast<int *>(tag.data.byteArray));
       }
       break;
     }
     case Type::ch_info_struct_:
     {
       stream << "data: ";
-      auto info = static_cast<Data::ch_info_rec *>(tag.data);
+      auto info = static_cast<Fiff::ChannelInfo*>(tag.data.byteArray);
       stream << "scanNo " << info->scanNo << ", ";
       stream << "logNo " << info->logNo << ", ";
       stream << "kind " << info->kind << ", ";
