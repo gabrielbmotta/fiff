@@ -45,21 +45,34 @@ std::string Fiff::Formatting::asString(const Fiff::Tag& tag){
   return stream.str();
 }
 
-std::string Fiff::Formatting::asString(const Fiff::ChannelPosition &)
+std::string Fiff::Formatting::asString(const Fiff::ChannelPosition& pos)
 {
-  return std::string();
+  std::stringstream stream;
+
+  stream.precision(2);
+  stream << "coil type " << pos.coil_type << ", ";
+  stream << "r0 (" << pos.r0[0] << "," << pos.r0[1] << "," << pos.r0[2] << "), ";
+  stream << "ex (" << pos.ex[0] << "," << pos.ex[1] << "," << pos.ex[2] << "), ";
+  stream << "ey (" << pos.ey[0] << "," << pos.ey[1] << "," << pos.ey[2] << "), ";
+  stream << "ez (" << pos.ez[0] << "," << pos.ez[1] << "," << pos.ez[2] << "), ";
+
+  return stream.str();
 }
 
-std::string Fiff::Formatting::asString(const Fiff::ChannelInfo & info)
+std::string Fiff::Formatting::asString(const Fiff::ChannelInfo& info)
 {
   std::stringstream stream;
 
   stream << "scanNo " << info.scanNo << ", ";
   stream << "logNo " << info.logNo << ", ";
   stream << "kind " << info.kind << ", ";
-  stream.precision(9);
-  stream << "range " << info.range << ", ";
-  stream << "cal " << info.cal;
+  stream.precision(2);
+  stream << "range " << std::scientific << info.range << ", ";
+  stream << "cal " << std::scientific << info.cal << ", ";
+  stream << asString(info.chpos) << ", ";
+  stream << "unit " << info.unit << ", ";
+  stream << "unit_mul " << info.unit_mul << ", ";
+
 
   return stream.str();
 }
@@ -104,8 +117,6 @@ std::string Fiff::Formatting::getMapValue(const std::map<int,std::string>& map,
   auto mapEntry = map.find(id);
   if (mapEntry != map.end()) {
     stream << mapEntry->second;
-  } else {
-    stream << id;
   }
 
   return stream.str();
@@ -120,12 +131,22 @@ std::string Fiff::Formatting::formatTagMetaData(const Fiff::Tag &tag)
 {
   std::stringstream stream;
 
-  stream << "(" << static_cast<int32_t>(tag.kind) << ")" << getMapValue(_tagKind, static_cast<int32_t>(tag.kind));
+  stream << "[" << static_cast<int32_t>(tag.kind) << "]" << getMapValue(_tagKind, static_cast<int32_t>(tag.kind));
   stream << ", ";
-  stream << "(" << static_cast<int32_t>(tag.type) << ")" << getMapValue(_tagType, static_cast<int32_t>(tag.type));
+  stream << "[" << static_cast<int32_t>(tag.type) << "]" << getMapValue(_tagType, static_cast<int32_t>(tag.type));
   stream << ", ";
-  stream << tag.size << " bytes";
-  stream <<  ", next: " << tag.next;
+  stream << tag.size << "B";
+  int KB = tag.size/1000;
+  int MB = KB/1000;
+  if(MB){
+    stream << "(" << MB <<  "MB)";
+  }  else if (KB){
+    stream << "(" << KB <<  "KB)";
+  }
+  if(tag.next)
+  {
+    stream << ", next: " << tag.next;
+  }
 
   return stream.str();
 }
@@ -141,14 +162,13 @@ std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
     return {};
   }
   std::stringstream stream;
-  stream << "data: ";
 
   switch (tag.type){
     case Type::int32_:
     {
       if(tag.kind == Kind::block_start || tag.kind == Kind::block_end)
       {
-        stream << "(" << *static_cast<int *>(tag.data.byteArray) << ")" << getMapValue(_blockID, *static_cast<int *>(tag.data.byteArray));
+        stream << "[" << *static_cast<int *>(tag.data.byteArray) << "] Block: " << getMapValue(_blockID, *static_cast<int *>(tag.data.byteArray));
       } else
       {
         stream << std::to_string(*static_cast<int *>(tag.data.byteArray));
