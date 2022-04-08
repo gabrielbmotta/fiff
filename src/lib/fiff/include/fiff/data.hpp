@@ -88,7 +88,7 @@ struct Data {
   ~Data();
   Data &operator=(const Data &rhs);
 
-  void resize(int newSize);
+  void resize(size_t newSize);
   void clear();
 
   Data(char); // 1
@@ -111,27 +111,27 @@ struct Data {
   Data(ChannelPosition);// 34
   Data(DigitizerString);// 36
 
-  operator char(); // 1
-  operator int16_t(); // 2
-  operator int32_t(); // 3
-  operator float(); // 4
-  operator double(); // 5
-  operator Julian(); // 6
-  operator uint16_t(); // 7
-  operator uint32_t(); // 8
-  operator uint64_t(); // 9
-  operator std::string(); // 10
-  operator int64_t(); // 11
-  operator std::complex<float>(); // 20
-  operator std::complex<double>(); // 21
-  operator ChannelInfo(); // 30
-  operator ID(); // 31
-  operator DirectoryEntry(); // 32
-  operator DigitizerPoint(); // 33
-  operator ChannelPosition(); // 34
-  operator DigitizerString(); // 36
+  operator char() const; // 1
+  operator int16_t() const; // 2
+  operator int32_t() const; // 3
+  operator float() const; // 4
+  operator double() const; // 5
+  operator Julian() const; // 6
+  operator uint16_t() const; // 7
+  operator uint32_t() const; // 8
+  operator uint64_t() const; // 9
+  operator std::string() const; // 10
+  operator int64_t() const; // 11
+  operator std::complex<float>() const; // 20
+  operator std::complex<double>() const; // 21
+  operator ChannelInfo() const; // 30
+  operator ID() const; // 31
+  operator DirectoryEntry() const; // 32
+  operator DigitizerPoint() const; // 33
+  operator ChannelPosition() const; // 34
+  operator DigitizerString() const; // 36
 
-  int32_t size;
+  size_t size;
   void* byteArray;
 };
 

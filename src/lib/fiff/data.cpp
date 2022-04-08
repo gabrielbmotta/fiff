@@ -31,7 +31,7 @@ Fiff::Data::~Data()
   }
 }
 
-void Fiff::Data::resize(int newSize)
+void Fiff::Data::resize(size_t newSize)
 {
   clear();
   this->size = newSize;
@@ -160,97 +160,179 @@ Fiff::Data &Fiff::Data::operator=(const Fiff::Data &rhs)
   return *this;
 }
 
-Fiff::Data::operator char()
+Fiff::Data::operator char() const
 {
-  return 0;
+  return *static_cast<char*>(byteArray);
 }
 
-Fiff::Data::operator int16_t()
+Fiff::Data::operator int16_t() const
 {
-  return 0;
+  return *static_cast<int16_t*>(byteArray);
 }
 
-Fiff::Data::operator int32_t()
+Fiff::Data::operator int32_t() const
 {
-  return 0;
+  return *static_cast<int32_t*>(byteArray);
 }
 
-Fiff::Data::operator float()
+Fiff::Data::operator float() const
 {
-  return 0;
+  return *static_cast<float*>(byteArray);
 }
 
-Fiff::Data::operator double()
+Fiff::Data::operator double() const
 {
-  return 0;
+  return *static_cast<double*>(byteArray);
 }
 
-Fiff::Data::operator Julian()
+Fiff::Data::operator Julian() const
 {
-  return Fiff::Julian();
+  Julian j{};
+  j.date = *static_cast<int32_t*>(byteArray);
+  return j;
 }
 
-Fiff::Data::operator uint16_t()
+Fiff::Data::operator uint16_t() const
 {
-  return 0;
+  return *static_cast<uint16_t*>(byteArray);
 }
 
-Fiff::Data::operator uint32_t()
+Fiff::Data::operator uint32_t() const
 {
-  return 0;
+  return *static_cast<uint32_t*>(byteArray);
 }
 
-Fiff::Data::operator uint64_t()
+Fiff::Data::operator uint64_t() const
 {
-  return 0;
+  return *static_cast<uint64_t*>(byteArray);
 }
 
-Fiff::Data::operator std::string()
+Fiff::Data::operator std::string() const
 {
-  return std::string();
+  return {static_cast<char*>(byteArray), size};
 }
 
-Fiff::Data::operator int64_t()
+Fiff::Data::operator int64_t() const
 {
-  return 0;
+  return *static_cast<int64_t*>(byteArray);
 }
 
-Fiff::Data::operator std::complex<float>()
+Fiff::Data::operator std::complex<float>() const
 {
-  return std::complex<float>();
+  std::complex<float> f;
+  f.real(*static_cast<float*>(byteArray));
+  f.imag(*(static_cast<float*>(byteArray) + 1));
+  return f;
 }
 
-Fiff::Data::operator std::complex<double>()
+Fiff::Data::operator std::complex<double>() const
 {
-  return std::complex<double>();
+  std::complex<double> f;
+  f.real(*static_cast<double*>(byteArray));
+  f.imag(*(static_cast<double*>(byteArray) + 1));
+  return f;}
+
+Fiff::Data::operator ChannelInfo() const
+{
+  int offset = 0;
+  ChannelInfo info{};
+  info.scanNo = *(static_cast<int32_t*>(byteArray) + offset++);
+  info.logNo = *(static_cast<int32_t*>(byteArray) + offset++);
+  info.kind = *(static_cast<int32_t*>(byteArray) + offset++);
+  info.range = *(static_cast<float*>(byteArray) + offset++);
+  info.cal = *(static_cast<float*>(byteArray) + offset++);
+
+  info.chpos.coil_type = *(static_cast<int32_t*>(byteArray) + offset++);
+
+  info.chpos.r0[0] = *(static_cast<float*>(byteArray) + offset++);
+  info.chpos.r0[1] = *(static_cast<float*>(byteArray) + offset++);
+  info.chpos.r0[2] = *(static_cast<float*>(byteArray) + offset++);
+
+  info.chpos.ex[0] = *(static_cast<float*>(byteArray) + offset++);
+  info.chpos.ex[1] = *(static_cast<float*>(byteArray) + offset++);
+  info.chpos.ex[2] = *(static_cast<float*>(byteArray) + offset++);
+
+  info.chpos.ey[0] = *(static_cast<float*>(byteArray) + offset++);
+  info.chpos.ey[1] = *(static_cast<float*>(byteArray) + offset++);
+  info.chpos.ey[2] = *(static_cast<float*>(byteArray) + offset++);
+
+  info.chpos.ez[0] = *(static_cast<float*>(byteArray) + offset++);
+  info.chpos.ez[1] = *(static_cast<float*>(byteArray) + offset++);
+  info.chpos.ez[2] = *(static_cast<float*>(byteArray) + offset++);
+
+  info.unit = *(static_cast<int32_t*>(byteArray) + offset++);
+  info.unit_mul = *(static_cast<int32_t*>(byteArray) + offset);
+  return info;
 }
 
-Fiff::Data::operator ChannelInfo()
+Fiff::Data::operator ID() const
 {
-  return Fiff::ChannelInfo();
+  int offset = 0;
+  ID id{};
+
+  id.version = *(static_cast<int32_t*>(byteArray) + offset++);
+  id.machid[0] = *(static_cast<int32_t*>(byteArray) + offset++);
+  id.machid[1] = *(static_cast<int32_t*>(byteArray) + offset++);
+  id.time_sec = *(static_cast<int32_t*>(byteArray) + offset++);
+  id.time_usec = *(static_cast<int32_t*>(byteArray) + offset);
+
+  return id;
 }
 
-Fiff::Data::operator ID()
+Fiff::Data::operator DirectoryEntry() const
 {
-  return Fiff::ID();
+  int offset = 0;
+  DirectoryEntry dir{};
+
+  dir.kind = static_cast<Kind>(*(static_cast<int32_t*>(byteArray) + offset++));
+  dir.type = static_cast<Type>(*(static_cast<int32_t*>(byteArray) + offset++));
+  dir.size = *(static_cast<int32_t*>(byteArray) + offset++);
+  dir.position = *(static_cast<int32_t*>(byteArray) + offset);
+
+  return dir;
 }
 
-Fiff::Data::operator DirectoryEntry()
+Fiff::Data::operator DigitizerPoint() const
 {
-  return Fiff::DirectoryEntry();
+  int offset = 0;
+  DigitizerPoint dig{};
+
+  dig.kind = *(static_cast<int32_t*>(byteArray) + offset++);
+  dig.ident = *(static_cast<int32_t*>(byteArray) + offset++);
+  dig.r[0] = *(static_cast<float*>(byteArray) + offset++);
+  dig.r[1] = *(static_cast<float*>(byteArray) + offset++);
+  dig.r[2] = *(static_cast<float*>(byteArray) + offset);
+
+  return dig;
 }
 
-Fiff::Data::operator DigitizerPoint()
+Fiff::Data::operator ChannelPosition() const
 {
-  return Fiff::DigitizerPoint();
+  int offset = 0;
+  Fiff::ChannelPosition chpos{};
+
+  chpos.coil_type = *(static_cast<int32_t*>(byteArray) + offset++);
+
+  chpos.r0[0] = *(static_cast<float*>(byteArray) + offset++);
+  chpos.r0[1] = *(static_cast<float*>(byteArray) + offset++);
+  chpos.r0[2] = *(static_cast<float*>(byteArray) + offset++);
+
+  chpos.ex[0] = *(static_cast<float*>(byteArray) + offset++);
+  chpos.ex[1] = *(static_cast<float*>(byteArray) + offset++);
+  chpos.ex[2] = *(static_cast<float*>(byteArray) + offset++);
+
+  chpos.ey[0] = *(static_cast<float*>(byteArray) + offset++);
+  chpos.ey[1] = *(static_cast<float*>(byteArray) + offset++);
+  chpos.ey[2] = *(static_cast<float*>(byteArray) + offset++);
+
+  chpos.ez[0] = *(static_cast<float*>(byteArray) + offset++);
+  chpos.ez[1] = *(static_cast<float*>(byteArray) + offset++);
+  chpos.ez[2] = *(static_cast<float*>(byteArray) + offset);
+
+  return chpos;
 }
 
-Fiff::Data::operator ChannelPosition()
+Fiff::Data::operator DigitizerString() const
 {
-  return Fiff::ChannelPosition();
-}
-
-Fiff::Data::operator DigitizerString()
-{
-  return Fiff::DigitizerString();
+  return {};
 }

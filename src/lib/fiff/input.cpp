@@ -137,7 +137,7 @@ void Fiff::Input::setEndianess()
  */
 void Fiff::Input::setEndianess(Endian fileEndian)
 {
-  if (systemEndian() == fileEndian){
+  if(systemEndian() == fileEndian){
     m_relativeEndian = RelativeEndian::same_as_system;
   } else {
     m_relativeEndian = RelativeEndian::different_from_system;
@@ -294,4 +294,3 @@ void Fiff::Input::readData(Fiff::Tag &tag)
     }
   }
 }
-
