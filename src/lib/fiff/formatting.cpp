@@ -50,9 +50,18 @@ std::string Fiff::Formatting::asString(const Fiff::ChannelPosition &)
   return std::string();
 }
 
-std::string Fiff::Formatting::asString(const Fiff::ChannelInfo &)
+std::string Fiff::Formatting::asString(const Fiff::ChannelInfo & info)
 {
-  return std::string();
+  std::stringstream stream;
+
+  stream << "scanNo " << info.scanNo << ", ";
+  stream << "logNo " << info.logNo << ", ";
+  stream << "kind " << info.kind << ", ";
+  stream.precision(9);
+  stream << "range " << info.range << ", ";
+  stream << "cal " << info.cal;
+
+  return stream.str();
 }
 
 std::string Fiff::Formatting::asString(const Fiff::ID &)
@@ -71,6 +80,11 @@ std::string Fiff::Formatting::asString(const Fiff::DigitizerPoint &)
 }
 
 std::string Fiff::Formatting::asString(const Fiff::DigitizerString &)
+{
+  return std::string();
+}
+
+std::string Fiff::Formatting::asString(const Fiff::Julian &)
 {
   return std::string();
 }
@@ -127,11 +141,11 @@ std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
     return {};
   }
   std::stringstream stream;
+  stream << "data: ";
 
   switch (tag.type){
     case Type::int32_:
     {
-      stream << "data: ";
       if(tag.kind == Kind::block_start || tag.kind == Kind::block_end)
       {
         stream << "(" << *static_cast<int *>(tag.data.byteArray) << ")" << getMapValue(_blockID, *static_cast<int *>(tag.data.byteArray));
@@ -141,18 +155,74 @@ std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
       }
       break;
     }
+
+    case Type::void_:
+      break;
+    case Type::byte_:
+      break;
+    case Type::short_:
+      break;
+    case Type::float_:
+      break;
+    case Type::double_:
+      break;
+    case Type::julian_:
+      break;
+    case Type::ushort_:
+      break;
+    case Type::uint32_:
+      break;
+    case Type::uint64_:
+      break;
+    case Type::string_:
+      break;
+    case Type::int64_:
+      break;
+    case Type::dau_pack13_:
+      break;
+    case Type::dau_pack14_:
+      break;
+    case Type::dau_pack16_:
+      break;
+    case Type::complex_float_:
+      break;
+    case Type::complex_double_:
+      break;
+    case Type::old_pack_:
+      break;
     case Type::ch_info_struct_:
     {
-      stream << "data: ";
-      auto info = static_cast<Fiff::ChannelInfo*>(tag.data.byteArray);
-      stream << "scanNo " << info->scanNo << ", ";
-      stream << "logNo " << info->logNo << ", ";
-      stream << "kind " << info->kind << ", ";
-      stream.precision(9);
-      stream << "range " << info->range << ", ";
-      stream << "cal " << info->cal;
+      stream << asString(static_cast<ChannelInfo>(tag.data));
+      break;
     }
-    default:
+    case Type::id_struct_:
+    {
+      stream << asString(static_cast<ID>(tag.data));
+      break;
+    }
+    case Type::dir_entry_struct_:
+    {
+      stream << asString(static_cast<DirectoryEntry>(tag.data));
+      break;
+    }
+    case Type::dig_point_struct_:
+    {
+      stream << asString(static_cast<DigitizerPoint>(tag.data));
+      break;
+    }
+    case Type::ch_pos_struct_:
+    {
+      stream << asString(static_cast<ChannelPosition>(tag.data));
+      break;
+    }
+    case Type::coord_trans_struct_:
+      break;
+    case Type::dig_string_struct_:
+    {
+      stream << asString(static_cast<DigitizerString>(tag.data));
+      break;
+    }
+    case Type::stream_segment_struct_:
       break;
   }
   return stream.str();

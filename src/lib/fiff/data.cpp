@@ -139,6 +139,11 @@ Fiff::Data::Data(Fiff::ChannelPosition)
 
 }
 
+Fiff::Data::Data(Fiff::CoordinateTransformation)
+{
+
+}
+
 Fiff::Data::Data(Fiff::DigitizerString)
 {
 
@@ -261,7 +266,8 @@ Fiff::Data::operator ChannelInfo() const
   info.chpos.ez[2] = *(static_cast<float*>(byteArray) + offset++);
 
   info.unit = *(static_cast<int32_t*>(byteArray) + offset++);
-  info.unit_mul = *(static_cast<int32_t*>(byteArray) + offset);
+  info.unit_mul = *(static_cast<int32_t*>(byteArray) + offset++);
+  memcpy(info.ch_name, static_cast<char*>(byteArray) + offset * sizeof(int32_t), 16);
   return info;
 }
 
@@ -330,6 +336,35 @@ Fiff::Data::operator ChannelPosition() const
   chpos.ez[2] = *(static_cast<float*>(byteArray) + offset);
 
   return chpos;
+}
+
+Fiff::Data::operator CoordinateTransformation() const
+{
+  int offset = 0;
+  CoordinateTransformation coord{};
+
+  coord.from = *(static_cast<int32_t*>(byteArray) + offset++);
+  coord.from = *(static_cast<int32_t*>(byteArray) + offset++);
+
+  for(auto& row : coord.rot){
+    for(auto& element : row)
+      element = *(static_cast<float*>(byteArray) + offset++);
+  }
+
+  coord.move[0] = *(static_cast<float*>(byteArray) + offset++);
+  coord.move[1] = *(static_cast<float*>(byteArray) + offset++);
+  coord.move[2] = *(static_cast<float*>(byteArray) + offset++);
+
+  for(auto& row : coord.invrot){
+    for(auto& element : row)
+      element = *(static_cast<float*>(byteArray) + offset++);
+  }
+
+  coord.invmove[0] = *(static_cast<float*>(byteArray) + offset++);
+  coord.invmove[1] = *(static_cast<float*>(byteArray) + offset++);
+  coord.invmove[2] = *(static_cast<float*>(byteArray) + offset);
+
+  return coord;
 }
 
 Fiff::Data::operator DigitizerString() const

@@ -25,6 +25,7 @@ public:
   static std::string asString(const DirectoryEntry&);
   static std::string asString(const DigitizerPoint&);
   static std::string asString(const DigitizerString&);
+  static std::string asString(const Julian&);
 
   static const std::map<int,std::string>& tagKinds();
   static const std::map<int,std::string>& tagTypes();

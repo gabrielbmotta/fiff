@@ -63,6 +63,15 @@ struct DigitizerString{
   float* rr[3];
 };
 
+struct CoordinateTransformation{
+  int32_t from;
+  int32_t to;
+  float rot[3][3];
+  float move[3];
+  float invrot[3][3];
+  float invmove[3];
+};
+
 //struct ch_info_t {
 //  int32_t scanNo;       /**< Position of this channel in scanning order. */
 //  int32_t logNo;        /**< Logical channel number. These must be unique within channels of the same kind. */
@@ -100,16 +109,17 @@ struct Data {
   Data(uint16_t); // 7
   Data(uint32_t); // 8
   Data(uint64_t); // 9
-  Data(std::string);// 10
-  Data(int64_t);// 11
-  Data(std::complex<float>);// 20
-  Data(std::complex<double>);// 21
-  Data(ChannelInfo);// 30
-  Data(ID);// 31
-  Data(DirectoryEntry);// 32
-  Data(DigitizerPoint);// 33
-  Data(ChannelPosition);// 34
-  Data(DigitizerString);// 36
+  Data(std::string); // 10
+  Data(int64_t); // 11
+  Data(std::complex<float>); // 20
+  Data(std::complex<double>); // 21
+  Data(ChannelInfo); // 30
+  Data(ID); // 31
+  Data(DirectoryEntry); // 32
+  Data(DigitizerPoint); // 33
+  Data(ChannelPosition); // 34
+  Data(CoordinateTransformation); // 35
+  Data(DigitizerString); // 36
 
   operator char() const; // 1
   operator int16_t() const; // 2
@@ -129,6 +139,7 @@ struct Data {
   operator DirectoryEntry() const; // 32
   operator DigitizerPoint() const; // 33
   operator ChannelPosition() const; // 34
+  operator CoordinateTransformation() const; // 35
   operator DigitizerString() const; // 36
 
   size_t size;
