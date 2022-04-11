@@ -219,24 +219,34 @@ std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
     case Type::void_:
       break;
     case Type::byte_:
+      stream << static_cast<char>(tag.data);
       break;
     case Type::short_:
+      stream << static_cast<int16_t>(tag.data);
       break;
     case Type::float_:
+      stream << static_cast<float>(tag.data);
       break;
     case Type::double_:
+      stream << static_cast<double>(tag.data);
       break;
     case Type::julian_:
+      stream << asString(static_cast<Julian>(tag.data));
       break;
     case Type::ushort_:
+      stream << static_cast<uint16_t>(tag.data);
       break;
     case Type::uint32_:
+      stream << static_cast<uint32_t>(tag.data);
       break;
     case Type::uint64_:
+      stream << static_cast<uint64_t>(tag.data);
       break;
     case Type::string_:
+      stream << static_cast<std::string>(tag.data);
       break;
     case Type::int64_:
+      stream << static_cast<int64_t>(tag.data);
       break;
     case Type::dau_pack13_:
       break;
@@ -245,8 +255,10 @@ std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
     case Type::dau_pack16_:
       break;
     case Type::complex_float_:
+      stream << static_cast<std::complex<float>>(tag.data);
       break;
     case Type::complex_double_:
+      stream << static_cast<std::complex<double>>(tag.data);
       break;
     case Type::old_pack_:
       break;
