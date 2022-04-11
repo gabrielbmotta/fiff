@@ -167,6 +167,8 @@ void Fiff::Input::readMetaData(Fiff::Tag &tag)
     endswap(&tag.next);
   }
 
+  type = type & 0x00000FF;
+
   tag.kind = static_cast<Kind>(kind);
   tag.type = static_cast<Type>(type);
 }

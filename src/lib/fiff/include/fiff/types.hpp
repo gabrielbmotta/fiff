@@ -350,7 +350,18 @@ enum class Kind : int32_t {
   mem_data_buffer = 10300
 };
 
-enum class Type : int32_t {
+enum TypeFormat{
+  scalar = 0x00000000,
+  matrix = 0x40000000
+};
+
+enum TypeRepresentation{
+  dense = 0x00000000,
+  column_compressed_sparse = 0x00100000,
+  row_compressed_sparse = 0x00200000
+};
+
+enum class Type: int32_t{
   void_ = 0,
   byte_ = 1,
   short_ = 2,
