@@ -34,7 +34,7 @@ const std::map<int, std::string> &Fiff::Formatting::blockIds()
 
 //==============================================================================
 /**
- * Formats passed tag a human- readable string.
+ * Formats passed tag a human-readable string.
  * @param tag   tag to be formatted as a string.
  */
 std::string Fiff::Formatting::asString(const Fiff::Tag& tag){
@@ -45,6 +45,11 @@ std::string Fiff::Formatting::asString(const Fiff::Tag& tag){
   return stream.str();
 }
 
+//==============================================================================
+/**
+ * Formats channel position object as human-readable string.
+ * @param pos   object to be formatted as string
+ */
 std::string Fiff::Formatting::asString(const Fiff::ChannelPosition& pos)
 {
   std::stringstream stream;
@@ -54,15 +59,21 @@ std::string Fiff::Formatting::asString(const Fiff::ChannelPosition& pos)
   stream << "r0 (" << pos.r0[0] << "," << pos.r0[1] << "," << pos.r0[2] << "), ";
   stream << "ex (" << pos.ex[0] << "," << pos.ex[1] << "," << pos.ex[2] << "), ";
   stream << "ey (" << pos.ey[0] << "," << pos.ey[1] << "," << pos.ey[2] << "), ";
-  stream << "ez (" << pos.ez[0] << "," << pos.ez[1] << "," << pos.ez[2] << "), ";
+  stream << "ez (" << pos.ez[0] << "," << pos.ez[1] << "," << pos.ez[2] << ")";
 
   return stream.str();
 }
 
+//==============================================================================
+/**
+ * Formats channel info object as human-readable string.
+ * @param info  object to be formatted as string
+ */
 std::string Fiff::Formatting::asString(const Fiff::ChannelInfo& info)
 {
   std::stringstream stream;
 
+  stream << std::string(info.ch_name) << ", ";
   stream << "scanNo " << info.scanNo << ", ";
   stream << "logNo " << info.logNo << ", ";
   stream << "kind " << info.kind << ", ";
@@ -73,32 +84,61 @@ std::string Fiff::Formatting::asString(const Fiff::ChannelInfo& info)
   stream << "unit " << info.unit << ", ";
   stream << "unit_mul " << info.unit_mul << ", ";
 
-
   return stream.str();
 }
 
-std::string Fiff::Formatting::asString(const Fiff::ID &)
+//==============================================================================
+/**
+ * Formats id object as human-readable string.
+ * @param id    object to be formatted as string
+ */
+std::string Fiff::Formatting::asString(const Fiff::ID &id)
 {
+  (void)id;
   return std::string();
 }
 
-std::string Fiff::Formatting::asString(const Fiff::DirectoryEntry &)
+//==============================================================================
+/**
+ * Formats directory entry object as human-readable string.
+ * @param dirEntr   object to be formatted as string
+ */
+std::string Fiff::Formatting::asString(const Fiff::DirectoryEntry &dirEntr)
 {
+  (void)dirEntr;
   return std::string();
 }
 
-std::string Fiff::Formatting::asString(const Fiff::DigitizerPoint &)
+//==============================================================================
+/**
+ * Formats digitizer position object as human-readable string.
+ * @param dig   object to be formatted as string
+ */
+std::string Fiff::Formatting::asString(const Fiff::DigitizerPoint &dig)
 {
+  (void)dig;
   return std::string();
 }
 
-std::string Fiff::Formatting::asString(const Fiff::DigitizerString &)
+//==============================================================================
+/**
+ * Formats digitizer string object as human-readable string.
+ * @param dig   object to be formatted as string
+ */
+std::string Fiff::Formatting::asString(const Fiff::DigitizerString &dig)
 {
+  (void)dig;
   return std::string();
 }
 
-std::string Fiff::Formatting::asString(const Fiff::Julian &)
+//==============================================================================
+/**
+ * Formats Julian date as human-readable string.
+ * @param jul   object to be formatted as string
+ */
+std::string Fiff::Formatting::asString(const Fiff::Julian &jul)
 {
+  (void)jul;
   return std::string();
 }
 

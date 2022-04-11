@@ -2,10 +2,6 @@
 
 #include "fiff/types.hpp"
 
-namespace {
-
-}
-
 //==============================================================================
 /**
  * Constructs a Input object.
@@ -73,7 +69,9 @@ bool Fiff::Input::atEnd() const
 }
 
 //==============================================================================
-
+/**
+ * Creates an object to read from a fiff file tag by tag.
+ */
 Fiff::Input Fiff::Input::fromFile(const std::string &filePath)
 {
   Input in;
@@ -83,7 +81,10 @@ Fiff::Input Fiff::Input::fromFile(const std::string &filePath)
 }
 
 //==============================================================================
-
+/**
+ * Creates an object to read from a fiff file tag by tag, with a user
+ * specified endianess.
+ */
 Fiff::Input Fiff::Input::fromFile(const std::string &filePath, Endian fileEndian)
 {
   Input in;
