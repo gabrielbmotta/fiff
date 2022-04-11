@@ -16,6 +16,10 @@
 
 namespace Fiff{
 
+//==============================================================================
+/**
+ * Object containing the position of a channel.
+ */
 struct ChannelPosition {
   int32_t coil_type;
   float r0[3];
@@ -24,6 +28,10 @@ struct ChannelPosition {
   float ez[3];
 }; //mSize is 48 bytes
 
+//==============================================================================
+/**
+ * Object containing information about a channel.
+ */
 struct ChannelInfo {
   int32_t scanNo;       /**< Position of this channel in scanning order. */
   int32_t logNo;        /**< Logical channel number. These must be unique within channels of the same kind. */
@@ -36,6 +44,10 @@ struct ChannelInfo {
   char ch_name[16];     /**< Descriptive name for the channel. */
 }; //mSize is 96 bytes
 
+//==============================================================================
+/**
+ * Object containing identifying information about the source of a fiff file.
+ */
 struct ID {
   int32_t version;
   int32_t machid[2];
@@ -43,6 +55,10 @@ struct ID {
   int32_t time_usec;
 };//total mSize is 20 bytes
 
+//==============================================================================
+/**
+ * An entry showing where to find elements in a fiff file.
+ */
 struct DirectoryEntry{
   Kind kind;
   Type type;
@@ -50,12 +66,20 @@ struct DirectoryEntry{
   int32_t position;
 };
 
+//==============================================================================
+/**
+ * An object containing the position of a digitization point.
+ */
 struct DigitizerPoint{
   int32_t kind;
   int32_t ident;
   float r[3];
 };
 
+//==============================================================================
+/**
+ * An object containing a series of positions of digitization points.
+ */
 struct DigitizerString{
   int32_t kind;
   int32_t ident;
@@ -63,6 +87,10 @@ struct DigitizerString{
   float* rr[3];
 };
 
+//==============================================================================
+/**
+ * An object containing transformations between coordinate spaces.
+ */
 struct CoordinateTransformation{
   int32_t from;
   int32_t to;
@@ -87,10 +115,18 @@ struct CoordinateTransformation{
 //  int32_t unit_mul;     /**< The unit multiplier. The result given by range*cal*data is in units unit*10^unit_mul. */
 //}; //mSize is 80 bytes
 
+//==============================================================================
+/**
+ * An object containing a date in the julian format.
+ */
 struct Julian{
   int32_t date;
 };
 
+//==============================================================================
+/**
+ * An object that holds the fiff data.
+ */
 struct Data {
   Data();
   Data(const Data &);
@@ -145,5 +181,4 @@ struct Data {
   size_t size;
   void* byteArray;
 };
-
 }

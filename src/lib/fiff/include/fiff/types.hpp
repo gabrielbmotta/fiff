@@ -10,6 +10,11 @@ namespace Fiff {
 
 static_assert(CHAR_BIT == 8, "Only 8-bit byte systems supported.");
 
+//==============================================================================
+/**
+ * This enum defined the kind of a fiff tag. Tag kinds tell us what the
+ * contents of the tag are.
+ */
 enum class Kind : int32_t {
   new_file = 1,
   close_file = 2,
@@ -350,17 +355,30 @@ enum class Kind : int32_t {
   mem_data_buffer = 10300
 };
 
+//==============================================================================
+/**
+ * Format tells us whether the data is a single scalar value or a matrix
+ * of values.
+ */
 enum TypeFormat{
   scalar = 0x00000000,
   matrix = 0x40000000
 };
 
+//==============================================================================
+/**
+ * Representation tells us how a matrix is encoded.
+ */
 enum TypeRepresentation{
   dense = 0x00000000,
   column_compressed_sparse = 0x00100000,
   row_compressed_sparse = 0x00200000
 };
 
+//==============================================================================
+/**
+ * The type tells us with what data type to interpret the data.
+ */
 enum class Type: int32_t{
   void_ = 0,
   byte_ = 1,
@@ -390,6 +408,10 @@ enum class Type: int32_t{
   stream_segment_struct_ = 37
 };
 
+//==============================================================================
+/**
+ * Header IDs for fiff blocks that organize data in a fiff list (e.g. a file)
+ */
 enum class Block : int32_t {
   root = 999,
   meas = 100,
