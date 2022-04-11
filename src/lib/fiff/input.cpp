@@ -65,7 +65,7 @@ std::streampos Fiff::Input::currentReadPosition() const
  */
 bool Fiff::Input::atEnd() const
 {
-  return m_istream->eof();
+  return (m_istream->eof() || m_istream->peek() == std::ifstream::traits_type::eof());
 }
 
 //==============================================================================
