@@ -1,6 +1,9 @@
 #include "fiff/formatting.hpp"
 
 #include "fiff/types.hpp"
+#include <chrono>
+
+static std::string unix_epoch(int time);
 
 //==============================================================================
 /**
@@ -82,7 +85,7 @@ std::string Fiff::Formatting::asString(const Fiff::ChannelInfo& info)
   stream << "cal " << std::scientific << info.cal << ", ";
   stream << asString(info.chpos) << ", ";
   stream << "unit " << info.unit << ", ";
-  stream << "unit_mul " << info.unit_mul << ", ";
+  stream << "unit_mul " << info.unit_mul;
 
   return stream.str();
 }
@@ -94,8 +97,12 @@ std::string Fiff::Formatting::asString(const Fiff::ChannelInfo& info)
  */
 std::string Fiff::Formatting::asString(const Fiff::ID &id)
 {
-  (void)id;
-  return std::string();
+  std::stringstream stream;
+  stream << "Fiff version " << ((id.version & 0xFFFF0000)>>16) <<"." << (id.version & 0x0000FFFF);
+  stream << ", id " << id.machid[0] << " " << id.machid[1];
+  stream << ", " << unix_epoch(id.time_sec);
+
+  return stream.str();
 }
 
 //==============================================================================
@@ -106,7 +113,20 @@ std::string Fiff::Formatting::asString(const Fiff::ID &id)
 std::string Fiff::Formatting::asString(const Fiff::DirectoryEntry &dirEntr)
 {
   (void)dirEntr;
-  return std::string();
+  std::stringstream stream;
+  stream << getMapValue(_tagKind, static_cast<int32_t>(dirEntr.kind));
+  stream << ", " << getMapValue(_tagType, static_cast<int32_t>(dirEntr.type));
+  stream << ", " << dirEntr.size << "B";
+  int KB = dirEntr.size/1000;
+  int MB = KB/1000;
+  if(MB){
+    stream << "(" << MB <<  "MB)";
+  }  else if (KB){
+    stream << "(" << KB <<  "KB)";
+  }
+  stream << ", position " << dirEntr.position;
+
+  return stream.str();
 }
 
 //==============================================================================
@@ -116,8 +136,12 @@ std::string Fiff::Formatting::asString(const Fiff::DirectoryEntry &dirEntr)
  */
 std::string Fiff::Formatting::asString(const Fiff::DigitizerPoint &dig)
 {
-  (void)dig;
-  return std::string();
+  std::stringstream stream;
+  stream.precision(3);
+  stream << dig.kind;
+  stream << ", ident " << dig.ident;
+  stream << ", (" << dig.r[0] << "," << dig.r[1] << "," << dig.r[2] << ")";
+  return stream.str();
 }
 
 //==============================================================================
@@ -209,6 +233,8 @@ std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
       if(tag.kind == Kind::block_start || tag.kind == Kind::block_end)
       {
         stream << "[" << *static_cast<int *>(tag.data.byteArray) << "] Block: " << getMapValue(_blockID, *static_cast<int *>(tag.data.byteArray));
+      } else if(tag.kind == Kind::meas_date){
+        stream << unix_epoch(*static_cast<int *>(tag.data.byteArray));
       } else
       {
         stream << std::to_string(*static_cast<int *>(tag.data.byteArray));
@@ -219,24 +245,34 @@ std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
     case Type::void_:
       break;
     case Type::byte_:
+      stream << static_cast<char>(tag.data);
       break;
     case Type::short_:
+      stream << static_cast<int16_t>(tag.data);
       break;
     case Type::float_:
+      stream << static_cast<float>(tag.data);
       break;
     case Type::double_:
+      stream << static_cast<double>(tag.data);
       break;
     case Type::julian_:
+      stream << asString(static_cast<Julian>(tag.data));
       break;
     case Type::ushort_:
+      stream << static_cast<uint16_t>(tag.data);
       break;
     case Type::uint32_:
+      stream << static_cast<uint32_t>(tag.data);
       break;
     case Type::uint64_:
+      stream << static_cast<uint64_t>(tag.data);
       break;
     case Type::string_:
+      stream << static_cast<std::string>(tag.data);
       break;
     case Type::int64_:
+      stream << static_cast<int64_t>(tag.data);
       break;
     case Type::dau_pack13_:
       break;
@@ -245,8 +281,10 @@ std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
     case Type::dau_pack16_:
       break;
     case Type::complex_float_:
+      stream << static_cast<std::complex<float>>(tag.data);
       break;
     case Type::complex_double_:
+      stream << static_cast<std::complex<double>>(tag.data);
       break;
     case Type::old_pack_:
       break;
@@ -699,3 +737,12 @@ const std::map<int, std::string> Fiff::Formatting::_blockID
          {124, "device_info"},
          {125, "helium_info"},
          {126, "channel_info"}};
+
+static std::string unix_epoch(int time){
+  auto unix_timestamp = static_cast<time_t>(time);
+  char time_buf[80];
+  tm ts{};
+  ts = *localtime(&unix_timestamp);
+  strftime(time_buf, sizeof(time_buf), "%a %Y-%m-%d %H:%M:%S %Z", &ts);
+  return time_buf;
+}
