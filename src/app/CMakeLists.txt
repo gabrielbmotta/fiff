@@ -6,4 +6,5 @@ set(CMAKE_CXX_STANDARD 17)
 add_subdirectory(printfiff)
 add_subdirectory(qfiff)
 add_subdirectory(anonymizer)
+add_subdirectory(fiffsplice)
 
