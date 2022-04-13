@@ -232,7 +232,7 @@ std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
     {
       if(tag.kind == Kind::block_start || tag.kind == Kind::block_end)
       {
-        stream << "[" << *static_cast<int *>(tag.data.byteArray) << "] Block: " << getMapValue(_blockID, *static_cast<int *>(tag.data.byteArray));
+        stream << "Block: " << "[" << *static_cast<int *>(tag.data.byteArray) << "] "<< getMapValue(_blockID, *static_cast<int *>(tag.data.byteArray));
       } else if(tag.kind == Kind::meas_date){
         stream << unix_epoch(*static_cast<int *>(tag.data.byteArray));
       } else
