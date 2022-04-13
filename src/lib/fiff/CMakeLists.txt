@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 project(fiff)
 
 add_library(${PROJECT_NAME}
-        include/fiff/tag.hpp
+        tag.cpp include/fiff/tag.hpp
         include/fiff/types.hpp
         input.cpp include/fiff/input.hpp
         output.cpp include/fiff/output.hpp

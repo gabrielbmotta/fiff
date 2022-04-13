@@ -20,6 +20,7 @@ struct Tag {
   Data data;   // Pointer to data.
 };
 
+void endswapTagData(Tag& tag);
 }//namespace
 
 #endif //FIFFFILEEXPLORER_FIFFTAG_HPP
