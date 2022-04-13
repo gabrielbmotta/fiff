@@ -195,6 +195,8 @@ void Fiff::Input::readData(Fiff::Tag &tag)
   tag.data.resize(tag.size);
   m_istream->read(reinterpret_cast<char *>(tag.data.byteArray), tag.size);
 
+  return;
+
   if(m_relativeEndian == RelativeEndian::different_from_system)
   {
     switch(tag.type)

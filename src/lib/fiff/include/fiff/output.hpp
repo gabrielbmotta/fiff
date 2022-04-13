@@ -17,13 +17,14 @@ class Output {
 public:
   Output() = default;
 
-  void writeTag(const Tag &tag);
+  void writeTag(Tag &tag);
 
   void goToWritePosition(std::streampos pos);
   std::streampos currentWritePosition();
 
   static Output toFile(const std::string &filePath);
 
+  RelativeEndian m_relativeEndian;
 protected:
   std::unique_ptr<std::ostream> m_ostream;
 };

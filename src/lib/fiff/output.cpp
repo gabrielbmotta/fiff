@@ -9,17 +9,25 @@
  * Writes the given tag to file.
  * @param tag   Tag to be wirtten to file.
  */
-void Fiff::Output::writeTag(const Fiff::Tag &tag)
+void Fiff::Output::writeTag(Fiff::Tag &tag)
 {
+  int32_t size = tag.size;
   auto kind = static_cast<int32_t>(tag.kind);
   auto type = static_cast<int32_t>(tag.type);
+
+  if(m_relativeEndian == RelativeEndian::different_from_system){
+    endswap(&kind);
+    endswap(&type);
+    endswap(&tag.size);
+    endswap(&tag.next);
+  }
 
   //TODO: ability to write in either endianness.
   m_ostream->write(reinterpret_cast<const char*>(&kind), sizeof (kind));
   m_ostream->write(reinterpret_cast<const char*>(&type), sizeof (type));
   m_ostream->write(reinterpret_cast<const char*>(&tag.size), sizeof (tag.size));
   m_ostream->write(reinterpret_cast<const char*>(&tag.next), sizeof (tag.next));
-  m_ostream->write(reinterpret_cast<const char*>(tag.data.byteArray), tag.size);
+  m_ostream->write(reinterpret_cast<const char*>(tag.data.byteArray), size);
 }
 
 //==============================================================================

@@ -21,21 +21,28 @@ int main(int argc, char* argv[])
   auto digSource = Fiff::Input::fromFile(digFile);
   auto output = Fiff::Output::toFile(outFile);
 
+  output.m_relativeEndian = rawSource.m_relativeEndian;
+
   std::cout << " > Reading from raw file...\n";
   while(!rawSource.atEnd()){
     auto tag = rawSource.getTag();
-    if(tag.kind == Fiff::Kind::block_start && static_cast<int32_t>(tag.data) == static_cast<int32_t>(Fiff::Block::isotrak)){
+    auto data = static_cast<int32_t>(tag.data);
+    endswap(&data);
+    if(tag.kind == Fiff::Kind::block_start && data == static_cast<int32_t>(Fiff::Block::isotrak)){
       std::cout << " > Raw file digitization data reached. Switching to digitizer file.\n";
       std::cout << " > Reading from digitizer file...\n";
       while(!digSource.atEnd()){
         auto digFileTag = digSource.getTag();
-        if(digFileTag.kind == Fiff::Kind::block_start && static_cast<int32_t>(digFileTag.data) == static_cast<int32_t>(Fiff::Block::isotrak)){
+        //std::cout << "Kind:" << static_cast<int32_t>(digFileTag.kind) << "\n";
+        auto digData = static_cast<int32_t>(tag.data);
+        endswap(&digData);
+        if(digFileTag.kind == Fiff::Kind::block_start && digData == static_cast<int32_t>(Fiff::Block::isotrak)){
           std::cout << " > Digitizer data found in digitizer file. Splicing...\n";
           output.writeTag(digFileTag);
           bool readAllDig = false;
           while(!readAllDig){
             auto dig = digSource.getTag();
-            if((dig.kind == Fiff::Kind::block_end && static_cast<int32_t>(dig.data) == static_cast<int32_t>(Fiff::Block::isotrak))){
+            if(dig.kind == Fiff::Kind::block_end){
               output.writeTag(dig);
               std::cout << " > All digitizer data spliced.\n";
               readAllDig = true;
@@ -44,14 +51,13 @@ int main(int argc, char* argv[])
             }
           }
         }
-        break;
       }
       bool discardAllDig = false;
+      std::cout << " > Skipping digitization data from raw file...\n";
       while(!discardAllDig){
-        std::cout << " > Skipping digitization data from raw file...\n";
         auto dig = rawSource.getTag();
         if(dig.type == Fiff::Type::dig_point_struct_ ||
-                (tag.kind == Fiff::Kind::block_end && static_cast<int32_t>(tag.data) == static_cast<int32_t>(Fiff::Block::isotrak))){
+                (tag.kind == Fiff::Kind::block_end )){
         } else{
           std::cout << " > Raw file digitization skipped.\n";
           std::cout << " > Continuing raw file parsing...\n";
