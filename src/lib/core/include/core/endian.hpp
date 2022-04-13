@@ -8,6 +8,7 @@
 #include <algorithm>
 
 enum class Endian{
+  unknown,
   little,
   big
 };
@@ -23,7 +24,7 @@ Endian systemEndian();
 template <class T>
 void endswap(T *objp)
 {
-  unsigned char *memp = reinterpret_cast<unsigned char*>(objp);
+  auto *memp = reinterpret_cast<unsigned char*>(objp);
   std::reverse(memp, memp + sizeof(T));
 }
 

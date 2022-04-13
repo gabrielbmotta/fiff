@@ -15,17 +15,21 @@ namespace Fiff {
 
 class Output {
 public:
-  Output() = default;
+  Output();
 
-  void writeTag(const Tag &tag);
+  void writeTag(Tag &tag);
 
   void goToWritePosition(std::streampos pos);
   std::streampos currentWritePosition();
 
   static Output toFile(const std::string &filePath);
+  static Output toFile(const std::string &filePath, Endian fileEndian);
 
+  void setEndianess(Endian fileEndian);
 protected:
+
   std::unique_ptr<std::ostream> m_ostream;
+  RelativeEndian m_relativeEndian;
 };
 }//namespace
 

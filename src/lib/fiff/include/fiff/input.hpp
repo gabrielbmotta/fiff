@@ -30,9 +30,10 @@ public:
   static Input fromFile(const std::string &filePath);
   static Input fromFile(const std::string &filePath, Endian fileEndian);
 
+  Endian fileEndianess();
+  void setEndianess(Endian fileEndian);
 protected:
   void setEndianess();
-  void setEndianess(Endian fileEndian);
 
   void readMetaData(Tag& tag);
   void readData(Tag& tag);

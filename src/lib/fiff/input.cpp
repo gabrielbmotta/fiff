@@ -94,6 +94,22 @@ Fiff::Input Fiff::Input::fromFile(const std::string &filePath, Endian fileEndian
 }
 
 //==============================================================================
+
+Endian Fiff::Input::fileEndianess()
+{
+  if (m_relativeEndian == RelativeEndian::same_as_system){
+    return systemEndian();
+  } else if (m_relativeEndian == RelativeEndian::different_from_system){
+    if(systemEndian() == Endian::little){
+      return Endian::big;
+    } else if(systemEndian() == Endian::big){
+      return Endian::little;
+    }
+  }
+  return Endian::unknown;
+}
+
+//==============================================================================
 /**
  * Tries to determine the file's endianness by peeking at the next tag.
  * Call this function when read position is at start.
