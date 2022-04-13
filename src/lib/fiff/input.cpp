@@ -207,8 +207,10 @@ void Fiff::Input::readData(Fiff::Tag &tag)
       // 1 byte
       case Fiff::Type::byte_:
       {
-        auto *dataPtr = reinterpret_cast<int8_t*>(tag.data.byteArray);
-        endswap(dataPtr);
+        auto *dataPtr = reinterpret_cast<int8_t *>(tag.data.byteArray);
+        for(size_t i = 0; i < (tag.size / sizeof (int8_t)); ++i){
+          endswap(dataPtr + i);
+        }
         break;
       }
       // 2 bytes
@@ -219,7 +221,9 @@ void Fiff::Input::readData(Fiff::Tag &tag)
       case Fiff::Type::dau_pack16_:
       {
         auto *dataPtr = reinterpret_cast<int16_t*>(tag.data.byteArray);
-        endswap(dataPtr);
+        for(size_t i = 0; i < (tag.size / sizeof (int16_t)); ++i){
+          endswap(dataPtr + i);
+        }
         break;
       }
       // 4 bytes
@@ -229,7 +233,9 @@ void Fiff::Input::readData(Fiff::Tag &tag)
       case Fiff::Type::uint32_:
       {
         auto *dataPtr = reinterpret_cast<int32_t*>(tag.data.byteArray);
-        endswap(dataPtr);
+        for(size_t i = 0; i < (tag.size / sizeof (int32_t)); ++i){
+          endswap(dataPtr + i);
+        }
         break;
       }
       // 8 bytes:
@@ -238,14 +244,16 @@ void Fiff::Input::readData(Fiff::Tag &tag)
       case Fiff::Type::int64_:
       {
         auto *dataPtr = reinterpret_cast<int64_t*>(tag.data.byteArray);
-        endswap(dataPtr);
+        for(size_t i = 0; i < (tag.size / sizeof (int64_t)); ++i){
+          endswap(dataPtr + i);
+        }
         break;
       }
       // array of 1 byte
       case Fiff::Type::string_:
       {
         auto *dataPtr = reinterpret_cast<int8_t*>(tag.data.byteArray);
-        for (int i = 0; i < tag.size; ++i){
+        for (size_t i = 0; i < (tag.size / sizeof (int8_t)); ++i){
           endswap(dataPtr + i);
         }
         break;
@@ -253,7 +261,7 @@ void Fiff::Input::readData(Fiff::Tag &tag)
       case Fiff::Type::complex_double_:
       {
         auto* ptr8byte = reinterpret_cast<int64_t*>(tag.data.byteArray);
-        for(int i = 0; i < 2; ++i){
+        for (size_t i = 0; i < (tag.size / sizeof (int64_t)); ++i){
           endswap(ptr8byte + i);
         }
         break;
@@ -283,9 +291,8 @@ void Fiff::Input::readData(Fiff::Tag &tag)
       case Fiff::Type::ch_pos_struct_:
       case Fiff::Type::coord_trans_struct_:
       {
-        auto sizeInBytes = tag.size / 4;
         auto* ptr4byte = reinterpret_cast<int32_t*>(tag.data.byteArray);
-        for(int i = 0; i < sizeInBytes; ++i){
+        for (size_t i = 0; i < (tag.size / sizeof (int32_t)); ++i){
           endswap(ptr4byte + i);
         }
         break;
