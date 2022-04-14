@@ -26,6 +26,7 @@ public:
   static std::string asString(const DigitizerPoint&);
   static std::string asString(const DigitizerString&);
   static std::string asString(const Julian&);
+  static std::string asString(const CoordinateTransformation&);
 
   static const std::map<int,std::string>& tagKinds();
   static const std::map<int,std::string>& tagTypes();
@@ -41,6 +42,8 @@ private:
   static const std::map<int,std::string> _tagKind;
   static const std::map<int,std::string> _tagType;
   static const std::map<int,std::string> _blockID;
+  static const std::map<int,std::string> _coordinateSystem;
+
 };
 }
 
