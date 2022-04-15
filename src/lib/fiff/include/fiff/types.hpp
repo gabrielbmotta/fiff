@@ -412,6 +412,32 @@ enum : int32_t{
   stream_segment_struct_ = 37
 };
 }//namespace Type
+
+enum class PointDef : int32_t{
+  cardinal = 1,
+  hpi = 2,
+  eeg = 3,
+  ecg = 3,
+  extra = 4,
+  head_surface = 5
+};
+
+enum class CoordinateSystem : int32_t {
+  unknown = 0,
+  device = 1,
+  isotrak = 2,
+  hpi = 3,
+  head = 4,
+  data_volume = 5,
+  data_slice = 6,
+  data_display = 7,
+  dicom_device = 8,
+  imaging_device = 9,
+  voxel_data = 10,
+  atlas_head = 11,
+  torso = 100
+};
+
 //class Type{
 //
 //};
