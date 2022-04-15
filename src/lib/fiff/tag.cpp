@@ -8,7 +8,7 @@
 
 void Fiff::endswapTagData(Tag &tag)
 {
-  switch(tag.type)
+  switch((tag.type) & Fiff::Type::baseMask())
   {
     // 0 bytes
     case Fiff::Type::void_:

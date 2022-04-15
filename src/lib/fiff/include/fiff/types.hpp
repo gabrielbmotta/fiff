@@ -359,25 +359,6 @@ enum : int32_t{
 }//namespace Kind
 
 namespace Type {
-//==============================================================================
-/**
- * Format tells us whether the data is a single scalar value or a matrix
- * of values.
- */
-enum Format: int32_t{
-  scalar = 0x00000000,
-  matrix = 0x40000000
-};
-
-//==============================================================================
-/**
- * Representation tells us how a matrix is encoded.
- */
-enum Representation: int32_t{
-  dense = 0x00000000,
-  column_compressed_sparse = 0x00100000,
-  row_compressed_sparse = 0x00200000
-};
 
 //==============================================================================
 /**
@@ -411,9 +392,58 @@ enum : int32_t{
   dig_string_struct_ = 36,
   stream_segment_struct_ = 37
 };
+
+//==============================================================================
+/**
+ * Format tells us whether the data is a single scalar value or a matrix
+ * of values.
+ */
+enum Format: int32_t{
+  scalar = 0x00000000,
+  matrix = 0x40000000
+};
+
+//==============================================================================
+/**
+ * Representation tells us how a matrix is encoded.
+ */
+enum Representation: int32_t{
+  dense = 0x00000000,
+  column_compressed_sparse = 0x00100000,
+  row_compressed_sparse = 0x00200000
+};
+
+//==============================================================================
+/**
+ *
+ * @return
+ */
+constexpr uint32_t baseMask(){
+  return 0x00000FFF;
+}
+
+//==============================================================================
+/**
+ *
+ * @return
+ */
+constexpr uint32_t fsMask(){
+  return 0xFF000000;
+}
+
+//==============================================================================
+/**
+ *
+ * @return
+ */
+constexpr uint32_t mcMask(){
+  return 0x00FF0000;
+}
+
 }//namespace Type
 
-enum class PointDef : int32_t{
+namespace PointDef {
+enum : int32_t{
   cardinal = 1,
   hpi = 2,
   eeg = 3,
@@ -421,8 +451,10 @@ enum class PointDef : int32_t{
   extra = 4,
   head_surface = 5
 };
+}//namespace PointDef
 
-enum class CoordinateSystem : int32_t {
+namespace CoordinateSystem {
+enum: int32_t{
   unknown = 0,
   device = 1,
   isotrak = 2,
@@ -437,38 +469,8 @@ enum class CoordinateSystem : int32_t {
   atlas_head = 11,
   torso = 100
 };
+}// namespace CoordinateSystem
 
-//class Type{
-//
-//};
-
-//        void_matrix_dense = 0 | 0x40000000,
-//        byte_matrix_dense = 1 | 0x40000000,
-//        short_matrix_dense = 2 | 0x40000000,
-//        int32_matrix_dense = 3 | 0x40000000,
-//        float_matrix_dense = 4 | 0x40000000,
-//        double_matrix_dense = 5 | 0x40000000,
-//        julian_matrix_dense = 6 | 0x40000000,
-//        ushort_matrix_dense = 7 | 0x40000000,
-//        uint32_matrix_dense = 8 | 0x40000000,
-//        uint64_matrix_dense = 9 | 0x40000000,
-//        string_matrix_dense = 10 | 0x40000000,
-//        int64_matrix_dense = 11 | 0x40000000,
-//        dau_pack13_matrix_dense = 13 | 0x40000000,
-//        dau_pack14_matrix_dense = 14 | 0x40000000,
-//        dau_pack16_matrix_dense = 16 | 0x40000000,
-//        complex_float_matrix_dense = 20 | 0x40000000,
-//        complex_double_matrix_dense = 21 | 0x40000000,
-//        old_pack_matrix_dense = 23 | 0x40000000,
-//        ch_info_struct_matrix_dense = 30 | 0x40000000,
-//        id_struct_matrix_dense = 31 | 0x40000000,
-//        dir_entry_struct_matrix_dense = 32 | 0x40000000,
-//        dig_point_struct_matrix_dense = 33 | 0x40000000,
-//        ch_pos_struct_matrix_dense = 34 | 0x40000000,
-//        coord_trans_struct_matrix_dense = 35 | 0x40000000,
-//        dig_string_struct_matrix_dense = 36 | 0x40000000,
-//        stream_segment_struct_matrix_dense = 37 | 0x40000000,
-//
 //==============================================================================
 /**
  * Header IDs for fiff blocks that organize data in a fiff list (e.g. a file)
@@ -503,6 +505,5 @@ enum class Block : int32_t {
   helium_info = 125,
   channel_inf = 126
 };
-
 }//namespace Fiff
 #endif //FIFFFILEEXPLORER_TYPES_HPP
