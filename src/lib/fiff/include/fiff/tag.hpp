@@ -13,13 +13,14 @@
 namespace Fiff {
 
 struct Tag {
-  Kind kind;   // Tag number.
-  Type type;   // Data type.
+  int kind;   // Tag number.
+  int type;   // Data type.
   int32_t size;   // Size of data.
   int32_t next;   // Next object. 0 is sequential, -1 if end of file.
   Data data;   // Pointer to data.
 };
 
+void endswapTagData(Tag& tag);
 }//namespace
 
 #endif //FIFFFILEEXPLORER_FIFFTAG_HPP

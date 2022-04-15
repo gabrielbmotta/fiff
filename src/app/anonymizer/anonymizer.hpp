@@ -10,8 +10,8 @@
 
 class Anonymizer {
 public:
-  void setInput(Fiff::Input&& input);
-  void setOutput(Fiff::Output&& output);
+  void setInput(Fiff::Input* input);
+  void setOutput(Fiff::Output* output);
 
   void anonymize();
 
@@ -19,8 +19,8 @@ private:
   void trackBlockTypes(const Fiff::Tag& tag);
   void censorTag(Fiff::Tag& tag);
 
-  Fiff::Input m_input;
-  Fiff::Output m_output;
+  Fiff::Input* m_input;
+  Fiff::Output* m_output;
   std::stack<Fiff::Block> m_blockHierarchy;
 };
 

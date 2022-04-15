@@ -5,6 +5,13 @@
 #include "fiff/output.hpp"
 
 //==============================================================================
+Fiff::Output::Output()
+: m_relativeEndian(RelativeEndian::undetermined)
+{
+
+}
+
+//==============================================================================
 /**
  * Writes the given tag to file.
  * @param tag   Tag to be wirtten to file.
@@ -15,7 +22,8 @@ void Fiff::Output::writeTag(Fiff::Tag &tag)
   auto kind = static_cast<int32_t>(tag.kind);
   auto type = static_cast<int32_t>(tag.type);
 
-  if(m_relativeEndian == RelativeEndian::different_from_system){
+  if (m_relativeEndian == RelativeEndian::different_from_system){
+    endswapTagData(tag);
     endswap(&kind);
     endswap(&type);
     endswap(&tag.size);
@@ -56,3 +64,26 @@ Fiff::Output Fiff::Output::toFile(const std::string &filePath)
           std::ofstream(filePath, std::ios::binary));
   return out;
 }
+
+//==============================================================================
+
+Fiff::Output Fiff::Output::toFile(const std::string &filePath, Endian fileEndian)
+{
+  Output out;
+  out.m_ostream = std::make_unique<std::ofstream>(
+          std::ofstream(filePath, std::ios::binary));
+  out.setEndianess(fileEndian);
+  return out;
+}
+
+//==============================================================================
+
+void Fiff::Output::setEndianess(Endian fileEndian)
+{
+  if(systemEndian() == fileEndian){
+    m_relativeEndian = RelativeEndian::same_as_system;
+  } else {
+    m_relativeEndian = RelativeEndian::different_from_system;
+  }
+}
+

@@ -5,9 +5,9 @@
  *
  * @param input
  */
-void Anonymizer::setInput(Fiff::Input&& input)
+void Anonymizer::setInput(Fiff::Input* input)
 {
-  m_input = std::move(input);
+  m_input = input;
 }
 
 //==============================================================================
@@ -15,9 +15,9 @@ void Anonymizer::setInput(Fiff::Input&& input)
  *
  * @param output
  */
-void Anonymizer::setOutput(Fiff::Output&& output)
+void Anonymizer::setOutput(Fiff::Output* output)
 {
-  m_output = std::move(output);
+  m_output = output;
 }
 
 //==============================================================================
@@ -26,11 +26,11 @@ void Anonymizer::setOutput(Fiff::Output&& output)
  */
 void Anonymizer::anonymize()
 {
-  while(!m_input.atEnd()){
-    auto tag = m_input.getTag();
+  while(!m_input->atEnd()){
+    auto tag = m_input->getTag();
     trackBlockTypes(tag);
-    censorTag(tag);
-    m_output.writeTag(tag);
+    //censorTag(tag);
+    m_output->writeTag(tag);
   }
 }
 

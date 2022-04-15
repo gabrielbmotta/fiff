@@ -30,8 +30,11 @@ int main(int argc, char* argv[])
   }
 
   Anonymizer anonymizer;
-  anonymizer.setInput(Fiff::Input::fromFile(inputPath));
-  anonymizer.setOutput(Fiff::Output::toFile(outputPath));
+  auto input = Fiff::Input::fromFile(inputPath);
+  auto output = Fiff::Output::toFile(outputPath, input.fileEndianess());
+
+  anonymizer.setInput(&input);
+  anonymizer.setOutput(&output);
 
   anonymizer.anonymize();
 

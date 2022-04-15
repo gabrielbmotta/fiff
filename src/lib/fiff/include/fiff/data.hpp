@@ -60,8 +60,8 @@ struct ID {
  * An entry showing where to find elements in a fiff file.
  */
 struct DirectoryEntry{
-  Kind kind;
-  Type type;
+  int32_t kind;
+  int32_t type;
   int32_t size;
   int32_t position;
 };

@@ -165,6 +165,20 @@ std::string Fiff::Formatting::asString(const Fiff::Julian &jul)
   (void)jul;
   return std::string();
 }
+//==============================================================================
+std::string Fiff::Formatting::asString(const Fiff::CoordinateTransformation &coord)
+{
+  std::stringstream stream;
+  stream.precision(3);
+  stream << "from " << getMapValue(_coordinateSystem, coord.from) << " to " << getMapValue(_coordinateSystem, coord.to);
+  stream << ", rot = ((" << coord.rot[0][0] <<"," << coord.rot[0][1] <<"," << coord.rot[0][2] <<"),(";
+  stream << coord.rot[1][0] <<"," << coord.rot[1][1] <<"," << coord.rot[1][2] <<"),(";
+  stream << coord.rot[2][0] <<"," << coord.rot[2][1] <<"," << coord.rot[2][2] <<"))";
+
+  stream << ", " << "move = (" << coord.move[0] << "," << coord.move[1] << "," << coord.move[2] << ")";
+
+  return stream.str();
+}
 
 //==============================================================================
 /**
@@ -232,7 +246,7 @@ std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
     {
       if(tag.kind == Kind::block_start || tag.kind == Kind::block_end)
       {
-        stream << "[" << *static_cast<int *>(tag.data.byteArray) << "] Block: " << getMapValue(_blockID, *static_cast<int *>(tag.data.byteArray));
+        stream << "Block: " << "[" << *static_cast<int *>(tag.data.byteArray) << "] "<< getMapValue(_blockID, *static_cast<int *>(tag.data.byteArray));
       } else if(tag.kind == Kind::meas_date){
         stream << unix_epoch(*static_cast<int *>(tag.data.byteArray));
       } else
@@ -314,6 +328,7 @@ std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
       break;
     }
     case Type::coord_trans_struct_:
+      stream << asString(static_cast<CoordinateTransformation>(tag.data));
       break;
     case Type::dig_string_struct_:
     {
@@ -737,6 +752,23 @@ const std::map<int, std::string> Fiff::Formatting::_blockID
          {124, "device_info"},
          {125, "helium_info"},
          {126, "channel_info"}};
+
+
+const std::map<int, std::string> Fiff::Formatting::_coordinateSystem{
+        {0,   "unknown"},
+        {1,   "device"},
+        {2,   "isotrak"},
+        {3,   "hpi"},
+        {4,   "head"},
+        {5,   "data_volume"},
+        {6,   "data_slice"},
+        {7,   "data_display"},
+        {8,   "dicom_device"},
+        {9,   "imaging_device"},
+        {10,  "voxel_data"},
+        {11,  "atlas_head"},
+        {100, "torso"}
+};
 
 static std::string unix_epoch(int time){
   auto unix_timestamp = static_cast<time_t>(time);
