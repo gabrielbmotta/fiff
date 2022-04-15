@@ -442,7 +442,7 @@ constexpr uint32_t mcMask(){
 
 }//namespace Type
 
-namespace PointDef {
+namespace PointDefinition {
 enum : int32_t{
   cardinal = 1,
   hpi = 2,
@@ -471,11 +471,69 @@ enum: int32_t{
 };
 }// namespace CoordinateSystem
 
+namespace ChannelTypes{
+enum : int32_t {
+  magn = 1,
+  el = 2,
+  stim = 3,
+  bio = 102,
+  mcg = 201,
+  eog = 202,
+  magn_ref = 301,
+  emg = 302,
+  ecg = 402,
+  misc = 502,
+  resp = 602,
+  quat0 = 700,
+  quat1 = 701,
+  quat2 = 702,
+  quat3 = 703,
+  quat4 = 704,
+  quat5 = 705,
+  quat6 = 706,
+  hpi_goodness = 707,
+  hpi_error = 708,
+  hpi_movement = 709,
+  syst = 900,
+  ias = 910,
+  exci = 920,
+  dipole_wave = 1000,
+  goodness_fit = 1001
+};
+}//namespace ChannelTypes
+
+namespace CoilType{
+enum : int32_t {
+  none = 0,
+  eeg = 1,
+  nm_122 = 2,
+  nm_24 = 3,
+  nm_mcg_axial = 4,
+  eeg_bipolar = 5,
+  dipole = 200,
+  mcg_42 = 1000,
+  point_magnetometer = 2000,
+  axial_grad_5cm = 2001,
+  vv_planar_w = 3011,
+  vv_planar_t1 = 3012,
+  vv_planar_t2 = 3013,
+  vv_planar_t3 = 3014,
+  vv_mag_w = 3021,
+  vv_mag_t1 = 3022,
+  vv_mag_t2 = 3023,
+  vv_mag_t3 = 3024,
+  magnes_mag = 4001,
+  magnes_grad = 4002,
+  ctf_grad = 5001
+};
+}
+
+namespace Block {
 //==============================================================================
 /**
  * Header IDs for fiff blocks that organize data in a fiff list (e.g. a file)
  */
-enum class Block : int32_t {
+enum : int32_t{
   root = 999,
   meas = 100,
   meas_info = 101,
@@ -505,5 +563,7 @@ enum class Block : int32_t {
   helium_info = 125,
   channel_inf = 126
 };
+}//namespace Block
+
 }//namespace Fiff
 #endif //FIFFFILEEXPLORER_TYPES_HPP

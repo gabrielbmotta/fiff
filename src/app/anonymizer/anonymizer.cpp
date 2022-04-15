@@ -42,7 +42,7 @@ void Anonymizer::anonymize()
 void Anonymizer::trackBlockTypes(const Fiff::Tag &tag)
 {
   if(tag.kind == Fiff::Kind::block_start){
-    m_blockHierarchy.push(*reinterpret_cast<Fiff::Block*>(tag.data.byteArray));
+    m_blockHierarchy.push(*reinterpret_cast<int32_t*>(tag.data.byteArray));
   } else if (tag.kind == Fiff::Kind::block_end){
     m_blockHierarchy.pop();
   }
