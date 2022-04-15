@@ -10,12 +10,14 @@ namespace Fiff {
 
 static_assert(CHAR_BIT == 8, "Only 8-bit byte systems supported.");
 
+
+namespace Kind {
 //==============================================================================
 /**
  * This enum defined the kind of a fiff tag. Tag kinds tell us what the
  * contents of the tag are.
  */
-enum class Kind : int32_t {
+enum : int32_t{
   new_file = 1,
   close_file = 2,
   discard_file = 3,
@@ -354,13 +356,15 @@ enum class Kind : int32_t {
   mne_epochs_raw_sfreq = 3803,
   mem_data_buffer = 10300
 };
+}//namespace Kind
 
+namespace Type {
 //==============================================================================
 /**
  * Format tells us whether the data is a single scalar value or a matrix
  * of values.
  */
-enum class TypeFormat : int32_t {
+enum Format: int32_t{
   scalar = 0x00000000,
   matrix = 0x40000000
 };
@@ -369,7 +373,7 @@ enum class TypeFormat : int32_t {
 /**
  * Representation tells us how a matrix is encoded.
  */
-enum class TypeRepresentation : int32_t{
+enum Representation: int32_t{
   dense = 0x00000000,
   column_compressed_sparse = 0x00100000,
   row_compressed_sparse = 0x00200000
@@ -379,7 +383,7 @@ enum class TypeRepresentation : int32_t{
 /**
  * The type tells us with what data type to interpret the data.
  */
-enum class Type : int32_t{
+enum : int32_t{
   void_ = 0,
   byte_ = 1,
   short_ = 2,
@@ -407,7 +411,7 @@ enum class Type : int32_t{
   dig_string_struct_ = 36,
   stream_segment_struct_ = 37
 };
-
+}//namespace Type
 //class Type{
 //
 //};

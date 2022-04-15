@@ -168,26 +168,17 @@ void Fiff::Input::setEndianess(Endian fileEndian)
  */
 void Fiff::Input::readMetaData(Fiff::Tag &tag)
 {
-  int32_t kind;
-  m_istream->read(reinterpret_cast<char*>(&kind), sizeof(kind));
-
-  int32_t type;
-  m_istream->read(reinterpret_cast<char*>(&type), sizeof(type));
-
+  m_istream->read(reinterpret_cast<char*>(&tag.kind), sizeof(tag.kind));
+  m_istream->read(reinterpret_cast<char*>(&tag.type), sizeof(tag.type));
   m_istream->read(reinterpret_cast<char*>(&tag.size), sizeof(tag.size));
   m_istream->read(reinterpret_cast<char*>(&tag.next), sizeof(tag.next));
 
   if(m_relativeEndian == RelativeEndian::different_from_system){
-    endswap(&kind);
-    endswap(&type);
+    endswap(&tag.kind);
+    endswap(&tag.type);
     endswap(&tag.size);
     endswap(&tag.next);
   }
-
-  type = type & 0x00000FF;
-
-  tag.kind = static_cast<Kind>(kind);
-  tag.type = static_cast<Type>(type);
 }
 
 //==============================================================================

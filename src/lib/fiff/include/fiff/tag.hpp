@@ -12,25 +12,7 @@
 
 namespace Fiff {
 
-class Tag {
-public:
-  Kind getKind();
-  void setKind(Kind);
-  Type getType();
-  void setType(Type);
-  void setType(int);
-
-  TypeFormat getTypeFormat();
-  void setTypeFormat(TypeFormat);
-  TypeRepresentation getTypeRepresentation();
-  void setTypeRepresentation(TypeRepresentation);
-  int getSize();
-  void setSize(int);
-
-  Data& getData();
-  void setData(Data);
-
-private:
+struct Tag {
   int kind;   // Tag number.
   int type;   // Data type.
   int32_t size;   // Size of data.

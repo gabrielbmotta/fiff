@@ -290,8 +290,8 @@ Fiff::Data::operator DirectoryEntry() const
   int offset = 0;
   DirectoryEntry dir{};
 
-  dir.kind = static_cast<Kind>(*(static_cast<int32_t*>(byteArray) + offset++));
-  dir.type = static_cast<Type>(*(static_cast<int32_t*>(byteArray) + offset++));
+  dir.kind = *(static_cast<int32_t*>(byteArray) + offset++);
+  dir.type = *(static_cast<int32_t*>(byteArray) + offset++);
   dir.size = *(static_cast<int32_t*>(byteArray) + offset++);
   dir.position = *(static_cast<int32_t*>(byteArray) + offset);
 
