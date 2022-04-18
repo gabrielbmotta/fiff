@@ -3,8 +3,8 @@ project(FiffFileExplorer)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/out/${MY_BUILD_NAME}/bin/)
-set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/out/${MY_BUILD_NAME}/lib/)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/out/${MY_BUILD_NAME}/bin/)
+set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/out/${MY_BUILD_NAME}/lib/)
 
 if(CMAKE_BUILD_TYPE MATCHES "Debug")
     add_compile_options(-Wall -Wextra -Wpedantic -Wabi -Wdouble-promotion -Werror -g)
