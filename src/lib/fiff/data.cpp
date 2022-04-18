@@ -6,12 +6,20 @@
 #include <cstring>
 #include "fiff/data.hpp"
 
+//==============================================================================
+/**
+ * Constructs an empty Data object.
+ */
 Fiff::Data::Data()
         : size(0)
         , byteArray(nullptr)
 {
 }
 
+//==============================================================================
+/**
+ * Constructs a copy of a Data object given in the input parameter.
+ */
 Fiff::Data::Data(const Fiff::Data& other)
         : size(other.size)
 {
@@ -23,6 +31,10 @@ Fiff::Data::Data(const Fiff::Data& other)
   }
 }
 
+//==============================================================================
+/**
+ * Destroys the data object.
+ */
 Fiff::Data::~Data()
 {
   if (byteArray)
@@ -31,6 +43,11 @@ Fiff::Data::~Data()
   }
 }
 
+//==============================================================================
+/**
+ * Resizes the data object to a new size. This needs to be called if the size of
+ * data being stored in the object is being changed.
+ */
 void Fiff::Data::resize(size_t newSize)
 {
   clear();
@@ -38,6 +55,10 @@ void Fiff::Data::resize(size_t newSize)
   byteArray = new char[this->size];
 }
 
+//==============================================================================
+/**
+ * Clears the data in the object and sets it to a default state.
+ */
 void Fiff::Data::clear()
 {
   if (byteArray)
@@ -48,107 +69,190 @@ void Fiff::Data::clear()
   byteArray = nullptr;
 }
 
-
+//==============================================================================
+/**
+ * Creates a Data object from a char.
+ */
 Fiff::Data::Data(char)
 {
 
 }
 
+//==============================================================================
+/**
+ * Creates a Data object from a 16 bit int.
+ */
 Fiff::Data::Data(int16_t)
 {
 
 }
 
+//==============================================================================
+/**
+ * Creates a Data object from a 32 bit int.
+ */
 Fiff::Data::Data(int32_t)
 {
 
 }
 
+//==============================================================================
+/**
+ * Creates a Data object from a single precision floating point number.
+ */
 Fiff::Data::Data(float)
 {
 
 }
 
+//==============================================================================
+/**
+ * Creates a Data object from a double precision floating point number.
+ */
 Fiff::Data::Data(double)
 {
 
 }
 
+//==============================================================================
+/**
+ * Creates a Data object from a Julian date object.
+ */
 Fiff::Data::Data(Fiff::Julian)
 {
 
 }
 
+//==============================================================================
+/**
+ * Creates a Data object from an unsigned 16 bit int.
+ */
 Fiff::Data::Data(uint16_t)
 {
 
 }
 
+//==============================================================================
+/**
+ * Creates a Data object from an unsigned 32 bit int.
+ */
 Fiff::Data::Data(uint32_t)
 {
 
 }
 
+//==============================================================================
+/**
+ * Creates a Data object from an unsigned 64 bit int.
+ */
 Fiff::Data::Data(uint64_t)
 {
 
 }
 
+//==============================================================================
+/**
+ * Creates a Data object from a string.
+ */
 Fiff::Data::Data(std::string)
 {
 
 }
 
+//==============================================================================
+/**
+ * Creates a Data object from a 64 bit int.
+ */
 Fiff::Data::Data(int64_t)
 {
 
 }
 
+//==============================================================================
+/**
+ * Creates a Data object from a single precision complex floating point number.
+ */
 Fiff::Data::Data(std::complex<float>)
 {
 
 }
 
+//==============================================================================
+/**
+ * Creates a Data object from a double precision complex floating point number.
+ */
 Fiff::Data::Data(std::complex<double>)
 {
 
 }
 
+//==============================================================================
+/**
+ * Creates a Data object from a Channel Info object.
+ */
 Fiff::Data::Data(Fiff::ChannelInfo)
 {
 
 }
 
+//==============================================================================
+/**
+ * Creates a Data object from an Id object.
+ */
 Fiff::Data::Data(Fiff::ID)
 {
 
 }
 
+//==============================================================================
+/**
+ * Creates a Data object from a Directory Entry object.
+ */
 Fiff::Data::Data(Fiff::DirectoryEntry)
 {
 
 }
 
+//==============================================================================
+/**
+ * Creates a Data object from a digitizer point object.
+ */
 Fiff::Data::Data(Fiff::DigitizerPoint)
 {
 
 }
 
+//==============================================================================
+/**
+ * Creates a Data object from a Channel Position object.
+ */
 Fiff::Data::Data(Fiff::ChannelPosition)
 {
 
 }
 
+//==============================================================================
+/**
+ * Creates a Data object from a Coordinate Transformation object.
+ */
 Fiff::Data::Data(Fiff::CoordinateTransformation)
 {
 
 }
 
+//==============================================================================
+/**
+ * Creates a Data object from a Digitizer String object.
+ */
 Fiff::Data::Data(Fiff::DigitizerString)
 {
 
 }
 
+//==============================================================================
+/**
+ * Overloads assignment operator to another Data object.
+ */
 Fiff::Data &Fiff::Data::operator=(const Fiff::Data &rhs)
 {
   if(this != &rhs)
@@ -165,31 +269,55 @@ Fiff::Data &Fiff::Data::operator=(const Fiff::Data &rhs)
   return *this;
 }
 
+//==============================================================================
+/**
+ * Converts the data object into a char.
+ */
 Fiff::Data::operator char() const
 {
   return *static_cast<char*>(byteArray);
 }
 
+//==============================================================================
+/**
+ * Converts the data object into a 16 bit int.
+ */
 Fiff::Data::operator int16_t() const
 {
   return *static_cast<int16_t*>(byteArray);
 }
 
+//==============================================================================
+/**
+ * Converts the data object into a 32 bit int.
+ */
 Fiff::Data::operator int32_t() const
 {
   return *static_cast<int32_t*>(byteArray);
 }
 
+//==============================================================================
+/**
+ * Converts the data object into a single precision floating point number.
+ */
 Fiff::Data::operator float() const
 {
   return *static_cast<float*>(byteArray);
 }
 
+//==============================================================================
+/**
+ * Converts the data object into a double precision floating point number.
+ */
 Fiff::Data::operator double() const
 {
   return *static_cast<double*>(byteArray);
 }
 
+//==============================================================================
+/**
+ * Converts the data object into a Julian date object.
+ */
 Fiff::Data::operator Julian() const
 {
   Julian j{};
@@ -197,31 +325,55 @@ Fiff::Data::operator Julian() const
   return j;
 }
 
+//==============================================================================
+/**
+ * Converts the data object into an unsigned 16 bit integer.
+ */
 Fiff::Data::operator uint16_t() const
 {
   return *static_cast<uint16_t*>(byteArray);
 }
 
+//==============================================================================
+/**
+ * Converts the data object into an unsigned 32 bit integer.
+ */
 Fiff::Data::operator uint32_t() const
 {
   return *static_cast<uint32_t*>(byteArray);
 }
 
+//==============================================================================
+/**
+ * Converts the data object into an unsigned 64 bit integer.
+ */
 Fiff::Data::operator uint64_t() const
 {
   return *static_cast<uint64_t*>(byteArray);
 }
 
+//==============================================================================
+/**
+ * Converts the data object into a string.
+ */
 Fiff::Data::operator std::string() const
 {
   return {static_cast<char*>(byteArray), size};
 }
 
+//==============================================================================
+/**
+ * Converts the data object into a 64 bit integer.
+ */
 Fiff::Data::operator int64_t() const
 {
   return *static_cast<int64_t*>(byteArray);
 }
 
+//==============================================================================
+/**
+ * Converts the data object into a single precision floating point number.
+ */
 Fiff::Data::operator std::complex<float>() const
 {
   std::complex<float> f;
@@ -230,6 +382,10 @@ Fiff::Data::operator std::complex<float>() const
   return f;
 }
 
+//==============================================================================
+/**
+ * Converts the data object into a double precision floating point number.
+ */
 Fiff::Data::operator std::complex<double>() const
 {
   std::complex<double> f;
@@ -237,6 +393,10 @@ Fiff::Data::operator std::complex<double>() const
   f.imag(*(static_cast<double*>(byteArray) + 1));
   return f;}
 
+//==============================================================================
+/**
+ * Converts the data object into a Channel Info object
+ */
 Fiff::Data::operator ChannelInfo() const
 {
   int offset = 0;
@@ -271,6 +431,10 @@ Fiff::Data::operator ChannelInfo() const
   return info;
 }
 
+//==============================================================================
+/**
+ * Converts the data object into a Id object.
+ */
 Fiff::Data::operator ID() const
 {
   int offset = 0;
@@ -285,6 +449,10 @@ Fiff::Data::operator ID() const
   return id;
 }
 
+//==============================================================================
+/**
+ * Converts the data object into a Directory Entry object.
+ */
 Fiff::Data::operator DirectoryEntry() const
 {
   int offset = 0;
@@ -298,6 +466,10 @@ Fiff::Data::operator DirectoryEntry() const
   return dir;
 }
 
+//==============================================================================
+/**
+ * Converts the data object into a Digitizer Point object.
+ */
 Fiff::Data::operator DigitizerPoint() const
 {
   int offset = 0;
@@ -312,6 +484,10 @@ Fiff::Data::operator DigitizerPoint() const
   return dig;
 }
 
+//==============================================================================
+/**
+ * Converts the data object into a Channel Position object.
+ */
 Fiff::Data::operator ChannelPosition() const
 {
   int offset = 0;
@@ -338,6 +514,10 @@ Fiff::Data::operator ChannelPosition() const
   return chpos;
 }
 
+//==============================================================================
+/**
+ * Converts the data object into a Coordinate Transformation object.
+ */
 Fiff::Data::operator CoordinateTransformation() const
 {
   int offset = 0;
@@ -367,6 +547,10 @@ Fiff::Data::operator CoordinateTransformation() const
   return coord;
 }
 
+//==============================================================================
+/**
+ * Converts the data object into a Digitizer String object.
+ */
 Fiff::Data::operator DigitizerString() const
 {
   return {};

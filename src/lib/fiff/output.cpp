@@ -5,6 +5,11 @@
 #include "fiff/output.hpp"
 
 //==============================================================================
+/**
+ * Constructs an Output object.
+ *
+ * Prefer a static function that creates an Output to something. (i.e. toFile)
+ */
 Fiff::Output::Output()
 : m_relativeEndian(RelativeEndian::undetermined)
 {
@@ -28,7 +33,6 @@ void Fiff::Output::writeTag(Fiff::Tag &tag)
     endswap(&tag.next);
   }
 
-  //TODO: ability to write in either endianness.
   m_ostream->write(reinterpret_cast<const char*>(&tag.kind), sizeof (tag.kind));
   m_ostream->write(reinterpret_cast<const char*>(&tag.type), sizeof (tag.type));
   m_ostream->write(reinterpret_cast<const char*>(&tag.size), sizeof (tag.size));
@@ -55,6 +59,11 @@ std::streampos Fiff::Output::currentWritePosition()
   return m_ostream->tellp();
 }
 //==============================================================================
+/**
+ * Creates an Output object to write to given file.
+ *
+ * Creates the file if it does not exist.
+ */
 Fiff::Output Fiff::Output::toFile(const std::string &filePath)
 {
   Output out;
@@ -64,7 +73,11 @@ Fiff::Output Fiff::Output::toFile(const std::string &filePath)
 }
 
 //==============================================================================
-
+/**
+ * Creates an Output object to write to given file with a selected endianness.
+ *
+ * Creates the file if it does not exist.
+ */
 Fiff::Output Fiff::Output::toFile(const std::string &filePath, Endian fileEndian)
 {
   Output out;
@@ -75,7 +88,9 @@ Fiff::Output Fiff::Output::toFile(const std::string &filePath, Endian fileEndian
 }
 
 //==============================================================================
-
+/**
+ * Sets the endianness with which the tags will be written.
+ */
 void Fiff::Output::setEndianess(Endian fileEndian)
 {
   if(systemEndian() == fileEndian){

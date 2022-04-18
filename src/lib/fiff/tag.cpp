@@ -5,7 +5,10 @@
 #include "fiff/tag.hpp"
 
 #include "core/endian.hpp"
-
+//==============================================================================
+/**
+ * Swaps the endianness of a tag's data.
+ */
 void Fiff::endswapTagData(Tag &tag)
 {
   switch((tag.type) & Fiff::Type::baseMask())

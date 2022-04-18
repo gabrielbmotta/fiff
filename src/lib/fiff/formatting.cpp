@@ -37,8 +37,7 @@ const std::map<int, std::string> &Fiff::Formatting::blockIds()
 
 //==============================================================================
 /**
- * Formats passed tag a human-readable string.
- * @param tag   tag to be formatted as a string.
+ * Formats tag a human-readable string.
  */
 std::string Fiff::Formatting::asString(const Fiff::Tag& tag){
   std::stringstream stream;
@@ -51,7 +50,6 @@ std::string Fiff::Formatting::asString(const Fiff::Tag& tag){
 //==============================================================================
 /**
  * Formats channel position object as human-readable string.
- * @param pos   object to be formatted as string
  */
 std::string Fiff::Formatting::asString(const Fiff::ChannelPosition& pos)
 {
@@ -70,7 +68,6 @@ std::string Fiff::Formatting::asString(const Fiff::ChannelPosition& pos)
 //==============================================================================
 /**
  * Formats channel info object as human-readable string.
- * @param info  object to be formatted as string
  */
 std::string Fiff::Formatting::asString(const Fiff::ChannelInfo& info)
 {
@@ -93,7 +90,6 @@ std::string Fiff::Formatting::asString(const Fiff::ChannelInfo& info)
 //==============================================================================
 /**
  * Formats id object as human-readable string.
- * @param id    object to be formatted as string
  */
 std::string Fiff::Formatting::asString(const Fiff::ID &id)
 {
@@ -108,7 +104,6 @@ std::string Fiff::Formatting::asString(const Fiff::ID &id)
 //==============================================================================
 /**
  * Formats directory entry object as human-readable string.
- * @param dirEntr   object to be formatted as string
  */
 std::string Fiff::Formatting::asString(const Fiff::DirectoryEntry &dirEntr)
 {
@@ -132,7 +127,6 @@ std::string Fiff::Formatting::asString(const Fiff::DirectoryEntry &dirEntr)
 //==============================================================================
 /**
  * Formats digitizer position object as human-readable string.
- * @param dig   object to be formatted as string
  */
 std::string Fiff::Formatting::asString(const Fiff::DigitizerPoint &dig)
 {
@@ -147,7 +141,6 @@ std::string Fiff::Formatting::asString(const Fiff::DigitizerPoint &dig)
 //==============================================================================
 /**
  * Formats digitizer string object as human-readable string.
- * @param dig   object to be formatted as string
  */
 std::string Fiff::Formatting::asString(const Fiff::DigitizerString &dig)
 {
@@ -158,7 +151,6 @@ std::string Fiff::Formatting::asString(const Fiff::DigitizerString &dig)
 //==============================================================================
 /**
  * Formats Julian date as human-readable string.
- * @param jul   object to be formatted as string
  */
 std::string Fiff::Formatting::asString(const Fiff::Julian &jul)
 {
@@ -166,6 +158,9 @@ std::string Fiff::Formatting::asString(const Fiff::Julian &jul)
   return std::string();
 }
 //==============================================================================
+/**
+ * Formats Coordinate transformation into human-readable string.
+ */
 std::string Fiff::Formatting::asString(const Fiff::CoordinateTransformation &coord)
 {
   std::stringstream stream;
@@ -754,6 +749,11 @@ const std::map<int, std::string> Fiff::Formatting::_blockID
          {126, "channel_info"}};
 
 
+//==============================================================================
+/**
+ * Map of fiff coordinate system where the keys are the coordinate system ids
+ * and the content their names.
+ */
 const std::map<int, std::string> Fiff::Formatting::_coordinateSystem{
         {0,   "unknown"},
         {1,   "device"},
@@ -770,6 +770,10 @@ const std::map<int, std::string> Fiff::Formatting::_coordinateSystem{
         {100, "torso"}
 };
 
+//==============================================================================
+/**
+ * Returns unix timestamp as a human readable string.
+ */
 static std::string unix_epoch(int time){
   auto unix_timestamp = static_cast<time_t>(time);
   char time_buf[80];

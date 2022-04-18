@@ -125,7 +125,7 @@ struct Julian{
 
 //==============================================================================
 /**
- * An object that holds the fiff data.
+ * An object that holds fiff data.
  */
 struct Data {
   Data();

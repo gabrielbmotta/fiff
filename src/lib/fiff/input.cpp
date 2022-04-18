@@ -6,7 +6,7 @@
 /**
  * Constructs a Input object.
  *
- * Prefer a constructor that also accepts a path to file.
+ * Prefer a static function that creates an Input from a source (i.e. fromFile)
  */
 Fiff::Input::Input()
 :m_relativeEndian(RelativeEndian::undetermined)
@@ -94,8 +94,10 @@ Fiff::Input Fiff::Input::fromFile(const std::string &filePath, Endian fileEndian
 }
 
 //==============================================================================
-
-Endian Fiff::Input::fileEndianess()
+/**
+ * Returns the endianness of the files.
+ */
+Endian Fiff::Input::fileEndianess() const
 {
   if (m_relativeEndian == RelativeEndian::same_as_system){
     return systemEndian();
@@ -201,8 +203,6 @@ void Fiff::Input::readData(Fiff::Tag &tag)
   //TODO: check time of switch statement vs function map vs other possible implementations
   tag.data.resize(tag.size);
   m_istream->read(reinterpret_cast<char *>(tag.data.byteArray), tag.size);
-
-  return;
 
   if(m_relativeEndian == RelativeEndian::different_from_system)
   {
