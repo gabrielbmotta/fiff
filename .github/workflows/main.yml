@@ -29,6 +29,17 @@ jobs:
       - name: Check if project builds
         run: ./build
 
+#      - name: Run tests
+#          run: |
+#            ./out/release/run_tests
+
+  Code_stats:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
       - name: Get code stats
         run: |
           sudo apt-get install cloc
