@@ -91,12 +91,30 @@ Fiff::Output Fiff::Output::toFile(const std::string &filePath, Endian fileEndian
 /**
  * Sets the endianness with which the tags will be written.
  */
-void Fiff::Output::setEndianess(Endian fileEndian)
+void Fiff::Output::setEndianess(Endian endianness)
 {
-  if(systemEndian() == fileEndian){
+  if(systemEndian() == endianness){
     m_relativeEndian = RelativeEndian::same_as_system;
   } else {
     m_relativeEndian = RelativeEndian::different_from_system;
   }
+}
+
+//==============================================================================
+/**
+ * Returns the current endianness with which tags wll be written.
+ */
+Endian Fiff::Output::getEndianess() const
+{
+  if (m_relativeEndian == RelativeEndian::same_as_system){
+    return systemEndian();
+  } else if (m_relativeEndian == RelativeEndian::different_from_system){
+    if(systemEndian() == Endian::little){
+      return Endian::big;
+    } else if(systemEndian() == Endian::big){
+      return Endian::little;
+    }
+  }
+  return Endian::unknown;
 }
 

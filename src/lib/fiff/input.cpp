@@ -97,7 +97,7 @@ Fiff::Input Fiff::Input::fromFile(const std::string &filePath, Endian fileEndian
 /**
  * Returns the endianness of the files.
  */
-Endian Fiff::Input::fileEndianess() const
+Endian Fiff::Input::getEndianess() const
 {
   if (m_relativeEndian == RelativeEndian::same_as_system){
     return systemEndian();

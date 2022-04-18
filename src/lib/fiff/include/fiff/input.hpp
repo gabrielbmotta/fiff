@@ -30,7 +30,7 @@ public:
   static Input fromFile(const std::string &filePath);
   static Input fromFile(const std::string &filePath, Endian fileEndian);
 
-  Endian fileEndianess() const;
+  Endian getEndianess() const;
   void setEndianess(Endian fileEndian);
 protected:
   void setEndianess();
@@ -39,7 +39,7 @@ protected:
   void readData(Tag& tag);
 
   RelativeEndian m_relativeEndian;
-  std::unique_ptr<std::ifstream> m_istream;
+  std::unique_ptr<std::istream> m_istream;
 };
 
 } //namespace

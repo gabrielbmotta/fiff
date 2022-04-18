@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 
   Anonymizer anonymizer;
   auto input = Fiff::Input::fromFile(inputPath);
-  auto output = Fiff::Output::toFile(outputPath, input.fileEndianess());
+  auto output = Fiff::Output::toFile(outputPath, input.getEndianess());
 
   anonymizer.setInput(&input);
   anonymizer.setOutput(&output);

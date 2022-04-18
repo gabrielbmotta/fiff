@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
   auto digSource = Fiff::Input::fromFile(digFile);
   auto output = Fiff::Output::toFile(outFile);
 
-  output.m_relativeEndian = rawSource.m_relativeEndian;
+  output.setEndianess(rawSource.getEndianess());
 
   std::cout << " > Reading from raw file...\n";
   while(!rawSource.atEnd()){

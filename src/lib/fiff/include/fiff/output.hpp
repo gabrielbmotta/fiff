@@ -26,7 +26,8 @@ public:
   static Output toFile(const std::string &filePath, Endian fileEndian);
 
   RelativeEndian m_relativeEndian;
-  void setEndianess(Endian fileEndian);
+  void setEndianess(Endian endianness);
+  Endian getEndianess() const;
 protected:
 
   std::unique_ptr<std::ostream> m_ostream;
