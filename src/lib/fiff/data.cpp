@@ -11,8 +11,8 @@
  * Constructs an empty Data object.
  */
 Fiff::Data::Data()
-        : size(0)
-        , byteArray(nullptr)
+        : byteArray(nullptr)
+        , size(0)
 {
 }
 

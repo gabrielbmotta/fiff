@@ -9,5 +9,6 @@ add_executable(test_${PROJECT_NAME}
         main.cpp
         u_input.cpp
         u_output.cpp
+        u_tag.cpp
         i_inputoutput.cpp)
-target_link_libraries(test_${PROJECT_NAME} PRIVATE Catch2::Catch2 fiff)
+target_link_libraries(test_${PROJECT_NAME} PRIVATE Catch2::Catch2 fiff core)
