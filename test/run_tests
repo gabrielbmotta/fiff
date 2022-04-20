@@ -1,0 +1,6 @@
+file="sample_audvis_trun_raw.fif"
+if [ ! -f "$file" ]
+then
+    echo "$0: Downloading test file"
+    wget https://github.com/mne-tools/mne-cpp-test-data/raw/master/MEG/sample/sample_audvis_trunc_raw.fif
+fi
