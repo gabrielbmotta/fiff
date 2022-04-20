@@ -21,23 +21,32 @@ Fiff::Output::Output()
  * Writes the given tag to file.
  * @param tag   Tag to be wirtten to file.
  */
-void Fiff::Output::writeTag(Fiff::Tag &tag)
+void Fiff::Output::writeTag(const Fiff::Tag &tag)
 {
   int32_t size = tag.size;
 
   if (m_relativeEndian == RelativeEndian::different_from_system){
-    endswapTagData(tag);
-    endswap(&tag.kind);
-    endswap(&tag.type);
-    endswap(&tag.size);
-    endswap(&tag.next);
+    auto swapTag = tag;
+
+    endswapTagData(swapTag);
+    endswap(&swapTag.kind);
+    endswap(&swapTag.type);
+    endswap(&swapTag.size);
+    endswap(&swapTag.next);
+
+    m_ostream->write(reinterpret_cast<const char*>(&swapTag.kind), sizeof (swapTag.kind));
+    m_ostream->write(reinterpret_cast<const char*>(&swapTag.type), sizeof (swapTag.type));
+    m_ostream->write(reinterpret_cast<const char*>(&swapTag.size), sizeof (swapTag.size));
+    m_ostream->write(reinterpret_cast<const char*>(&swapTag.next), sizeof (swapTag.next));
+    m_ostream->write(reinterpret_cast<const char*>(swapTag.data.byteArray), size);
+  } else {
+    m_ostream->write(reinterpret_cast<const char*>(&tag.kind), sizeof (tag.kind));
+    m_ostream->write(reinterpret_cast<const char*>(&tag.type), sizeof (tag.type));
+    m_ostream->write(reinterpret_cast<const char*>(&tag.size), sizeof (tag.size));
+    m_ostream->write(reinterpret_cast<const char*>(&tag.next), sizeof (tag.next));
+    m_ostream->write(reinterpret_cast<const char*>(tag.data.byteArray), size);
   }
 
-  m_ostream->write(reinterpret_cast<const char*>(&tag.kind), sizeof (tag.kind));
-  m_ostream->write(reinterpret_cast<const char*>(&tag.type), sizeof (tag.type));
-  m_ostream->write(reinterpret_cast<const char*>(&tag.size), sizeof (tag.size));
-  m_ostream->write(reinterpret_cast<const char*>(&tag.next), sizeof (tag.next));
-  m_ostream->write(reinterpret_cast<const char*>(tag.data.byteArray), size);
 }
 
 //==============================================================================

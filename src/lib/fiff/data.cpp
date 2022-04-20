@@ -91,9 +91,11 @@ Fiff::Data::Data(int16_t)
 /**
  * Creates a Data object from a 32 bit int.
  */
-Fiff::Data::Data(int32_t)
+Fiff::Data::Data(int32_t number)
+: byteArray(new char[4])
+, size(4)
 {
-
+  *static_cast<int32_t*>(byteArray) = number;
 }
 
 //==============================================================================

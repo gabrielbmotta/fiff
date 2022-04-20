@@ -17,7 +17,7 @@ class Output {
 public:
   Output();
 
-  void writeTag(Tag &tag);
+  void writeTag(const Tag &tag);
 
   void goToWritePosition(std::streampos pos);
   std::streampos currentWritePosition();

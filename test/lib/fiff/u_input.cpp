@@ -6,9 +6,8 @@
 
 #include "fiff/input.hpp"
 #include "core/endian.hpp"
-#include <string>
 
-const std::string testFile = "sample_audvis_trunc_raw.fif";
+const static char* testFile = "sample_audvis_trunc_raw.fif";
 
 TEST_CASE("Create input from file", "[input file]")
 {
