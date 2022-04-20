@@ -18,6 +18,8 @@ struct Tag {
   int32_t size;   // Size of data.
   int32_t next;   // Next object. 0 is sequential, -1 if end of file.
   Data data;   // Pointer to data.
+
+  bool operator==(const Tag& other) const;
 };
 
 void endswapTagData(Tag& tag);

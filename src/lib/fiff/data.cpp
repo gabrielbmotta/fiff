@@ -555,3 +555,16 @@ Fiff::Data::operator DigitizerString() const
 {
   return {};
 }
+
+bool Fiff::Data::operator==(const Fiff::Data &other) const
+{
+  if (this->size == other.size){
+    for(size_t i = 0; i < this->size; ++i){
+      if(static_cast<char*>(this->byteArray)[i] != static_cast<char*>(other.byteArray)[i]){
+        return false;
+      }
+    }
+    return true;
+  }
+  return false;
+}

@@ -178,7 +178,11 @@ struct Data {
   operator CoordinateTransformation() const; // 35
   operator DigitizerString() const; // 36
 
-  size_t size;
   void* byteArray;
+
+  bool operator==(const Data& other) const;
+private:
+  size_t size;
+
 };
 }

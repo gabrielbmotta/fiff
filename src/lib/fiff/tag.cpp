@@ -5,6 +5,21 @@
 #include "fiff/tag.hpp"
 
 #include "core/endian.hpp"
+
+//==============================================================================
+/**
+ *
+ * @param other
+ * @return
+ */
+bool Fiff::Tag::operator==(const Fiff::Tag &other) const
+{
+  return(this->kind == other.kind &&
+         this->type == other.type &&
+         this->size == other.size &&
+         this->data == other.data);
+}
+
 //==============================================================================
 /**
  * Swaps the endianness of a tag's data.
