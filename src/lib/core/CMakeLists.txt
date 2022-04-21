@@ -8,5 +8,3 @@ add_library(${PROJECT_NAME} commandlineinput.cpp include/core/commandlineinput.h
 
 target_include_directories( ${PROJECT_NAME}
         PUBLIC ${PROJECT_SOURCE_DIR}/include)
-
-set(CMAKE_CXX_STANDARD 17)

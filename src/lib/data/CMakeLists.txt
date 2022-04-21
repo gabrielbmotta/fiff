@@ -8,5 +8,3 @@ target_include_directories( ${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
         fiff core)
-
-set(CMAKE_CXX_STANDARD 17)

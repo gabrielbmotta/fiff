@@ -15,5 +15,3 @@ target_include_directories( ${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
          core)
-
-set(CMAKE_CXX_STANDARD 17)

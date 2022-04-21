@@ -9,26 +9,28 @@
 
 #ifndef FIFFFILEEXPLORER_STRINGMANIP_HPP
 #define FIFFFILEEXPLORER_STRINGMANIP_HPP
-namespace Core::StringManipulation {
+namespace Core{
+namespace StringManipulation {
 
-template<typename T>
-static std::vector<T> getVectorFrom(const std::string &item, char separator)
-{
-  std::vector<T> tag_set;
-  std::stringstream ss(item);
+  template<typename T>
+  static std::vector<T> getVectorFrom(const std::string &item, char separator)
+  {
+    std::vector<T> tag_set;
+    std::stringstream ss(item);
 
-  for (T i; ss >> i;) {
-    tag_set.push_back(i);
-    if (ss.peek() == separator)
-      ss.ignore();
+    for (T i; ss >> i;) {
+      tag_set.push_back(i);
+      if (ss.peek() == separator)
+        ss.ignore();
+    }
+
+    return tag_set;
   }
 
-  return tag_set;
+  bool isNumber(const std::string& s);
+
+  bool endsWith(const std::string& string, const std::string& suffix);
 }
-
-bool isNumber(const std::string& s);
-
-bool endsWith(const std::string& string, const std::string& suffix);
 }
 
 #endif //FIFFFILEEXPLORER_STRINGMANIP_HPP
