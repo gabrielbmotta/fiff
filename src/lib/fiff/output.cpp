@@ -76,8 +76,7 @@ std::streampos Fiff::Output::currentWritePosition()
 Fiff::Output Fiff::Output::toFile(const std::string &filePath)
 {
   Output out;
-  out.m_ostream = std::make_unique<std::ofstream>(
-          std::ofstream(filePath, std::ios::binary));
+  out.m_ostream = std::unique_ptr<std::ofstream>(new std::ofstream(filePath, std::ios::binary));
   return out;
 }
 
@@ -90,8 +89,7 @@ Fiff::Output Fiff::Output::toFile(const std::string &filePath)
 Fiff::Output Fiff::Output::toFile(const std::string &filePath, Endian fileEndian)
 {
   Output out;
-  out.m_ostream = std::make_unique<std::ofstream>(
-          std::ofstream(filePath, std::ios::binary));
+  out.m_ostream = std::unique_ptr<std::ofstream>(new std::ofstream(filePath, std::ios::binary));
   out.setEndianess(fileEndian);
   return out;
 }

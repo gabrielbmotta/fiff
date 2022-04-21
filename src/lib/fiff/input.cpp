@@ -75,7 +75,7 @@ bool Fiff::Input::atEnd() const
 Fiff::Input Fiff::Input::fromFile(const std::string &filePath)
 {
   Input in;
-  in.m_istream = std::make_unique<std::ifstream>(filePath, std::ios::binary);
+  in.m_istream = std::unique_ptr<std::ifstream>(new std::ifstream(filePath, std::ios::binary));
   in.setEndianess();
   return in;
 }
@@ -88,7 +88,7 @@ Fiff::Input Fiff::Input::fromFile(const std::string &filePath)
 Fiff::Input Fiff::Input::fromFile(const std::string &filePath, Endian fileEndian)
 {
   Input in;
-  in.m_istream = std::make_unique<std::ifstream>(filePath, std::ios::binary);
+  in.m_istream = std::unique_ptr<std::ifstream>(new std::ifstream(filePath, std::ios::binary));
   in.setEndianess(fileEndian);
   return in;
 }
