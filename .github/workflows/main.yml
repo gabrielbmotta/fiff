@@ -39,6 +39,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install Catch2
+        run: |
+          if [ "${runner.os}" == "Linux" ]; then
+          sudo apt-get update
+          sudo apt-get -y install catch2
+          elif [ "${runner.os}" == "macOS" ]; then
+          brew install catch2
+          fi
+
       - name: Build project
         run: ./build
 
