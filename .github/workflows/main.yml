@@ -41,10 +41,10 @@ jobs:
 
       - name: Install Catch2
         run: |
-          if [ "${runner.os}" == "Linux" ]; then
+          if [ "$RUNNER_OS" == "Linux" ]; then
           sudo apt-get update
           sudo apt-get -y install catch2
-          elif [ "${runner.os}" == "macOS" ]; then
+          elif [ "$RUNNER_OS" == "macOS" ]; then
           brew install catch2
           fi
 
