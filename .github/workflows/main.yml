@@ -44,7 +44,7 @@ jobs:
 
       - name: Run tests
         run: |
-          cd out/Debug/test
+          cd out/Release/test
           chmod +x run_tests
           ./run_tests
 
