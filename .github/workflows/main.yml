@@ -29,10 +29,6 @@ jobs:
       - name: Check if project builds
         run: ./build
 
-      - name: Run tests
-        run: |
-            ./out/release/run_tests
-
   Tests:
     runs-on: ${{ matrix.os }}
 
