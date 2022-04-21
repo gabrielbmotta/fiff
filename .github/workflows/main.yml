@@ -29,10 +29,6 @@ jobs:
       - name: Check if project builds
         run: ./build
 
-      - name: Run tests
-        run: |
-            ./out/release/run_tests
-
   Tests:
     runs-on: ${{ matrix.os }}
 
@@ -48,7 +44,7 @@ jobs:
 
       - name: Run tests
         run: |
-          cd ./out/Debug/test
+          cd out/Release/test
           chmod +x run_tests
           ./run_tests
 
