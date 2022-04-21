@@ -43,7 +43,7 @@ TEST_CASE("Write tag", "[output tag]")
     Fiff::Tag tag = testTag();
     file.writeTag(tag);
   }
-  std::ifstream check("test_write.fif");
+  std::ifstream check("test_write.fif", std::ios::binary);
 
   char readbuff[std::max({sizeof testKind, sizeof testType, sizeof testSize, sizeof testNext, sizeof testData})];
 
@@ -86,22 +86,22 @@ TEST_CASE("Set endianess", "[output file endianess]")
     fileLE2.writeTag(tag);
   }
 
-  std::ifstream checkBE1("BE1.fif");
+  std::ifstream checkBE1("BE1.fif", std::ios::binary);
   char readBE1[std::max({sizeof testKind, sizeof testType, sizeof testSize, sizeof testNext, sizeof testData})];
   checkBE1.read(readBE1, sizeof testKind);
   auto kindBE1 = *static_cast<int32_t *>(static_cast<void*>(readBE1));
 
-  std::ifstream checkBE2("BE2.fif");
+  std::ifstream checkBE2("BE2.fif", std::ios::binary);
   char readBE2[std::max({sizeof testKind, sizeof testType, sizeof testSize, sizeof testNext, sizeof testData})];
   checkBE2.read(readBE2, sizeof testKind);
   auto kindBE2 = *static_cast<int32_t *>(static_cast<void*>(readBE2));
 
-  std::ifstream checkLE1("LE1.fif");
+  std::ifstream checkLE1("LE1.fif", std::ios::binary);
   char readLE1[std::max({sizeof testKind, sizeof testType, sizeof testSize, sizeof testNext, sizeof testData})];
   checkLE1.read(readLE1, sizeof testKind);
   auto kindLE1 = *static_cast<int32_t *>(static_cast<void*>(readLE1));
 
-  std::ifstream checkLE2("LE2.fif");
+  std::ifstream checkLE2("LE2.fif", std::ios::binary);
   char readLE2[std::max({sizeof testKind, sizeof testType, sizeof testSize, sizeof testNext, sizeof testData})];
   checkLE2.read(readLE2, sizeof testKind);
   auto kindLE2 = *static_cast<int32_t *>(static_cast<void*>(readLE2));
