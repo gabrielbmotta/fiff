@@ -1,12 +1,14 @@
 cmake_minimum_required(VERSION 3.20)
 project(fiff)
 
-set(CMAKE_CXX_STANDARD 17)
-
-add_executable(${PROJECT_NAME}_test
+set(SOURCES
         main.cpp
         u_input.cpp
         u_output.cpp
         u_tag.cpp
-        i_inputoutput.cpp)
+        i_inputoutput.cpp
+)
+
+add_executable(${PROJECT_NAME}_test ${SOURCES})
+
 target_link_libraries(${PROJECT_NAME}_test PRIVATE fiff core)
