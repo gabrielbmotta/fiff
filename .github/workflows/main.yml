@@ -11,24 +11,6 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  Does_it_build:
-    # The type of runner that the job will run on
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, macos-latest ]
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      # Runs a single command using the runners shell
-      - name: Check if project builds
-        run: ./build
-
   Tests:
     runs-on: ${{ matrix.os }}
 
@@ -38,15 +20,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: Install Catch2
-        run: |
-          if [ "$RUNNER_OS" == "Linux" ]; then
-          sudo apt-get update
-          sudo apt-get -y install catch2
-          elif [ "$RUNNER_OS" == "macOS" ]; then
-          brew install catch2
-          fi
 
       - name: Build project
         run: ./build

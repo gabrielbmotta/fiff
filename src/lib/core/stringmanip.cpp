@@ -3,6 +3,8 @@
 //
 #include "core/stringmanip.hpp"
 
+#include <algorithm>
+
 bool Core::StringManipulation::isNumber(const std::string& s)
 {
   return !s.empty() && std::find_if(s.begin(),

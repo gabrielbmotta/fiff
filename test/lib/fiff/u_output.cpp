@@ -2,7 +2,7 @@
 // Created by Gabriel Motta on 4/18/22.
 //
 
-#include "catch2/catch.hpp"
+#include "catch.hpp"
 
 #include "fiff/output.hpp"
 #include "core/endian.hpp"

@@ -3,10 +3,9 @@ project(test)
 
 set(CMAKE_CXX_STANDARD 17)
 
-find_package(Catch2)
-if(Catch2_FOUND)
-    set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/out/${MY_BUILD_NAME}/test/)
-    file(INSTALL run_tests DESTINATION ${CMAKE_SOURCE_DIR}/out/${MY_BUILD_NAME}/test/)
-    add_subdirectory(app)
-    add_subdirectory(lib)
-endif()
+
+include_directories(.)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/out/${MY_BUILD_NAME}/test/)
+file(INSTALL run_tests DESTINATION ${CMAKE_SOURCE_DIR}/out/${MY_BUILD_NAME}/test/)
+add_subdirectory(app)
+add_subdirectory(lib)
