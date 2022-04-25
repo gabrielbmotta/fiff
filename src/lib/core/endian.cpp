@@ -2,7 +2,7 @@
 // Created by Gabriel Motta on 3/25/22.
 //
 
-#include "core/endian.hpp"
+#include "endian.hpp"
 
 Endian systemEndian()
 {

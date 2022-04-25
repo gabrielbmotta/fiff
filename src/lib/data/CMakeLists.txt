@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.20)
 project(data)
 
-add_library(${PROJECT_NAME} parse.cpp   include/data/parse.hpp)
+add_library(${PROJECT_NAME} parse.cpp parse.hpp)
 
 target_include_directories( ${PROJECT_NAME}
-        PUBLIC ${PROJECT_SOURCE_DIR}/include)
+        PUBLIC ${PROJECT_SOURCE_DIR}/..)
 
 target_link_libraries(${PROJECT_NAME}
         fiff core)

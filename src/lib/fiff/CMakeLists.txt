@@ -2,16 +2,16 @@ cmake_minimum_required(VERSION 3.20)
 project(fiff)
 
 add_library(${PROJECT_NAME}
-        tag.cpp include/fiff/tag.hpp
-        include/fiff/types.hpp
-        input.cpp include/fiff/input.hpp
-        output.cpp include/fiff/output.hpp
-        formatting.cpp include/fiff/formatting.hpp
-        data.cpp include/fiff/data.hpp
+        tag.cpp tag.hpp
+        types.hpp
+        input.cpp input.hpp
+        output.cpp output.hpp
+        formatting.cpp formatting.hpp
+        data.cpp data.hpp
         )
 
 target_include_directories( ${PROJECT_NAME}
-        PUBLIC ${PROJECT_SOURCE_DIR}/include)
+        PUBLIC ${PROJECT_SOURCE_DIR}/..)
 
 target_link_libraries(${PROJECT_NAME}
          core)

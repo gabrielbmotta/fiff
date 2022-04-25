@@ -5,8 +5,8 @@
 #ifndef FIFFFILEEXPLORER_INPUT_HPP
 #define FIFFFILEEXPLORER_INPUT_HPP
 
-#include "fiff/tag.hpp"
-#include "core/endian.hpp"
+#include "tag.hpp"
+#include "../core/endian.hpp"
 
 #include <fstream>
 #include <memory>

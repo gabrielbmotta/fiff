@@ -2,8 +2,8 @@
 // Created by Gabriel Motta on 3/7/22.
 //
 
-#include "core/commandlineinput.hpp"
-#include "core/stringmanip.hpp"
+#include "commandlineinput.hpp"
+#include "stringmanip.hpp"
 #include <algorithm>
 
 Core::CommandLineInput::CommandLineInput(int &argc, char *argv[])

@@ -3,8 +3,8 @@
 //
 
 #include "data/parse.hpp"
-#include "core/stringmanip.hpp"
-#include "fiff/input.hpp"
+#include "../core/stringmanip.hpp"
+#include "../fiff/input.hpp"
 
 static std::map<std::string, std::any> parseFif(const std::string& filePath);
 

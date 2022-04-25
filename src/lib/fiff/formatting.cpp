@@ -1,6 +1,6 @@
-#include "fiff/formatting.hpp"
+#include "formatting.hpp"
 
-#include "fiff/types.hpp"
+#include "types.hpp"
 #include <chrono>
 
 static std::string unix_epoch(int time);

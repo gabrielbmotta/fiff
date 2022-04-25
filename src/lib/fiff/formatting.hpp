@@ -5,9 +5,9 @@
 #ifndef FIFFFILEEXPLORER_FORMATTING_HPP
 #define FIFFFILEEXPLORER_FORMATTING_HPP
 
-#include "fiff/tag.hpp"
-#include "fiff/input.hpp"
-#include <core/endian.hpp>
+#include "tag.hpp"
+#include "input.hpp"
+#include "../core/endian.hpp"
 
 #include <string>
 #include <sstream>

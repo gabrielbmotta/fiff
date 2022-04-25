@@ -1,9 +1,9 @@
 #ifndef FIFFFILEEXPLORER_ANONYMIZER_HPP
 #define FIFFFILEEXPLORER_ANONYMIZER_HPP
 
-#include <fiff/input.hpp>
-#include <fiff/output.hpp>
-#include <fiff/types.hpp>
+#include "../../lib/fiff/input.hpp"
+#include "../../lib/fiff/output.hpp"
+#include "../../lib/fiff/types.hpp"
 
 #include <string>
 #include <stack>

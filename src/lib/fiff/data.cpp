@@ -4,7 +4,7 @@
 
 #include <cstdlib>
 #include <cstring>
-#include "fiff/data.hpp"
+#include "data.hpp"
 
 //==============================================================================
 /**

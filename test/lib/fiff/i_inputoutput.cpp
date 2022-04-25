@@ -4,8 +4,8 @@
 
 #include "catch.hpp"
 
-#include "fiff/input.hpp"
-#include "fiff/output.hpp"
+#include "../../../src/lib/fiff/input.hpp"
+#include "../../../src/lib/fiff/output.hpp"
 
 const static char* testFile = "sample_audvis_trunc_raw.fif";
 

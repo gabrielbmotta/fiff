@@ -2,9 +2,9 @@
 // Created by Gabriel Motta on 4/13/22.
 //
 
-#include "fiff/tag.hpp"
+#include "tag.hpp"
 
-#include "core/endian.hpp"
+#include "../core/endian.hpp"
 
 //==============================================================================
 /**

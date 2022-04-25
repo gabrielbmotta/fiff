@@ -1,7 +1,7 @@
-#include <fiff/input.hpp>
-#include <fiff/formatting.hpp>
-#include <core/commandlineinput.hpp>
-#include <core/stringmanip.hpp>
+#include "../../lib/fiff/input.hpp"
+#include "../../lib/fiff/formatting.hpp"
+#include "../../lib/core/commandlineinput.hpp"
+#include "../../lib/core/stringmanip.hpp"
 #include <iostream>
 #include <string>
 

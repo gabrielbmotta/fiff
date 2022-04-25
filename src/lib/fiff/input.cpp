@@ -1,6 +1,6 @@
-#include "fiff/input.hpp"
+#include "input.hpp"
 
-#include "fiff/types.hpp"
+#include "types.hpp"
 
 //==============================================================================
 /**

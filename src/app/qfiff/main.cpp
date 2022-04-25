@@ -2,9 +2,9 @@
 // Created by Gabriel Motta on 3/10/22.
 //
 
-#include <core/commandlineinput.hpp>
-#include <core/stringmanip.hpp>
-#include <fiff/formatting.hpp>
+#include "../../lib/core/commandlineinput.hpp"
+#include "../../lib/core/stringmanip.hpp"
+#include "../../lib/fiff/formatting.hpp"
 
 #include <iostream>
 #include <string>

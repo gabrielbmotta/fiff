@@ -4,8 +4,8 @@
 
 #include "catch.hpp"
 
-#include "fiff/output.hpp"
-#include "core/endian.hpp"
+#include "../../../src/lib/fiff/output.hpp"
+#include "../../../src/lib/core/endian.hpp"
 
 #include <iostream>
 

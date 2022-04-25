@@ -4,8 +4,8 @@
 
 #include "catch.hpp"
 
-#include "fiff/input.hpp"
-#include "core/endian.hpp"
+#include "../../../src/lib/fiff/input.hpp"
+#include "../../../src/lib/core/endian.hpp"
 
 const static char* testFile = "sample_audvis_trunc_raw.fif";
 
