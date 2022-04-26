@@ -6,6 +6,7 @@ set(SOURCES
         u_input.cpp
         u_output.cpp
         u_tag.cpp
+        u_data.cpp
         i_inputoutput.cpp
 )
 

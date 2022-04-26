@@ -4,8 +4,8 @@
 
 #include "catch.hpp"
 
-#include "../../../src/lib/fiff/output.hpp"
-#include "../../../src/lib/core/endian.hpp"
+#include "fiff/output.hpp"
+#include "core/endian.hpp"
 
 #include <iostream>
 
@@ -78,6 +78,11 @@ TEST_CASE("Set endianess", "[output file endianess]")
     auto fileLE2 = Fiff::Output::toFile("LE2.fif");
     fileLE2.setEndianess(Endian::little);
 
+    REQUIRE(fileBE1.getEndianess() == Endian::big);
+    REQUIRE(fileBE2.getEndianess() == Endian::big);
+    REQUIRE(fileLE1.getEndianess() == Endian::little);
+    REQUIRE(fileLE2.getEndianess() == Endian::little);
+
     Fiff::Tag tag = testTag();
 
     fileBE1.writeTag(tag);
@@ -121,5 +126,14 @@ TEST_CASE("Set endianess", "[output file endianess]")
 
 TEST_CASE("Position in output", "[output position]")
 {
+  auto file = Fiff::Output::toFile("pos.fif");
+  auto initPos = file.currentWritePosition();
 
+  file.writeTag(testTag());
+  auto secondPos = file.currentWritePosition();
+  REQUIRE(initPos != secondPos);
+
+  file.goToWritePosition(initPos);
+  auto thirdPos = file.currentWritePosition();
+  REQUIRE(initPos == thirdPos);
 }
