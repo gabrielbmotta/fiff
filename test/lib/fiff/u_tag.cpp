@@ -21,7 +21,7 @@ TEST_CASE("Tag Data Endianness Swap", "[tag endian]"){
   Fiff::endswapTagData(tag);
 
   auto* tagDataPtr = reinterpret_cast<char*>(tag.data.byteArray);
-  auto* dataPtr = reinterpret_cast<char*>(data);
+  auto* dataPtr = reinterpret_cast<char*>(&data);
 
   bool equal = true;
   for(size_t i = 0; i < dataSize; ++i){
@@ -31,5 +31,4 @@ TEST_CASE("Tag Data Endianness Swap", "[tag endian]"){
     }
   }
   REQUIRE(equal);
-
 }
