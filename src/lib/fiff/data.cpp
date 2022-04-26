@@ -73,18 +73,22 @@ void Fiff::Data::clear()
 /**
  * Creates a Data object from a char.
  */
-Fiff::Data::Data(char)
+Fiff::Data::Data(char c)
+: byteArray(new char)
+, size(1)
 {
-
+  *static_cast<char *>(byteArray) = c;
 }
 
 //==============================================================================
 /**
  * Creates a Data object from a 16 bit int.
  */
-Fiff::Data::Data(int16_t)
+Fiff::Data::Data(int16_t number)
+: byteArray(new char[2])
+, size(2)
 {
-
+  *static_cast<int16_t *>(byteArray) = number;
 }
 
 //==============================================================================
@@ -102,18 +106,22 @@ Fiff::Data::Data(int32_t number)
 /**
  * Creates a Data object from a single precision floating point number.
  */
-Fiff::Data::Data(float)
+Fiff::Data::Data(float number)
+: byteArray(new char[4])
+, size(4)
 {
-
+  *static_cast<float_t*>(byteArray) = number;
 }
 
 //==============================================================================
 /**
  * Creates a Data object from a double precision floating point number.
  */
-Fiff::Data::Data(double)
+Fiff::Data::Data(double number)
+: byteArray(new char[8])
+, size(8)
 {
-
+  *static_cast<double_t *>(byteArray) = number;
 }
 
 //==============================================================================
@@ -129,27 +137,33 @@ Fiff::Data::Data(Fiff::Julian)
 /**
  * Creates a Data object from an unsigned 16 bit int.
  */
-Fiff::Data::Data(uint16_t)
+Fiff::Data::Data(uint16_t number)
+: byteArray(new char[2])
+, size(4)
 {
-
+  *static_cast<uint16_t*>(byteArray) = number;
 }
 
 //==============================================================================
 /**
  * Creates a Data object from an unsigned 32 bit int.
  */
-Fiff::Data::Data(uint32_t)
+Fiff::Data::Data(uint32_t number)
+: byteArray(new char[4])
+, size(4)
 {
-
+  *static_cast<uint32_t*>(byteArray) = number;
 }
 
 //==============================================================================
 /**
  * Creates a Data object from an unsigned 64 bit int.
  */
-Fiff::Data::Data(uint64_t)
+Fiff::Data::Data(uint64_t number)
+: byteArray(new char[8])
+, size(8)
 {
-
+  *static_cast<uint64_t *>(byteArray) = number;
 }
 
 //==============================================================================
@@ -165,9 +179,11 @@ Fiff::Data::Data(std::string)
 /**
  * Creates a Data object from a 64 bit int.
  */
-Fiff::Data::Data(int64_t)
+Fiff::Data::Data(int64_t number)
+: byteArray(new char[8])
+, size(8)
 {
-
+  *static_cast<int64_t*>(byteArray) = number;
 }
 
 //==============================================================================

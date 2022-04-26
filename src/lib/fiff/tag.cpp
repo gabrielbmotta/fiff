@@ -28,19 +28,11 @@ void Fiff::endswapTagData(Tag &tag)
 {
   switch((tag.type) & Fiff::Type::baseMask())
   {
-    // 0 bytes
+    // 0 bytes / 1 byte
     case Fiff::Type::void_:
-    {
-      break;
-    }
-      // 1 byte
     case Fiff::Type::byte_:
     case Fiff::Type::string_:
     {
-      auto *dataPtr = reinterpret_cast<int8_t *>(tag.data.byteArray);
-      for(size_t i = 0; i < (tag.size / sizeof (int8_t)); ++i){
-        endswap(dataPtr + i);
-      }
       break;
     }
       // 2 bytes
