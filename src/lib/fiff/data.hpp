@@ -136,26 +136,26 @@ struct Data {
   void resize(size_t newSize);
   void clear();
 
-  Data(char); // 1
-  Data(int16_t); // 2
-  Data(int32_t); // 3
-  Data(float); // 4
-  Data(double); // 5
-  Data(Julian); // 6
-  Data(uint16_t); // 7
-  Data(uint32_t); // 8
-  Data(uint64_t); // 9
-  Data(std::string); // 10
-  Data(int64_t); // 11
-  Data(std::complex<float>); // 20
-  Data(std::complex<double>); // 21
-  Data(ChannelInfo); // 30
-  Data(ID); // 31
-  Data(DirectoryEntry); // 32
-  Data(DigitizerPoint); // 33
-  Data(ChannelPosition); // 34
-  Data(CoordinateTransformation); // 35
-  Data(DigitizerString); // 36
+  explicit Data(char); // 1
+  explicit Data(int16_t); // 2
+  explicit Data(int32_t); // 3
+  explicit Data(float); // 4
+  explicit Data(double); // 5
+  explicit Data(Julian); // 6
+  explicit Data(uint16_t); // 7
+  explicit Data(uint32_t); // 8
+  explicit Data(uint64_t); // 9
+  explicit Data(std::string); // 10
+  explicit Data(int64_t); // 11
+  explicit Data(std::complex<float>); // 20
+  explicit Data(std::complex<double>); // 21
+  explicit Data(ChannelInfo); // 30
+  explicit Data(ID); // 31
+  explicit Data(DirectoryEntry); // 32
+  explicit Data(DigitizerPoint); // 33
+  explicit Data(ChannelPosition); // 34
+  explicit Data(CoordinateTransformation); // 35
+  explicit Data(DigitizerString); // 36
 
   explicit operator char() const; // 1
   explicit operator int16_t() const; // 2
