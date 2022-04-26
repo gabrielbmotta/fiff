@@ -35,6 +35,7 @@ void Fiff::endswapTagData(Tag &tag)
     }
       // 1 byte
     case Fiff::Type::byte_:
+    case Fiff::Type::string_:
     {
       auto *dataPtr = reinterpret_cast<int8_t *>(tag.data.byteArray);
       for(size_t i = 0; i < (tag.size / sizeof (int8_t)); ++i){
@@ -71,27 +72,11 @@ void Fiff::endswapTagData(Tag &tag)
     case Fiff::Type::double_:
     case Fiff::Type::uint64_:
     case Fiff::Type::int64_:
+    case Fiff::Type::complex_double_:
     {
       auto *dataPtr = reinterpret_cast<int64_t*>(tag.data.byteArray);
       for(size_t i = 0; i < (tag.size / sizeof (int64_t)); ++i){
         endswap(dataPtr + i);
-      }
-      break;
-    }
-      // array of 1 byte
-    case Fiff::Type::string_:
-    {
-      auto *dataPtr = reinterpret_cast<int8_t*>(tag.data.byteArray);
-      for (size_t i = 0; i < (tag.size / sizeof (int8_t)); ++i){
-        endswap(dataPtr + i);
-      }
-      break;
-    }
-    case Fiff::Type::complex_double_:
-    {
-      auto* ptr8byte = reinterpret_cast<int64_t*>(tag.data.byteArray);
-      for (size_t i = 0; i < (tag.size / sizeof (int64_t)); ++i){
-        endswap(ptr8byte + i);
       }
       break;
     }
