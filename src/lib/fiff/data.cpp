@@ -128,9 +128,11 @@ Fiff::Data::Data(double number)
 /**
  * Creates a Data object from a Julian date object.
  */
-Fiff::Data::Data(Fiff::Julian)
+Fiff::Data::Data(Fiff::Julian jul)
+: byteArray(new char[4])
+, size(4)
 {
-
+  *static_cast<int32_t*>(byteArray) = jul.date;
 }
 
 //==============================================================================
@@ -170,9 +172,11 @@ Fiff::Data::Data(uint64_t number)
 /**
  * Creates a Data object from a string.
  */
-Fiff::Data::Data(std::string)
+Fiff::Data::Data(const std::string& str)
+: byteArray(new char[str.length()])
+, size(str.length())
 {
-
+  std::memcpy(byteArray, str.c_str(), str.length());
 }
 
 //==============================================================================
@@ -190,18 +194,28 @@ Fiff::Data::Data(int64_t number)
 /**
  * Creates a Data object from a single precision complex floating point number.
  */
-Fiff::Data::Data(std::complex<float>)
+Fiff::Data::Data(std::complex<float> num)
+: byteArray(new char[8])
+, size(8)
 {
+  auto ptr = static_cast<float_t*>(byteArray);
 
+  *ptr =  num.real();
+  *(ptr + 1) = num.imag();
 }
 
 //==============================================================================
 /**
  * Creates a Data object from a double precision complex floating point number.
  */
-Fiff::Data::Data(std::complex<double>)
+Fiff::Data::Data(std::complex<double> num)
+        : byteArray(new char[16])
+        , size(16)
 {
+  auto ptr = static_cast<double_t*>(byteArray);
 
+  *ptr =  num.real();
+  *(ptr + 1) = num.imag();
 }
 
 //==============================================================================
@@ -209,8 +223,39 @@ Fiff::Data::Data(std::complex<double>)
  * Creates a Data object from a Channel Info object.
  */
 Fiff::Data::Data(Fiff::ChannelInfo)
+: byteArray(new char[16])
+, size(16)
 {
+  int offset = 0;
+  ChannelInfo info{};
+  *(static_cast<int32_t*>(byteArray) + offset++) = info.scanNo;
+  *(static_cast<int32_t*>(byteArray) + offset++) = info.logNo;
+  *(static_cast<int32_t*>(byteArray) + offset++) = info.kind;
+  *(static_cast<float*>(byteArray) + offset++) = info.range;
+  *(static_cast<float*>(byteArray) + offset++) = info.cal;
 
+  *(static_cast<int32_t*>(byteArray) + offset++) = info.chpos.coil_type;
+
+  *(static_cast<float*>(byteArray) + offset++) = info.chpos.r0[0];
+  *(static_cast<float*>(byteArray) + offset++) = info.chpos.r0[1];
+  *(static_cast<float*>(byteArray) + offset++) = info.chpos.r0[2];
+
+  *(static_cast<float*>(byteArray) + offset++) = info.chpos.ex[0];
+  *(static_cast<float*>(byteArray) + offset++) = info.chpos.ex[1];
+  *(static_cast<float*>(byteArray) + offset++) = info.chpos.ex[2];
+
+  *(static_cast<float*>(byteArray) + offset++) = info.chpos.ey[0];
+  *(static_cast<float*>(byteArray) + offset++) = info.chpos.ey[1];
+  *(static_cast<float*>(byteArray) + offset++) = info.chpos.ey[2];
+
+  *(static_cast<float*>(byteArray) + offset++) = info.chpos.ez[0];
+  *(static_cast<float*>(byteArray) + offset++) = info.chpos.ez[1];
+  *(static_cast<float*>(byteArray) + offset++) = info.chpos.ez[2];
+
+  *(static_cast<int32_t*>(byteArray) + offset++) = info.unit;
+  *(static_cast<int32_t*>(byteArray) + offset++) = info.unit_mul;
+
+  memcpy(static_cast<char*>(byteArray) + offset * sizeof(int32_t), info.ch_name, 16);
 }
 
 //==============================================================================

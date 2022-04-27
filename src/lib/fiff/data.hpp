@@ -145,7 +145,7 @@ struct Data {
   explicit Data(uint16_t); // 7
   explicit Data(uint32_t); // 8
   explicit Data(uint64_t); // 9
-  explicit Data(std::string); // 10
+  explicit Data(const std::string&); // 10
   explicit Data(int64_t); // 11
   explicit Data(std::complex<float>); // 20
   explicit Data(std::complex<double>); // 21
