@@ -7,6 +7,90 @@
 #include "data.hpp"
 
 //==============================================================================
+
+bool Fiff::ChannelPosition::operator==(const Fiff::ChannelPosition &other) const
+{
+  return (coil_type == other.coil_type &&
+          r0 == other.r0 &&
+          ex == other.ex &&
+          ey == other.ey &&
+          ez == other.ez);
+}
+
+//==============================================================================
+
+bool Fiff::ChannelInfo::operator==(const Fiff::ChannelInfo &other) const
+{
+  return (scanNo == other.scanNo &&
+          logNo == other.logNo &&
+          kind == other.kind &&
+          range == other.range &&
+          cal == other.cal &&
+          chpos == other.chpos &&
+          unit == other.unit &&
+          unit_mul == other.unit_mul &&
+          ch_name == other.ch_name);
+}
+
+//==============================================================================
+
+bool Fiff::ID::operator==(const Fiff::ID &other) const
+{
+  return (version == other.version &&
+          machid == other.machid &&
+          time_sec == other.time_sec &&
+          time_usec == other.time_usec);
+}
+
+//==============================================================================
+
+bool Fiff::DirectoryEntry::operator==(const Fiff::DirectoryEntry &other) const
+{
+  return (kind == other.kind &&
+          type == other.type &&
+          size == other.size &&
+          position == other.position);
+}
+
+//==============================================================================
+
+bool Fiff::DigitizerPoint::operator==(const Fiff::DigitizerPoint &other) const
+{
+  return (kind == other.kind &&
+          ident == other.ident &&
+          r == other.r);
+}
+
+//==============================================================================
+
+bool Fiff::DigitizerString::operator==(const Fiff::DigitizerString &other) const
+{
+  return (kind == other.kind &&
+          ident == other.ident &&
+          npoints == other.npoints &&
+          rr == other.rr);
+}
+
+//==============================================================================
+
+bool Fiff::CoordinateTransformation::operator==(const Fiff::CoordinateTransformation &other) const
+{
+  return (from == other.from &&
+          to == other.to &&
+          rot == other.rot &&
+          move == other.move &&
+          invrot == other.invrot &&
+          invmove == other.invmove);
+}
+
+//==============================================================================
+
+bool Fiff::Julian::operator==(const Fiff::Julian &other) const
+{
+  return (date == other.date);
+}
+
+//==============================================================================
 /**
  * Constructs an empty Data object.
  */
@@ -255,7 +339,7 @@ Fiff::Data::Data(Fiff::ChannelInfo info)
   *(static_cast<int32_t*>(byteArray) + offset++) = info.unit;
   *(static_cast<int32_t*>(byteArray) + offset++) = info.unit_mul;
 
-  memcpy(static_cast<char*>(byteArray) + offset * sizeof(int32_t), info.ch_name, 16);
+  memcpy(static_cast<char*>(byteArray) + offset * sizeof(int32_t), info.ch_name.data(), 16);
 }
 
 //==============================================================================
@@ -556,7 +640,7 @@ Fiff::Data::operator ChannelInfo() const
 
   info.unit = *(static_cast<int32_t*>(byteArray) + offset++);
   info.unit_mul = *(static_cast<int32_t*>(byteArray) + offset++);
-  memcpy(info.ch_name, static_cast<char*>(byteArray) + offset * sizeof(int32_t), 16);
+  memcpy(info.ch_name.data(), static_cast<char*>(byteArray) + offset * sizeof(int32_t), 16);
   return info;
 }
 

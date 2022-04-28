@@ -24,10 +24,12 @@ namespace Fiff{
  */
 struct ChannelPosition {
   int32_t coil_type;
-  float r0[3];
-  float ex[3];
-  float ey[3];
-  float ez[3];
+  std::array<float,3> r0;
+  std::array<float,3> ex;
+  std::array<float,3> ey;
+  std::array<float,3> ez;
+
+  bool operator==(const ChannelPosition& other) const;
 }; //mSize is 48 bytes
 
 //==============================================================================
@@ -43,7 +45,9 @@ struct ChannelInfo {
   ChannelPosition chpos;       /**< Channel position. */
   int32_t unit;         /**< The real-world unit-of measure. */
   int32_t unit_mul;     /**< The unit multiplier. The result given by range*cal*data is in units unit*10^unit_mul. */
-  char ch_name[16];     /**< Descriptive name for the channel. */
+  std::array<char,16> ch_name;     /**< Descriptive name for the channel. */
+
+  bool operator==(const ChannelInfo& other) const;
 }; //mSize is 96 bytes
 
 //==============================================================================
@@ -52,9 +56,11 @@ struct ChannelInfo {
  */
 struct ID {
   int32_t version;
-  int32_t machid[2];
+  std::array<int32_t,2> machid;
   int32_t time_sec;
   int32_t time_usec;
+
+  bool operator==(const ID& other) const;
 };//total mSize is 20 bytes
 
 //==============================================================================
@@ -66,6 +72,8 @@ struct DirectoryEntry{
   int32_t type;
   int32_t size;
   int32_t position;
+
+  bool operator==(const DirectoryEntry& other) const;
 };
 
 //==============================================================================
@@ -75,7 +83,9 @@ struct DirectoryEntry{
 struct DigitizerPoint{
   int32_t kind;
   int32_t ident;
-  float r[3];
+  std::array<float,3> r;
+
+  bool operator==(const DigitizerPoint& other) const;
 };
 
 //==============================================================================
@@ -87,6 +97,8 @@ struct DigitizerString{
   int32_t ident;
   int32_t npoints;
   std::vector<std::array<float,3>> rr;
+
+  bool operator==(const DigitizerString& other) const;
 };
 
 //==============================================================================
@@ -96,10 +108,12 @@ struct DigitizerString{
 struct CoordinateTransformation{
   int32_t from;
   int32_t to;
-  float rot[3][3];
-  float move[3];
-  float invrot[3][3];
-  float invmove[3];
+  std::array<std::array<float,3>,3> rot;
+  std::array<float,3> move;
+  std::array<std::array<float,3>,3> invrot;
+  std::array<float,3> invmove;
+
+  bool operator==(const CoordinateTransformation& other) const;
 };
 
 //struct ch_info_t {
@@ -123,6 +137,8 @@ struct CoordinateTransformation{
  */
 struct Julian{
   int32_t date;
+
+  bool operator==(const Julian& other) const;
 };
 
 //==============================================================================
