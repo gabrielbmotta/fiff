@@ -794,7 +794,7 @@ Fiff::Data::operator DigitizerString() const
                           *(static_cast<float_t *>(byteArray) + offset++)});
   }
 
-  return {};
+  return dig_str;
 }
 
 bool Fiff::Data::operator==(const Fiff::Data &other) const

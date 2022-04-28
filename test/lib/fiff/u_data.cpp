@@ -58,7 +58,7 @@ TEST_CASE("Data Types", "[data]"){
 
   std::complex<double> compDoubleTest = std::complex<double_t>(6.,7.);
   Fiff::Data compDoubleData(compDoubleTest);
-  REQUIRE(compFloatTest == static_cast<std::complex<float_t>>(compFloatData));
+  REQUIRE(compDoubleTest == static_cast<std::complex<double_t>>(compDoubleData));
 
   Fiff::ChannelInfo chInfoTest{
     1,
@@ -123,16 +123,33 @@ TEST_CASE("Data Types", "[data]"){
   Fiff::Data coordData(coordTest);
   REQUIRE(coordTest == static_cast<Fiff::CoordinateTransformation>(coordData));
 
-//  Fiff::DigitizerString digsTest{
-//    1,
-//    2,
-//    3,
-//    {{{1,2,3}}, {{2,3,4}}, {{3,4,5}}}
-//  };
-//  Fiff::Data digsData(digsTest);
-//  REQUIRE(digsTest == static_cast<Fiff::DigitizerString>(digsData));
+  Fiff::DigitizerString digsTest{
+    1,
+    2,
+    3,
+    {{{1,2,3}}, {{2,3,4}}, {{3,4,5}}}
+  };
+  Fiff::Data digsData(digsTest);
+  REQUIRE(digsTest == static_cast<Fiff::DigitizerString>(digsData));
 
 //   Test = ;
 //  Fiff::Data Data(Test);
 //  REQUIRE(Test == static_cast<>(Data));
+}
+
+TEST_CASE("Equality", "[data]"){
+  auto test1 = Fiff::Data(static_cast<int32_t>(123));
+  auto test2 = Fiff::Data(static_cast<char>('a'));
+  auto test3 = Fiff::Data();
+  auto test4 = Fiff::Data(test1);
+  auto test5 = Fiff::Data(static_cast<float_t>(1.23f));
+
+  REQUIRE(test1 == test4);
+  REQUIRE(!(test1 == test2));
+  REQUIRE(!(test1 == test3));
+
+  test1 = test3;
+
+  REQUIRE(test1 == test3);
+  REQUIRE(!(test1 == test5));
 }
