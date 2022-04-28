@@ -1,0 +1,28 @@
+lcov --verison &> /dev/null
+genhtml --version &> /dev/null
+
+source=""
+dest=""
+
+if [ "$1" ]
+then
+    echo Attempting to load coverage info from $1...
+    source=$1
+else
+    echo No source given for coverage files.
+    exit 1
+fi
+
+lcov -c -d $source -o cov.info
+
+echo Generating html with coverage data...
+if [ "$2" ]
+then
+    dest=$2
+else
+    dest="covhtml"
+fi
+
+genhtml cov.info -o $dest
+
+rm cov.info
