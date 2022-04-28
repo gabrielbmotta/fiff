@@ -15,7 +15,7 @@ TEST_CASE("Tag Data Endianness Swap 2byte", "[tag endian]"){
   tag.kind = Fiff::Kind::first_sample;
   tag.type = Fiff::Type::short_;
   tag.size = static_cast<int32_t>(dataSize);
-  tag.data = data;
+  tag.data = Fiff::Data(data);
 
   Fiff::endswapTagData(tag);
 
@@ -40,7 +40,7 @@ TEST_CASE("Tag Data Endianness Swap 4 byte", "[tag endian]"){
   tag.kind = Fiff::Kind::first_sample;
   tag.type = Fiff::Type::int32_;
   tag.size = static_cast<int32_t>(dataSize);
-  tag.data = data;
+  tag.data = Fiff::Data(data);
 
   Fiff::endswapTagData(tag);
 
@@ -65,7 +65,7 @@ TEST_CASE("Tag Data Endianness Swap 8byte", "[tag endian]"){
   tag.kind = Fiff::Kind::first_sample;
   tag.type = Fiff::Type::int64_;
   tag.size = static_cast<int32_t>(dataSize);
-  tag.data = data;
+  tag.data = Fiff::Data(data);
 
   Fiff::endswapTagData(tag);
 

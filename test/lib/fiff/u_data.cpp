@@ -60,6 +60,78 @@ TEST_CASE("Data Types", "[data]"){
   Fiff::Data compDoubleData(compDoubleTest);
   REQUIRE(compFloatTest == static_cast<std::complex<float_t>>(compFloatData));
 
+  Fiff::ChannelInfo chInfoTest{
+    1,
+    2,
+    3,
+    4.f,
+    5.f,
+    {1,
+    {1.f,2.f,3.f},
+    {2.f,3.f,4.f},
+    {3.f,4.f,5.f},
+    {4.f,5.f,6.f}},
+    6,
+    7,
+    {'a','b','c'}
+  };
+  Fiff::Data chInfoData(chInfoTest);
+  REQUIRE(chInfoTest == static_cast<Fiff::ChannelInfo>(chInfoData));
+
+  Fiff::ID idTest{
+    123,
+    {1,2},
+    1234567,
+    3456789
+  };
+  Fiff::Data idData(idTest);
+  REQUIRE(idTest == static_cast<Fiff::ID>(idData));
+
+  Fiff::DirectoryEntry dirTest{
+    1,
+    2,
+    3,
+    4
+  };
+  Fiff::Data dirData(dirTest);
+  REQUIRE(dirTest == static_cast<Fiff::DirectoryEntry>(dirData));
+
+  Fiff::DigitizerPoint digpTest{
+    1,
+    2,
+    {3.1f,4.1f,5.1f}
+  };
+  Fiff::Data digpData(digpTest);
+  REQUIRE(digpTest == static_cast<Fiff::DigitizerPoint>(digpData));
+
+  Fiff::ChannelPosition chposTest{1,
+                                  {1.f,2.f,3.f},
+                                  {2.f,3.f,4.f},
+                                  {3.f,4.f,5.f},
+                                  {4.f,5.f,6.f}};
+  Fiff::Data chposData(chposTest);
+  REQUIRE(chposTest == static_cast<Fiff::ChannelPosition>(chposData));
+
+  Fiff::CoordinateTransformation coordTest{
+    1,
+    2,
+    {{{1.f,2.f,3.f}, {4.f,5.f,6.f}, {7.f,8.f,9.f}}},
+    {{1,2,3}},
+    {{{1.f,2.f,3.f}, {4.f,5.f,6.f}, {7.f,8.f,9.f}}},
+    {{1,2,3}}
+  };
+  Fiff::Data coordData(coordTest);
+  REQUIRE(coordTest == static_cast<Fiff::CoordinateTransformation>(coordData));
+
+  Fiff::DigitizerString digsTest{
+    1,
+    2,
+    3,
+    {{{1,2,3}}, {{2,3,4}}, {{3,4,5}}}
+  };
+  Fiff::Data digsData(digsTest);
+  REQUIRE(digsTest == static_cast<Fiff::DigitizerString>(digsData));
+
 //   Test = ;
 //  Fiff::Data Data(Test);
 //  REQUIRE(Test == static_cast<>(Data));
