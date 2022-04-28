@@ -73,7 +73,7 @@ std::string Fiff::Formatting::asString(const Fiff::ChannelInfo& info)
 {
   std::stringstream stream;
 
-  stream << std::string(info.ch_name) << ", ";
+  stream << std::string(info.ch_name.data()) << ", ";
   stream << "scanNo " << info.scanNo << ", ";
   stream << "logNo " << info.logNo << ", ";
   stream << "kind " << info.kind << ", ";

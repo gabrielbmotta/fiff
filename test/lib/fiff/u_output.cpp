@@ -23,7 +23,7 @@ static Fiff::Tag testTag()
   tag.size = testSize;
   tag.next = testNext;
   tag.data.resize(4);
-  tag.data = static_cast<int32_t>(testData);
+  tag.data = Fiff::Data(static_cast<int32_t>(testData));
   return tag;
 }
 

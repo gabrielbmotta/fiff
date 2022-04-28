@@ -123,14 +123,14 @@ TEST_CASE("Data Types", "[data]"){
   Fiff::Data coordData(coordTest);
   REQUIRE(coordTest == static_cast<Fiff::CoordinateTransformation>(coordData));
 
-  Fiff::DigitizerString digsTest{
-    1,
-    2,
-    3,
-    {{{1,2,3}}, {{2,3,4}}, {{3,4,5}}}
-  };
-  Fiff::Data digsData(digsTest);
-  REQUIRE(digsTest == static_cast<Fiff::DigitizerString>(digsData));
+//  Fiff::DigitizerString digsTest{
+//    1,
+//    2,
+//    3,
+//    {{{1,2,3}}, {{2,3,4}}, {{3,4,5}}}
+//  };
+//  Fiff::Data digsData(digsTest);
+//  REQUIRE(digsTest == static_cast<Fiff::DigitizerString>(digsData));
 
 //   Test = ;
 //  Fiff::Data Data(Test);

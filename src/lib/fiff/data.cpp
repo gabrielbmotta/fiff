@@ -402,23 +402,23 @@ Fiff::Data::Data(Fiff::ChannelPosition chpos)
 {
   int offset = 0;
 
-  chpos.coil_type = *(static_cast<int32_t*>(byteArray) + offset++);
+  *(static_cast<int32_t*>(byteArray) + offset++) = chpos.coil_type;
 
-  chpos.r0[0] = *(static_cast<float*>(byteArray) + offset++);
-  chpos.r0[1] = *(static_cast<float*>(byteArray) + offset++);
-  chpos.r0[2] = *(static_cast<float*>(byteArray) + offset++);
+  *(static_cast<float*>(byteArray) + offset++) = chpos.r0[0];
+  *(static_cast<float*>(byteArray) + offset++) = chpos.r0[1];
+  *(static_cast<float*>(byteArray) + offset++) = chpos.r0[2];
 
-  chpos.ex[0] = *(static_cast<float*>(byteArray) + offset++);
-  chpos.ex[1] = *(static_cast<float*>(byteArray) + offset++);
-  chpos.ex[2] = *(static_cast<float*>(byteArray) + offset++);
+  *(static_cast<float*>(byteArray) + offset++) = chpos.ex[0];
+  *(static_cast<float*>(byteArray) + offset++) = chpos.ex[1];
+  *(static_cast<float*>(byteArray) + offset++) = chpos.ex[2];
 
-  chpos.ey[0] = *(static_cast<float*>(byteArray) + offset++);
-  chpos.ey[1] = *(static_cast<float*>(byteArray) + offset++);
-  chpos.ey[2] = *(static_cast<float*>(byteArray) + offset++);
+  *(static_cast<float*>(byteArray) + offset++) = chpos.ey[0];
+  *(static_cast<float*>(byteArray) + offset++) = chpos.ey[1];
+  *(static_cast<float*>(byteArray) + offset++) = chpos.ey[2];
 
-  chpos.ez[0] = *(static_cast<float*>(byteArray) + offset++);
-  chpos.ez[1] = *(static_cast<float*>(byteArray) + offset++);
-  chpos.ez[2] = *(static_cast<float*>(byteArray) + offset++);
+  *(static_cast<float*>(byteArray) + offset++) = chpos.ez[0];
+  *(static_cast<float*>(byteArray) + offset++) = chpos.ez[1];
+  *(static_cast<float*>(byteArray) + offset++) = chpos.ez[2];
 }
 
 //==============================================================================
@@ -457,9 +457,22 @@ Fiff::Data::Data(Fiff::CoordinateTransformation coord)
 /**
  * Creates a Data object from a Digitizer String object.
  */
-Fiff::Data::Data(Fiff::DigitizerString)
+Fiff::Data::Data(Fiff::DigitizerString dig_str)
 {
+  int offset = 0;
 
+  size = ((dig_str.npoints * 4 * 3) + (3 * 4));
+  byteArray = (new char[size]);
+
+  *(static_cast<int32_t*>(byteArray) + offset++) = dig_str.kind;
+  *(static_cast<int32_t*>(byteArray) + offset++) = dig_str.ident;
+  *(static_cast<int32_t*>(byteArray) + offset++) = dig_str.npoints;
+
+  for (auto& point : dig_str.rr){
+    *(static_cast<float_t*>(byteArray) + offset++) = point[0];
+    *(static_cast<float_t*>(byteArray) + offset++) = point[1];
+    *(static_cast<float_t*>(byteArray) + offset++) = point[2];
+  }
 }
 
 //==============================================================================
