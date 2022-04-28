@@ -5,4 +5,14 @@ then
     wget https://github.com/mne-tools/mne-cpp-test-data/raw/master/MEG/sample/sample_audvis_trunc_raw.fif
 fi
 
-for test in *_test; do ./${test}; done
+compound_output=0
+for test in *_test;
+do
+    ./${test} -s;
+    last_ret_value=$?
+    if [ $last_ret_value -ne 0 ]; then
+        compound_output=$((compound_output + 1))
+    fi
+done
+
+exit $compound_output
