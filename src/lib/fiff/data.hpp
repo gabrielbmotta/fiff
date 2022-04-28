@@ -13,6 +13,8 @@
 #include <climits>
 #include <string>
 #include <complex>
+#include <vector>
+#include <array>
 
 namespace Fiff{
 
@@ -84,7 +86,7 @@ struct DigitizerString{
   int32_t kind;
   int32_t ident;
   int32_t npoints;
-  float* rr[3];
+  std::vector<std::array<float,3>> rr;
 };
 
 //==============================================================================

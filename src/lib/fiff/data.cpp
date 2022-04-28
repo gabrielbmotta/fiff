@@ -222,12 +222,12 @@ Fiff::Data::Data(std::complex<double> num)
 /**
  * Creates a Data object from a Channel Info object.
  */
-Fiff::Data::Data(Fiff::ChannelInfo)
-: byteArray(new char[16])
-, size(16)
+Fiff::Data::Data(Fiff::ChannelInfo info)
+: byteArray(new char[96])
+, size(96)
 {
   int offset = 0;
-  ChannelInfo info{};
+
   *(static_cast<int32_t*>(byteArray) + offset++) = info.scanNo;
   *(static_cast<int32_t*>(byteArray) + offset++) = info.logNo;
   *(static_cast<int32_t*>(byteArray) + offset++) = info.kind;
@@ -262,45 +262,111 @@ Fiff::Data::Data(Fiff::ChannelInfo)
 /**
  * Creates a Data object from an Id object.
  */
-Fiff::Data::Data(Fiff::ID)
+Fiff::Data::Data(Fiff::ID id)
+: byteArray(new char[20])
+, size(20)
 {
+  int offset = 0;
 
+  *(static_cast<int32_t*>(byteArray) + offset++) = id.version;
+  *(static_cast<int32_t*>(byteArray) + offset++) = id.machid[0];
+  *(static_cast<int32_t*>(byteArray) + offset++) = id.machid[1];
+  *(static_cast<int32_t*>(byteArray) + offset++) = id.time_sec;
+  *(static_cast<int32_t*>(byteArray) + offset) = id.time_usec;
 }
 
 //==============================================================================
 /**
  * Creates a Data object from a Directory Entry object.
  */
-Fiff::Data::Data(Fiff::DirectoryEntry)
+Fiff::Data::Data(Fiff::DirectoryEntry dir)
+: byteArray(new char[16])
+, size(16)
 {
+  int offset = 0;
 
+  *(static_cast<int32_t*>(byteArray) + offset++) = dir.kind;
+  *(static_cast<int32_t*>(byteArray) + offset++) = dir.type;
+  *(static_cast<int32_t*>(byteArray) + offset++) = dir.size;
+  *(static_cast<int32_t*>(byteArray) + offset) = dir.position;
 }
 
 //==============================================================================
 /**
  * Creates a Data object from a digitizer point object.
  */
-Fiff::Data::Data(Fiff::DigitizerPoint)
+Fiff::Data::Data(Fiff::DigitizerPoint dig)
+: byteArray(new char[20])
+, size(20)
 {
+  int offset = 0;
 
+  *(static_cast<int32_t*>(byteArray) + offset++) = dig.kind;
+  *(static_cast<int32_t*>(byteArray) + offset++) = dig.ident;
+  *(static_cast<float*>(byteArray) + offset++) = dig.r[0];
+  *(static_cast<float*>(byteArray) + offset++) = dig.r[1];
+  *(static_cast<float*>(byteArray) + offset) = dig.r[2];
 }
 
 //==============================================================================
 /**
  * Creates a Data object from a Channel Position object.
  */
-Fiff::Data::Data(Fiff::ChannelPosition)
+Fiff::Data::Data(Fiff::ChannelPosition chpos)
+: byteArray(new char[52])
+, size(52)
 {
+  int offset = 0;
 
+  chpos.coil_type = *(static_cast<int32_t*>(byteArray) + offset++);
+
+  chpos.r0[0] = *(static_cast<float*>(byteArray) + offset++);
+  chpos.r0[1] = *(static_cast<float*>(byteArray) + offset++);
+  chpos.r0[2] = *(static_cast<float*>(byteArray) + offset++);
+
+  chpos.ex[0] = *(static_cast<float*>(byteArray) + offset++);
+  chpos.ex[1] = *(static_cast<float*>(byteArray) + offset++);
+  chpos.ex[2] = *(static_cast<float*>(byteArray) + offset++);
+
+  chpos.ey[0] = *(static_cast<float*>(byteArray) + offset++);
+  chpos.ey[1] = *(static_cast<float*>(byteArray) + offset++);
+  chpos.ey[2] = *(static_cast<float*>(byteArray) + offset++);
+
+  chpos.ez[0] = *(static_cast<float*>(byteArray) + offset++);
+  chpos.ez[1] = *(static_cast<float*>(byteArray) + offset++);
+  chpos.ez[2] = *(static_cast<float*>(byteArray) + offset++);
 }
 
 //==============================================================================
 /**
  * Creates a Data object from a Coordinate Transformation object.
  */
-Fiff::Data::Data(Fiff::CoordinateTransformation)
+Fiff::Data::Data(Fiff::CoordinateTransformation coord)
+: byteArray(new char[104])
+, size(104)
 {
+  int offset = 0;
 
+  *(static_cast<int32_t*>(byteArray) + offset++) = coord.from;
+  *(static_cast<int32_t*>(byteArray) + offset++) = coord.to;
+
+  for(auto& row : coord.rot){
+    for(auto& element : row)
+      *(static_cast<float*>(byteArray) + offset++) = element;
+  }
+
+  *(static_cast<float*>(byteArray) + offset++) = coord.move[0];
+  *(static_cast<float*>(byteArray) + offset++) = coord.move[1];
+  *(static_cast<float*>(byteArray) + offset++) = coord.move[2];
+
+  for(auto& row : coord.invrot){
+    for(auto& element : row)
+      *(static_cast<float*>(byteArray) + offset++) = element;
+  }
+
+  *(static_cast<float*>(byteArray) + offset++) = coord.invmove[0];
+  *(static_cast<float*>(byteArray) + offset++) = coord.invmove[1];
+  *(static_cast<float*>(byteArray) + offset) = coord.invmove[2];
 }
 
 //==============================================================================
@@ -587,7 +653,7 @@ Fiff::Data::operator CoordinateTransformation() const
   CoordinateTransformation coord{};
 
   coord.from = *(static_cast<int32_t*>(byteArray) + offset++);
-  coord.from = *(static_cast<int32_t*>(byteArray) + offset++);
+  coord.to = *(static_cast<int32_t*>(byteArray) + offset++);
 
   for(auto& row : coord.rot){
     for(auto& element : row)
@@ -616,6 +682,21 @@ Fiff::Data::operator CoordinateTransformation() const
  */
 Fiff::Data::operator DigitizerString() const
 {
+  int offset = 0;
+
+  DigitizerString dig_str;
+
+  dig_str.kind = *(static_cast<int32_t*>(byteArray) + offset++);
+  dig_str.ident = *(static_cast<int32_t*>(byteArray) + offset++);
+  dig_str.npoints = *(static_cast<int32_t*>(byteArray) + offset++);
+
+  dig_str.rr.reserve(dig_str.npoints);
+  for(int i = 0; i < dig_str.npoints; ++i){
+    dig_str.rr.push_back({*(static_cast<float_t *>(byteArray) + offset++),
+                          *(static_cast<float_t *>(byteArray) + offset++),
+                          *(static_cast<float_t *>(byteArray) + offset++)});
+  }
+
   return {};
 }
 
