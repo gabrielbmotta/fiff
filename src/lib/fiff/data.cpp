@@ -7,7 +7,9 @@
 #include "data.hpp"
 
 //==============================================================================
-
+/**
+ * Returns whether ChannelPositions are equal.
+ */
 bool Fiff::ChannelPosition::operator==(const Fiff::ChannelPosition &other) const
 {
   return (coil_type == other.coil_type &&
@@ -18,7 +20,9 @@ bool Fiff::ChannelPosition::operator==(const Fiff::ChannelPosition &other) const
 }
 
 //==============================================================================
-
+/**
+ * Returns whether ChannelInfos are equal.
+ */
 bool Fiff::ChannelInfo::operator==(const Fiff::ChannelInfo &other) const
 {
   return (scanNo == other.scanNo &&
@@ -33,7 +37,9 @@ bool Fiff::ChannelInfo::operator==(const Fiff::ChannelInfo &other) const
 }
 
 //==============================================================================
-
+/**
+ * Returns whether IDs are equal.
+ */
 bool Fiff::ID::operator==(const Fiff::ID &other) const
 {
   return (version == other.version &&
@@ -43,7 +49,9 @@ bool Fiff::ID::operator==(const Fiff::ID &other) const
 }
 
 //==============================================================================
-
+/**
+ * Returns whether DirectoryEntries are equal.
+ */
 bool Fiff::DirectoryEntry::operator==(const Fiff::DirectoryEntry &other) const
 {
   return (kind == other.kind &&
@@ -53,7 +61,9 @@ bool Fiff::DirectoryEntry::operator==(const Fiff::DirectoryEntry &other) const
 }
 
 //==============================================================================
-
+/**
+ * Returns whether DigitizerPoints are equal.
+ */
 bool Fiff::DigitizerPoint::operator==(const Fiff::DigitizerPoint &other) const
 {
   return (kind == other.kind &&
@@ -62,7 +72,9 @@ bool Fiff::DigitizerPoint::operator==(const Fiff::DigitizerPoint &other) const
 }
 
 //==============================================================================
-
+/**
+ * Returns whether DigitizerStrings are equal.
+ */
 bool Fiff::DigitizerString::operator==(const Fiff::DigitizerString &other) const
 {
   return (kind == other.kind &&
@@ -72,7 +84,9 @@ bool Fiff::DigitizerString::operator==(const Fiff::DigitizerString &other) const
 }
 
 //==============================================================================
-
+/**
+ * Returns whether CoordinateTransformations are equal.
+ */
 bool Fiff::CoordinateTransformation::operator==(const Fiff::CoordinateTransformation &other) const
 {
   return (from == other.from &&
@@ -84,7 +98,9 @@ bool Fiff::CoordinateTransformation::operator==(const Fiff::CoordinateTransforma
 }
 
 //==============================================================================
-
+/**
+ * Returns whether Julians are equal.
+ */
 bool Fiff::Julian::operator==(const Fiff::Julian &other) const
 {
   return (date == other.date);
@@ -796,6 +812,8 @@ Fiff::Data::operator DigitizerString() const
 
   return dig_str;
 }
+
+//==============================================================================
 
 bool Fiff::Data::operator==(const Fiff::Data &other) const
 {
