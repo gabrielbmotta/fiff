@@ -5,8 +5,6 @@
 #ifndef FIFFFILEEXPLORER_DATA_HPP
 #define FIFFFILEEXPLORER_DATA_HPP
 
-#endif //FIFFFILEEXPLORER_DATA_HPP
-
 #include "types.hpp"
 
 #include <cstdint>
@@ -204,3 +202,5 @@ private:
 
 };
 }
+
+#endif //FIFFFILEEXPLORER_DATA_HPP
