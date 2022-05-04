@@ -3,4 +3,4 @@ project(lib)
 
 add_subdirectory(core)
 add_subdirectory(fiff)
-#add_subdirectory(data)
+add_subdirectory(utils)

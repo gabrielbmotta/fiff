@@ -4,7 +4,7 @@
 
 #include "../../lib/fiff/input.hpp"
 #include "../../lib/fiff/output.hpp"
-#include "../../lib/core/commandlineinput.hpp"
+#include "utils/commandlineinput.hpp"
 #include "../../lib/core/stringmanip.hpp"
 #include <iostream>
 #include <string>

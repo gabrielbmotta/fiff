@@ -3,7 +3,7 @@
 //
 
 #include "commandlineinput.hpp"
-#include "stringmanip.hpp"
+#include "core/stringmanip.hpp"
 #include <algorithm>
 
 Core::CommandLineInput::CommandLineInput(int &argc, char *argv[])

@@ -2,7 +2,7 @@
 // Created by Gabriel Motta on 3/10/22.
 //
 
-#include "../../lib/core/commandlineinput.hpp"
+#include "utils/commandlineinput.hpp"
 #include "../../lib/core/stringmanip.hpp"
 #include "../../lib/fiff/formatting.hpp"
 

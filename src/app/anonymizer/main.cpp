@@ -1,6 +1,6 @@
 #include "anonymizer.hpp"
 
-#include "../../lib/core/commandlineinput.hpp"
+#include "utils/commandlineinput.hpp"
 
 #include <iostream>
 #include <string>

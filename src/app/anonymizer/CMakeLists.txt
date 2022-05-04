@@ -10,4 +10,4 @@ set(SOURCES
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 target_link_libraries(${PROJECT_NAME}
-        core fiff)
+        core fiff utils)
