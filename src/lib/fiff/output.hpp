@@ -25,7 +25,7 @@ public:
   static Output toFile(const std::string &filePath);
   static Output toFile(const std::string &filePath, Endian fileEndian);
 
-  RelativeEndian m_relativeEndian;
+  Endian::Relative m_relativeEndian;
   void setEndianess(Endian endianness);
   Endian getEndianess() const;
 protected:

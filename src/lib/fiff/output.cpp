@@ -11,7 +11,7 @@
  * Prefer a static function that creates an Output to something. (i.e. toFile)
  */
 Fiff::Output::Output()
-: m_relativeEndian(RelativeEndian::undetermined)
+: m_relativeEndian(Endian::Relative::undetermined)
 {
 
 }
@@ -25,7 +25,7 @@ void Fiff::Output::writeTag(const Fiff::Tag &tag)
 {
   int32_t size = tag.size;
 
-  if (m_relativeEndian == RelativeEndian::different_from_system){
+  if (m_relativeEndian == Endian::Relative::different_from_system){
     auto swapTag = tag;
 
     endswapTagData(swapTag);
@@ -101,9 +101,9 @@ Fiff::Output Fiff::Output::toFile(const std::string &filePath, Endian fileEndian
 void Fiff::Output::setEndianess(Endian endianness)
 {
   if(systemEndian() == endianness){
-    m_relativeEndian = RelativeEndian::same_as_system;
+    m_relativeEndian = Endian::Relative::same_as_system;
   } else {
-    m_relativeEndian = RelativeEndian::different_from_system;
+    m_relativeEndian = Endian::Relative::different_from_system;
   }
 }
 
@@ -113,15 +113,15 @@ void Fiff::Output::setEndianess(Endian endianness)
  */
 Endian Fiff::Output::getEndianess() const
 {
-  if (m_relativeEndian == RelativeEndian::same_as_system){
+  if (m_relativeEndian == Endian::Relative::same_as_system){
     return systemEndian();
-  } else if (m_relativeEndian == RelativeEndian::different_from_system){
-    if(systemEndian() == Endian::little){
-      return Endian::big;
-    } else if(systemEndian() == Endian::big){
-      return Endian::little;
+  } else if (m_relativeEndian == Endian::Relative::different_from_system){
+    if(systemEndian() == Endian::Absolute::little){
+      return Endian::Absolute::big;
+    } else if(systemEndian() == Endian::Absolute::big){
+      return Endian::Absolute::little;
     }
   }
-  return Endian::unknown;
+  return Endian::Absolute::unknown;
 }
 

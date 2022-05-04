@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.20)
 project(fiff)
 
+set(CMAKE_CXX_STANDARD 98)
+
 set(SOURCES
         types.hpp
         tag.hpp

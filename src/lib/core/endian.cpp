@@ -4,11 +4,11 @@
 
 #include "endian.hpp"
 
-Endian systemEndian()
+Endian::Absolute systemEndian()
 {
   int i = 1;
   if(*(char *)&i == 1)
-    return Endian::little;
+    return Endian::Absolute::little;
   else
-    return Endian::big;
+    return Endian::Absolute::big;
 }

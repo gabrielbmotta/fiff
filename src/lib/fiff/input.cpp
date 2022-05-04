@@ -9,7 +9,7 @@
  * Prefer a static function that creates an Input from a source (i.e. fromFile)
  */
 Fiff::Input::Input()
-:m_relativeEndian(RelativeEndian::undetermined)
+:m_relativeEndian(Endian::undetermined)
 {
 
 }
@@ -75,7 +75,7 @@ bool Fiff::Input::atEnd() const
 Fiff::Input Fiff::Input::fromFile(const std::string &filePath)
 {
   Input in;
-  in.m_istream = std::unique_ptr<std::ifstream>(new std::ifstream(filePath, std::ios::binary));
+  in.m_istream = new std::ifstream(filePath, std::ios::binary);
   in.setEndianess();
   return in;
 }
@@ -85,10 +85,10 @@ Fiff::Input Fiff::Input::fromFile(const std::string &filePath)
  * Creates an object to read from a fiff file tag by tag, with a user
  * specified endianess.
  */
-Fiff::Input Fiff::Input::fromFile(const std::string &filePath, Endian fileEndian)
+Fiff::Input Fiff::Input::fromFile(const std::string &filePath, Endian::Absolute fileEndian)
 {
   Input in;
-  in.m_istream = std::unique_ptr<std::ifstream>(new std::ifstream(filePath, std::ios::binary));
+  in.m_istream = new std::ifstream(filePath, std::ios::binary);
   in.setEndianess(fileEndian);
   return in;
 }
@@ -97,11 +97,11 @@ Fiff::Input Fiff::Input::fromFile(const std::string &filePath, Endian fileEndian
 /**
  * Returns the endianness of the files.
  */
-Endian Fiff::Input::getEndianess() const
+Endian::Absolute Fiff::Input::getEndianess() const
 {
-  if (m_relativeEndian == RelativeEndian::same_as_system){
+  if (m_relativeEndian == Endian::same_as_system){
     return systemEndian();
-  } else if (m_relativeEndian == RelativeEndian::different_from_system){
+  } else if (m_relativeEndian == Endian::different_from_system){
     if(systemEndian() == Endian::little){
       return Endian::big;
     } else if(systemEndian() == Endian::big){
@@ -127,7 +127,7 @@ void Fiff::Input::setEndianess()
   int32_t kind = 0;
   m_istream->read(reinterpret_cast<char*>(&kind), sizeof(kind));
   if(kind == 100) {
-    m_relativeEndian = RelativeEndian::same_as_system;
+    m_relativeEndian = Endian::Relative::same_as_system;
     m_istream->seekg(pos);
     return;
   }
@@ -135,16 +135,16 @@ void Fiff::Input::setEndianess()
   int32_t swapkind = kind;
   endswap(&swapkind);
   if(swapkind == 100) {
-    m_relativeEndian = RelativeEndian::different_from_system;
+    m_relativeEndian = Endian::Relative::different_from_system;
     m_istream->seekg(pos);
     return;
   }
 
   // fallback test if file does not begin with correct tag
   if(kind > 1000000 || kind < -1000000){
-    m_relativeEndian = RelativeEndian::different_from_system;
+    m_relativeEndian = Endian::Relative::different_from_system;
   } else {
-    m_relativeEndian = RelativeEndian::same_as_system;
+    m_relativeEndian = Endian::Relative::same_as_system;
   }
   m_istream->seekg(pos);
 }
@@ -157,9 +157,9 @@ void Fiff::Input::setEndianess()
 void Fiff::Input::setEndianess(Endian fileEndian)
 {
   if(systemEndian() == fileEndian){
-    m_relativeEndian = RelativeEndian::same_as_system;
+    m_relativeEndian = Endian::Relative::same_as_system;
   } else {
-    m_relativeEndian = RelativeEndian::different_from_system;
+    m_relativeEndian = Endian::Relative::different_from_system;
   }
 }
 
@@ -175,7 +175,7 @@ void Fiff::Input::readMetaData(Fiff::Tag &tag)
   m_istream->read(reinterpret_cast<char*>(&tag.size), sizeof(tag.size));
   m_istream->read(reinterpret_cast<char*>(&tag.next), sizeof(tag.next));
 
-  if(m_relativeEndian == RelativeEndian::different_from_system){
+  if(m_relativeEndian == Endian::Relative::different_from_system){
     endswap(&tag.kind);
     endswap(&tag.type);
     endswap(&tag.size);
@@ -204,7 +204,7 @@ void Fiff::Input::readData(Fiff::Tag &tag)
   tag.data.resize(tag.size);
   m_istream->read(reinterpret_cast<char *>(tag.data.byteArray), tag.size);
 
-  if(m_relativeEndian == RelativeEndian::different_from_system)
+  if(m_relativeEndian == Endian::Relative::different_from_system)
   {
     endswapTagData(tag);
   }

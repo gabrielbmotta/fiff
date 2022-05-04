@@ -71,17 +71,17 @@ TEST_CASE("Write tag", "[output tag]")
 TEST_CASE("Set endianess", "[output file endianess]")
 {
   {
-    auto fileBE1 = Fiff::Output::toFile("BE1.fif", Endian::big);
+    auto fileBE1 = Fiff::Output::toFile("BE1.fif", Endian::Absolute::big);
     auto fileBE2 = Fiff::Output::toFile("BE2.fif");
-    fileBE2.setEndianess(Endian::big);
-    auto fileLE1 = Fiff::Output::toFile("LE1.fif", Endian::little);
+    fileBE2.setEndianess(Endian::Absolute::big);
+    auto fileLE1 = Fiff::Output::toFile("LE1.fif", Endian::Absolute::little);
     auto fileLE2 = Fiff::Output::toFile("LE2.fif");
-    fileLE2.setEndianess(Endian::little);
+    fileLE2.setEndianess(Endian::Absolute::little);
 
-    REQUIRE(fileBE1.getEndianess() == Endian::big);
-    REQUIRE(fileBE2.getEndianess() == Endian::big);
-    REQUIRE(fileLE1.getEndianess() == Endian::little);
-    REQUIRE(fileLE2.getEndianess() == Endian::little);
+    REQUIRE(fileBE1.getEndianess() == Endian::Absolute::big);
+    REQUIRE(fileBE2.getEndianess() == Endian::Absolute::big);
+    REQUIRE(fileLE1.getEndianess() == Endian::Absolute::little);
+    REQUIRE(fileLE2.getEndianess() == Endian::Absolute::little);
 
     Fiff::Tag tag = testTag();
 

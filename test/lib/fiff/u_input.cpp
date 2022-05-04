@@ -17,15 +17,15 @@ TEST_CASE("Create input from file", "[input file]")
 TEST_CASE("Detect Endianness", "[input file endian]")
 {
   auto file = Fiff::Input::fromFile(testFile);
-  REQUIRE(file.getEndianess() == Endian::big);
+  REQUIRE(file.getEndianess() == Endian::Absolute::big);
 }
 
 TEST_CASE("Set Endianness", "[input file endian]")
 {
-  auto file1 = Fiff::Input::fromFile(testFile, Endian::little);
-  REQUIRE(file1.getEndianess() == Endian::little);
-  auto file2 = Fiff::Input::fromFile(testFile, Endian::big);
-  REQUIRE(file2.getEndianess() == Endian::big);
+  auto file1 = Fiff::Input::fromFile(testFile, Endian::Absolute::little);
+  REQUIRE(file1.getEndianess() == Endian::Absolute::little);
+  auto file2 = Fiff::Input::fromFile(testFile, Endian::Absolute::big);
+  REQUIRE(file2.getEndianess() == Endian::Absolute::big);
 }
 
 TEST_CASE("Read tag from input", "[input tag]")
