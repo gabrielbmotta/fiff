@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(FiffFileExplorer)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 if(NOT DEFINED ${MY_BUILD_NAME})
     set(MY_BUILD_NAME ${CMAKE_BUILD_TYPE})

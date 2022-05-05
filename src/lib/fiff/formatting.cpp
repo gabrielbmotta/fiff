@@ -1,5 +1,7 @@
 #include "formatting.hpp"
 
+#if (__cplusplus >= 201103L)
+
 #include "types.hpp"
 #include <chrono>
 
@@ -782,3 +784,5 @@ static std::string unix_epoch(int time){
   strftime(time_buf, sizeof(time_buf), "%a %Y-%m-%d %H:%M:%S %Z", &ts);
   return time_buf;
 }
+
+#endif

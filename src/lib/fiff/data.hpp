@@ -173,6 +173,29 @@ struct Data {
   explicit Data(CoordinateTransformation); // 35
   explicit Data(DigitizerString); // 36
 
+
+#if (__cplusplus >= 201103L)
+  explicit operator char() const; // 1
+  explicit operator int16_t() const; // 2
+  explicit operator int32_t() const; // 3
+  explicit operator float() const; // 4
+  explicit operator double() const; // 5
+  explicit operator Julian() const; // 6
+  explicit operator uint16_t() const; // 7
+  explicit operator uint32_t() const; // 8
+  explicit operator uint64_t() const; // 9
+  explicit operator std::string() const; // 10
+  explicit operator int64_t() const; // 11
+  explicit operator std::complex<float>() const; // 20
+  explicit operator std::complex<double>() const; // 21
+  explicit operator ChannelInfo() const; // 30
+  explicit operator ID() const; // 31
+  explicit operator DirectoryEntry() const; // 32
+  explicit operator DigitizerPoint() const; // 33
+  explicit operator ChannelPosition() const; // 34
+  explicit operator CoordinateTransformation() const; // 35
+  explicit operator DigitizerString() const; // 36
+#else
   operator char() const; // 1
   operator int16_t() const; // 2
   operator int32_t() const; // 3
@@ -193,7 +216,7 @@ struct Data {
   operator ChannelPosition() const; // 34
   operator CoordinateTransformation() const; // 35
   operator DigitizerString() const; // 36
-
+#endif
   void* byteArray;
 
   bool operator==(const Data& other) const;

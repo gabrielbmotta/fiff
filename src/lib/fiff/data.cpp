@@ -298,7 +298,7 @@ Fiff::Data::Data(std::complex<float> num)
 : byteArray(new char[8])
 , size(8)
 {
-  auto ptr = static_cast<float_t*>(byteArray);
+  float_t* ptr = static_cast<float_t*>(byteArray);
 
   *ptr =  num.real();
   *(ptr + 1) = num.imag();
@@ -312,7 +312,7 @@ Fiff::Data::Data(std::complex<double> num)
         : byteArray(new char[16])
         , size(16)
 {
-  auto ptr = static_cast<double_t*>(byteArray);
+  double_t* ptr = static_cast<double_t*>(byteArray);
 
   *ptr =  num.real();
   *(ptr + 1) = num.imag();
@@ -450,18 +450,20 @@ Fiff::Data::Data(Fiff::CoordinateTransformation coord)
   *(static_cast<int32_t*>(byteArray) + offset++) = coord.from;
   *(static_cast<int32_t*>(byteArray) + offset++) = coord.to;
 
-  for(auto& row : coord.rot){
-    for(auto& element : row)
-      *(static_cast<float*>(byteArray) + offset++) = element;
+  for(int i = 0; i < 3; ++i){
+    for(int j = 0; j < 3; ++j){
+      *(static_cast<float*>(byteArray) + offset++) = coord.rot[i][j];
+    }
   }
 
   *(static_cast<float*>(byteArray) + offset++) = coord.move[0];
   *(static_cast<float*>(byteArray) + offset++) = coord.move[1];
   *(static_cast<float*>(byteArray) + offset++) = coord.move[2];
 
-  for(auto& row : coord.invrot){
-    for(auto& element : row)
-      *(static_cast<float*>(byteArray) + offset++) = element;
+  for(int i = 0; i < 3; ++i){
+    for(int j = 0; j < 3; ++j){
+      *(static_cast<float*>(byteArray) + offset++) = coord.invrot[i][j];
+    }
   }
 
   *(static_cast<float*>(byteArray) + offset++) = coord.invmove[0];
@@ -484,10 +486,10 @@ Fiff::Data::Data(Fiff::DigitizerString dig_str)
   *(static_cast<int32_t*>(byteArray) + offset++) = dig_str.ident;
   *(static_cast<int32_t*>(byteArray) + offset++) = dig_str.npoints;
 
-  for (auto& point : dig_str.rr){
-    *(static_cast<float_t*>(byteArray) + offset++) = point[0];
-    *(static_cast<float_t*>(byteArray) + offset++) = point[1];
-    *(static_cast<float_t*>(byteArray) + offset++) = point[2];
+  for (size_t i = 0; i < dig_str.rr.size(); ++i){
+    *(static_cast<float_t*>(byteArray) + offset++) = dig_str.rr[i][0];
+    *(static_cast<float_t*>(byteArray) + offset++) = dig_str.rr[i][1];
+    *(static_cast<float_t*>(byteArray) + offset++) = dig_str.rr[i][2];
   }
 }
 
@@ -562,7 +564,7 @@ Fiff::Data::operator double() const
  */
 Fiff::Data::operator Julian() const
 {
-  Julian j{};
+  Julian j;
   j.date = *static_cast<int32_t*>(byteArray);
   return j;
 }
@@ -600,7 +602,7 @@ Fiff::Data::operator uint64_t() const
  */
 Fiff::Data::operator std::string() const
 {
-  return {static_cast<char*>(byteArray), size};
+  return std::string(static_cast<char*>(byteArray), size);
 }
 
 //==============================================================================
@@ -631,9 +633,10 @@ Fiff::Data::operator std::complex<float>() const
 Fiff::Data::operator std::complex<double>() const
 {
   std::complex<double> f;
-  f.real(*static_cast<double*>(byteArray));
-  f.imag(*(static_cast<double*>(byteArray) + 1));
-  return f;}
+  f.real(*static_cast<double *>(byteArray));
+  f.imag(*(static_cast<double *>(byteArray) + 1));
+  return f;
+}
 
 //==============================================================================
 /**
@@ -642,7 +645,7 @@ Fiff::Data::operator std::complex<double>() const
 Fiff::Data::operator ChannelInfo() const
 {
   int offset = 0;
-  ChannelInfo info{};
+  ChannelInfo info;
   info.scanNo = *(static_cast<int32_t*>(byteArray) + offset++);
   info.logNo = *(static_cast<int32_t*>(byteArray) + offset++);
   info.kind = *(static_cast<int32_t*>(byteArray) + offset++);
@@ -680,7 +683,7 @@ Fiff::Data::operator ChannelInfo() const
 Fiff::Data::operator ID() const
 {
   int offset = 0;
-  ID id{};
+  ID id;
 
   id.version = *(static_cast<int32_t*>(byteArray) + offset++);
   id.machid[0] = *(static_cast<int32_t*>(byteArray) + offset++);
@@ -698,7 +701,7 @@ Fiff::Data::operator ID() const
 Fiff::Data::operator DirectoryEntry() const
 {
   int offset = 0;
-  DirectoryEntry dir{};
+  DirectoryEntry dir;
 
   dir.kind = *(static_cast<int32_t*>(byteArray) + offset++);
   dir.type = *(static_cast<int32_t*>(byteArray) + offset++);
@@ -715,7 +718,7 @@ Fiff::Data::operator DirectoryEntry() const
 Fiff::Data::operator DigitizerPoint() const
 {
   int offset = 0;
-  DigitizerPoint dig{};
+  DigitizerPoint dig;
 
   dig.kind = *(static_cast<int32_t*>(byteArray) + offset++);
   dig.ident = *(static_cast<int32_t*>(byteArray) + offset++);
@@ -733,7 +736,7 @@ Fiff::Data::operator DigitizerPoint() const
 Fiff::Data::operator ChannelPosition() const
 {
   int offset = 0;
-  Fiff::ChannelPosition chpos{};
+  Fiff::ChannelPosition chpos;
 
   chpos.coil_type = *(static_cast<int32_t*>(byteArray) + offset++);
 
@@ -763,24 +766,27 @@ Fiff::Data::operator ChannelPosition() const
 Fiff::Data::operator CoordinateTransformation() const
 {
   int offset = 0;
-  CoordinateTransformation coord{};
+  CoordinateTransformation coord;
 
   coord.from = *(static_cast<int32_t*>(byteArray) + offset++);
   coord.to = *(static_cast<int32_t*>(byteArray) + offset++);
 
-  for(auto& row : coord.rot){
-    for(auto& element : row)
-      element = *(static_cast<float*>(byteArray) + offset++);
+  for(int i = 0; i < 3; ++i){
+    for(int j = 0; j < 3; ++j){
+       coord.rot[i][j] = *(static_cast<float*>(byteArray) + offset++);
+    }
   }
 
   coord.move[0] = *(static_cast<float*>(byteArray) + offset++);
   coord.move[1] = *(static_cast<float*>(byteArray) + offset++);
   coord.move[2] = *(static_cast<float*>(byteArray) + offset++);
 
-  for(auto& row : coord.invrot){
-    for(auto& element : row)
-      element = *(static_cast<float*>(byteArray) + offset++);
+  for(int i = 0; i < 3; ++i){
+    for(int j = 0; j < 3; ++j){
+      coord.invrot[i][j] = *(static_cast<float*>(byteArray) + offset++);
+    }
   }
+
 
   coord.invmove[0] = *(static_cast<float*>(byteArray) + offset++);
   coord.invmove[1] = *(static_cast<float*>(byteArray) + offset++);
@@ -805,9 +811,12 @@ Fiff::Data::operator DigitizerString() const
 
   dig_str.rr.reserve(dig_str.npoints);
   for(int i = 0; i < dig_str.npoints; ++i){
-    dig_str.rr.push_back({*(static_cast<float_t *>(byteArray) + offset++),
-                          *(static_cast<float_t *>(byteArray) + offset++),
-                          *(static_cast<float_t *>(byteArray) + offset++)});
+    std::array<float,3> arr;
+    arr[0] = *(static_cast<float_t *>(byteArray) + offset++);
+    arr[1] = *(static_cast<float_t *>(byteArray) + offset++);
+    arr[2] = *(static_cast<float_t *>(byteArray) + offset++);
+
+    dig_str.rr.push_back(arr);
   }
 
   return dig_str;
