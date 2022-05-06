@@ -19,6 +19,7 @@ namespace Fiff{
 class Input{
 public:
   Input();
+  ~Input();
 
   Tag getTag();
   Tag peekTag();
@@ -28,18 +29,18 @@ public:
   bool atEnd() const;
 
   static Input fromFile(const std::string &filePath);
-  static Input fromFile(const std::string &filePath, Endian fileEndian);
+  static Input fromFile(const std::string &filePath, Endian::Absolute fileEndian);
 
-  Endian getEndianess() const;
-  void setEndianess(Endian fileEndian);
+  Endian::Absolute getEndianess() const;
+  void setEndianess(Endian::Absolute fileEndian);
 protected:
   void setEndianess();
 
   void readMetaData(Tag& tag);
   void readData(Tag& tag);
 
-  RelativeEndian m_relativeEndian;
-  std::unique_ptr<std::istream> m_istream;
+  Endian::Relative m_relativeEndian;
+  std::istream* m_istream;
 };
 
 } //namespace

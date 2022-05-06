@@ -94,7 +94,7 @@ struct DigitizerString{
   int32_t kind;
   int32_t ident;
   int32_t npoints;
-  std::vector<std::array<float,3>> rr;
+  std::vector<std::array<float,3> > rr;
 
   bool operator==(const DigitizerString& other) const;
 };
@@ -173,6 +173,8 @@ struct Data {
   explicit Data(CoordinateTransformation); // 35
   explicit Data(DigitizerString); // 36
 
+
+#if (__cplusplus >= 201103L)
   explicit operator char() const; // 1
   explicit operator int16_t() const; // 2
   explicit operator int32_t() const; // 3
@@ -193,7 +195,28 @@ struct Data {
   explicit operator ChannelPosition() const; // 34
   explicit operator CoordinateTransformation() const; // 35
   explicit operator DigitizerString() const; // 36
-
+#else
+  operator char() const; // 1
+  operator int16_t() const; // 2
+  operator int32_t() const; // 3
+  operator float() const; // 4
+  operator double() const; // 5
+  operator Julian() const; // 6
+  operator uint16_t() const; // 7
+  operator uint32_t() const; // 8
+  operator uint64_t() const; // 9
+  operator std::string() const; // 10
+  operator int64_t() const; // 11
+  operator std::complex<float>() const; // 20
+  operator std::complex<double>() const; // 21
+  operator ChannelInfo() const; // 30
+  operator ID() const; // 31
+  operator DirectoryEntry() const; // 32
+  operator DigitizerPoint() const; // 33
+  operator ChannelPosition() const; // 34
+  operator CoordinateTransformation() const; // 35
+  operator DigitizerString() const; // 36
+#endif
   void* byteArray;
 
   bool operator==(const Data& other) const;
