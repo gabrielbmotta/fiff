@@ -10,8 +10,16 @@
  */
 Fiff::Input::Input()
 :m_relativeEndian(Endian::undetermined)
+,m_istream(NULL)
 {
 
+}
+
+Fiff::Input::~Input()
+{
+  if(m_istream){
+    delete m_istream;
+  }
 }
 
 //==============================================================================

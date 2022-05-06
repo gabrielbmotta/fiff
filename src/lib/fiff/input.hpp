@@ -19,6 +19,7 @@ namespace Fiff{
 class Input{
 public:
   Input();
+  ~Input();
 
   Tag getTag();
   Tag peekTag();

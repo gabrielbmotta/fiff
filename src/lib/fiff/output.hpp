@@ -17,6 +17,8 @@ class Output {
 public:
   Output();
 
+  ~Output();
+
   void writeTag(const Tag &tag);
 
   void goToWritePosition(std::streampos pos);

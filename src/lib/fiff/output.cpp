@@ -12,8 +12,16 @@
  */
 Fiff::Output::Output()
 : m_relativeEndian(Endian::undetermined)
+,m_ostream(NULL)
 {
 
+}
+
+Fiff::Output::~Output()
+{
+  if(m_ostream){
+    delete m_ostream;
+  }
 }
 
 //==============================================================================
