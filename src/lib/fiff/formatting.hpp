@@ -5,6 +5,8 @@
 #ifndef FIFFFILEEXPLORER_FORMATTING_HPP
 #define FIFFFILEEXPLORER_FORMATTING_HPP
 
+#if (__cplusplus >= 201103L)
+
 #include "tag.hpp"
 #include "input.hpp"
 #include "../core/endian.hpp"
@@ -46,5 +48,5 @@ private:
 
 };
 }
-
+#endif
 #endif //FIFFFILEEXPLORER_FORMATTING_HPP

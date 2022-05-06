@@ -8,16 +8,13 @@
 
 namespace Fiff {
 
-static_assert(CHAR_BIT == 8, "Only 8-bit byte systems supported.");
-
-
 namespace Kind {
 //==============================================================================
 /**
  * This enum defined the kind of a fiff tag. Tag kinds tell us what the
  * contents of the tag are.
  */
-enum : int32_t{
+enum{
   new_file = 1,
   close_file = 2,
   discard_file = 3,
@@ -364,7 +361,7 @@ namespace Type {
 /**
  * The type tells us with what data type to interpret the data.
  */
-enum : int32_t{
+enum{
   void_ = 0,
   byte_ = 1,
   short_ = 2,
@@ -398,7 +395,7 @@ enum : int32_t{
  * Format tells us whether the data is a single scalar value or a matrix
  * of values.
  */
-enum Format: int32_t{
+enum Format{
   scalar = 0x00000000,
   matrix = 0x40000000
 };
@@ -407,7 +404,7 @@ enum Format: int32_t{
 /**
  * Representation tells us how a matrix is encoded.
  */
-enum Representation: int32_t{
+enum Representation{
   dense = 0x00000000,
   column_compressed_sparse = 0x00100000,
   row_compressed_sparse = 0x00200000
@@ -418,32 +415,26 @@ enum Representation: int32_t{
  *
  * @return
  */
-constexpr uint32_t baseMask(){
-  return 0x00000FFF;
-}
+const uint32_t baseMask = 0x00000FFF;
 
 //==============================================================================
 /**
  *
  * @return
  */
-constexpr uint32_t fsMask(){
-  return 0xFF000000;
-}
+const uint32_t fsMask = 0xFF000000;
 
 //==============================================================================
 /**
  *
  * @return
  */
-constexpr uint32_t mcMask(){
-  return 0x00FF0000;
-}
+const uint32_t mcMask = 0x00FF0000;
 
 }//namespace Type
 
 namespace PointDefinition {
-enum : int32_t{
+enum{
   cardinal = 1,
   hpi = 2,
   eeg = 3,
@@ -454,7 +445,7 @@ enum : int32_t{
 }//namespace PointDef
 
 namespace CoordinateSystem {
-enum: int32_t{
+enum{
   unknown = 0,
   device = 1,
   isotrak = 2,
@@ -472,7 +463,7 @@ enum: int32_t{
 }// namespace CoordinateSystem
 
 namespace ChannelTypes{
-enum : int32_t {
+enum {
   magn = 1,
   el = 2,
   stim = 3,
@@ -503,7 +494,7 @@ enum : int32_t {
 }//namespace ChannelTypes
 
 namespace CoilType{
-enum : int32_t {
+enum {
   none = 0,
   eeg = 1,
   nm_122 = 2,
@@ -533,7 +524,7 @@ namespace Block {
 /**
  * Header IDs for fiff blocks that organize data in a fiff list (e.g. a file)
  */
-enum : int32_t{
+enum{
   root = 999,
   meas = 100,
   meas_info = 101,

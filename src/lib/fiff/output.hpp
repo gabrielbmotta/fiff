@@ -17,20 +17,22 @@ class Output {
 public:
   Output();
 
+  ~Output();
+
   void writeTag(const Tag &tag);
 
   void goToWritePosition(std::streampos pos);
   std::streampos currentWritePosition();
 
   static Output toFile(const std::string &filePath);
-  static Output toFile(const std::string &filePath, Endian fileEndian);
+  static Output toFile(const std::string &filePath, Endian::Absolute fileEndian);
 
-  RelativeEndian m_relativeEndian;
-  void setEndianess(Endian endianness);
-  Endian getEndianess() const;
+  void setEndianess(Endian::Absolute endianness);
+  Endian::Absolute getEndianess() const;
 protected:
 
-  std::unique_ptr<std::ostream> m_ostream;
+  Endian::Relative m_relativeEndian;
+  std::ostream* m_ostream;
 };
 }//namespace
 

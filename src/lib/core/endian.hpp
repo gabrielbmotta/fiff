@@ -7,24 +7,26 @@
 
 #include <algorithm>
 
-enum class Endian{
+namespace Endian {
+enum Absolute{
   unknown,
   little,
   big
 };
 
-enum class RelativeEndian{
+enum Relative{
   same_as_system,
   different_from_system,
   undetermined
 };
+}
 
-Endian systemEndian();
+Endian::Absolute systemEndian();
 
 template <class T>
 void endswap(T *objp)
 {
-  auto *memp = reinterpret_cast<unsigned char*>(objp);
+  unsigned char* memp = reinterpret_cast<unsigned char*>(objp);
   std::reverse(memp, memp + sizeof(T));
 }
 

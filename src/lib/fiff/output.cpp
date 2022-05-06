@@ -11,9 +11,19 @@
  * Prefer a static function that creates an Output to something. (i.e. toFile)
  */
 Fiff::Output::Output()
-: m_relativeEndian(RelativeEndian::undetermined)
+: m_relativeEndian(Endian::undetermined)
+,m_ostream(NULL)
 {
 
+}
+
+//==============================================================================
+/**
+ * Destructs the Output object
+ */
+Fiff::Output::~Output()
+{
+  delete m_ostream;
 }
 
 //==============================================================================
@@ -25,8 +35,8 @@ void Fiff::Output::writeTag(const Fiff::Tag &tag)
 {
   int32_t size = tag.size;
 
-  if (m_relativeEndian == RelativeEndian::different_from_system){
-    auto swapTag = tag;
+  if (m_relativeEndian == Endian::different_from_system){
+    Tag swapTag = tag;
 
     endswapTagData(swapTag);
     endswap(&swapTag.kind);
@@ -76,7 +86,7 @@ std::streampos Fiff::Output::currentWritePosition()
 Fiff::Output Fiff::Output::toFile(const std::string &filePath)
 {
   Output out;
-  out.m_ostream = std::unique_ptr<std::ofstream>(new std::ofstream(filePath, std::ios::binary));
+  out.m_ostream = new std::ofstream(filePath, std::ios::binary);
   return out;
 }
 
@@ -86,10 +96,10 @@ Fiff::Output Fiff::Output::toFile(const std::string &filePath)
  *
  * Creates the file if it does not exist.
  */
-Fiff::Output Fiff::Output::toFile(const std::string &filePath, Endian fileEndian)
+Fiff::Output Fiff::Output::toFile(const std::string &filePath, Endian::Absolute fileEndian)
 {
   Output out;
-  out.m_ostream = std::unique_ptr<std::ofstream>(new std::ofstream(filePath, std::ios::binary));
+  out.m_ostream = new std::ofstream(filePath, std::ios::binary);
   out.setEndianess(fileEndian);
   return out;
 }
@@ -98,12 +108,12 @@ Fiff::Output Fiff::Output::toFile(const std::string &filePath, Endian fileEndian
 /**
  * Sets the endianness with which the tags will be written.
  */
-void Fiff::Output::setEndianess(Endian endianness)
+void Fiff::Output::setEndianess(Endian::Absolute endianness)
 {
   if(systemEndian() == endianness){
-    m_relativeEndian = RelativeEndian::same_as_system;
+    m_relativeEndian = Endian::same_as_system;
   } else {
-    m_relativeEndian = RelativeEndian::different_from_system;
+    m_relativeEndian = Endian::different_from_system;
   }
 }
 
@@ -111,11 +121,11 @@ void Fiff::Output::setEndianess(Endian endianness)
 /**
  * Returns the current endianness with which tags wll be written.
  */
-Endian Fiff::Output::getEndianess() const
+Endian::Absolute Fiff::Output::getEndianess() const
 {
-  if (m_relativeEndian == RelativeEndian::same_as_system){
+  if (m_relativeEndian == Endian::same_as_system){
     return systemEndian();
-  } else if (m_relativeEndian == RelativeEndian::different_from_system){
+  } else if (m_relativeEndian == Endian::different_from_system){
     if(systemEndian() == Endian::little){
       return Endian::big;
     } else if(systemEndian() == Endian::big){
