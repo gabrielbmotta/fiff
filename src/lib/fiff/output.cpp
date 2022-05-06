@@ -17,11 +17,13 @@ Fiff::Output::Output()
 
 }
 
+//==============================================================================
+/**
+ * Destructs the Output object
+ */
 Fiff::Output::~Output()
 {
-  if(m_ostream){
-    delete m_ostream;
-  }
+  delete m_ostream;
 }
 
 //==============================================================================
