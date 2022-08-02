@@ -1,0 +1,43 @@
+DIR=$1
+OUTFILE=$2
+
+if [ "${OUTFILE}" == "" ]; then
+    OUTFILE="header_out.hpp"
+fi
+
+FILES=$(find ${DIR} -print | grep -Eo '.+(\.hpp|\.cpp|.h|.cc|.c)$')
+
+DONE=0
+PASS_NUM=0
+
+while [ ${DONE} == 0 ]; do
+    echo "PASS ${PASS_NUM}"
+
+    FILE_NAMES=$(echo "${FILES}" | grep -Eo '[^\/]+\.\w+(\s+|$)') 
+    NEXT_FILES=""
+
+    for FILE in ${FILES}; do
+        echo "Checking ${FILE}"
+        DEP=0
+        for DEPENDENCY in ${FILE_NAMES}; do
+            ESCAPED=$(echo ${DEPENDENCY} | sed 's/\./\\\./g')
+            if [ "$(grep -E "\#include (\<|\")${ESCAPED}(\>|\")" ${FILE})" != "" ]; then
+                echo "depends on ${DEPENDENCY}"
+                DEP=1
+            fi
+        done
+        if [ ${DEP} == 0 ]; then
+            echo "APPENDING FILE ${FILE}"
+            cat ${FILE} >> ${OUTFILE}
+        else 
+            NEXT_FILES="${NEXT_FILES} ${FILE}"
+        fi
+    done
+    
+    if [ "${FILES}" == "" ]; then
+        DONE=1
+    else
+        FILES=${NEXT_FILES}
+        PASS_NUM=$((${PASS_NUM} + 1))
+    fi
+done
