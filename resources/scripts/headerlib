@@ -6,6 +6,7 @@ if [ "${OUTFILE}" == "" ]; then
 fi
 
 FILES=$(find ${DIR} -print | grep -Eo '.+(\.hpp|\.cpp|.h|.cc|.c)$')
+ALL_DEP=$(echo "${FILES}" | grep -Eo '[^\/]+\.\w+(\s+|$)' | sed 's/\./\\\./g')
 
 DONE=0
 PASS_NUM=0
@@ -40,4 +41,10 @@ while [ ${DONE} == 0 ]; do
         FILES=${NEXT_FILES}
         PASS_NUM=$((${PASS_NUM} + 1))
     fi
+done
+
+echo "${ALL_DEP}"
+
+for DEP in ${ALL_DEP}; do
+    sed -E -i '' "/\#include (\<|\")${DEP}(\>|\")/d" ${OUTFILE}
 done
