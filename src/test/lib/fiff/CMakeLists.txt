@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(fiff)
+project(fiff_test)
 
 set(SOURCES
         main.cpp
@@ -10,6 +10,6 @@ set(SOURCES
         i_inputoutput.cpp
 )
 
-add_executable(${PROJECT_NAME}_test ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME}_test PRIVATE fiff core)
+target_link_libraries(${PROJECT_NAME} PRIVATE fiff core)
