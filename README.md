@@ -2,6 +2,8 @@
 
 ## Building
 
+On mac, the build script might require the installation of the gnu core utils. This can be done through homebrew with `brew install coreutils`
+
 ### TLDR
 
 Run the project script with the `--build` or `-b` flag:
