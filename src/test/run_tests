@@ -1,3 +1,12 @@
+SCRIPT_PATH=${BASH_SOURCE[0]:-$0}
+SCRIPT_DIR=$(realpath $(dirname "${SCRIPT_PATH}"))
+
+cd ${SCRIPT_DIR}
+
+if [ "$1" != "" ]; then
+    cd "$1"
+fi
+
 file="sample_audvis_trunc_raw.fif"
 if [ ! -f "$file" ]
 then

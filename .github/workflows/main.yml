@@ -24,11 +24,11 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build project
-        run: ./compile Debug
+        run: ./project --build --type Debug
 
       - name: Run tests
         run: |
-          cd out/Debug/test
+          cd out/Debug/tests
           chmod +x run_tests
           ./run_tests
 
