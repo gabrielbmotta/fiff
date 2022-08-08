@@ -1,9 +1,14 @@
+# Build process
 out/
 build/
-.idea/
-.DS_Store
 bin*/
-compile/
-cmake-build-*
-.cache/
 compile_commands.json
+
+# IDE folders
+.idea/
+.vscode/
+cmake-build-*/
+.cache/
+
+# MacOS 
+.DS_Store
