@@ -1,18 +1,25 @@
 #!/bin/bash
 
+GREP_FLAGS=""
+if [ "$(uname)" == "Darwin" ]; then
+    GREP_FLAGS="-Eo"
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+    GREP_FLAGS="-Po"
+fi
+
 FOLDER_NAME=$1
-LIB=$(realpath $2)
-HEADER_DIR=$(realpath $3)
+LIB=$(realpath "$2")
+HEADER_DIR=$(realpath "$3")
 
 mkdir ${FOLDER_NAME}   
 mkdir ${FOLDER_NAME}/lib
 mkdir ${FOLDER_NAME}/include
 cp ${LIB} ${FOLDER_NAME}/lib
 
-FILES=$(find ${HEADER_DIR} -print | grep -Eo '.+(\.hpp|\.h)$')
+FILES=$(find ${HEADER_DIR} -print | grep ${GREP_FLAGS} '.+(\.hpp|\.h)$')
 
 for FILE in ${FILES}; do
-    cp ${FILE} ${FOLDER_PATH}/include
+    cp ${FILE} ${FOLDER_NAME}/include/
 done
 
 OS_NAME=""

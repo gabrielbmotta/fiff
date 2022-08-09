@@ -51,17 +51,27 @@ jobs:
         run: brew install coreutils
 
       - name: Build project
-        run: ./project --build --type Debug
+        run: ./project --build
 
       - name: Run release
         run: |
           ./resources/scripts/package_lib libfiff out/Release/libs/*fiff* src/lib/fiff
           ./resources/scripts/header_only_lib src/lib/fiff fiff.hpp
+          echo "BUILD_TAR_NAME=$(find . -name *.tar.gz)" >> $GITHUB_ENV
+          echo "HEADER_LIB_NAME=$(find . -name *.hpp)" >> $GITHUB_ENV
       
       - name: Deploy binaries with dev release on Github
-        uses: svenstaro/upload-release-action@v1-release
+        uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: "*.tar.gz"
+          file: ${{ env.BUILD_TAR_NAME }}
+          tag: dev_build
+          overwrite: true
+
+      - name: Deploy header lib with dev release on Github
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ env.HEADER_LIB_NAME }}
           tag: dev_build
           overwrite: true
