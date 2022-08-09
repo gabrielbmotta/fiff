@@ -1,0 +1,67 @@
+name: Release CI
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  CreateRelease:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v2
+    - name: Setup Github credentials
+      uses: de-vri-es/setup-git-credentials@v2
+      with:
+        credentials: ${{secrets.GIT_CREDENTIALS}}
+    - name: Update dev_build tag and release (dev release only)
+      env:
+        GITHUB_USER: gabrielbmotta
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git config --global user.email gabrielbenmotta@gmail.com
+        git config --global user.name $GITHUB_USER
+        # Delete current dev_build release remotely.
+        # Must be done before deleting the remote tag associated with the dev_build release.
+        # This prevents a draft release to be left over after we delete the tag remotely.
+        hub release delete dev_build
+        # Delete current tag remotely
+        git push origin :refs/tags/dev_build
+        # Change dev_build tag to point to newest commit
+        git tag dev_build -f -a -m "Development Builds"
+        # Send the new tag
+        git push -f --tag
+        # Create new dev_build release
+        hub release create -m "Development Builds" dev_build --prerelease
+
+  ReleaseBuilds:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Download core utils for Mac
+        if: (matrix.os == 'macos-latest')
+        run: brew install coreutils
+
+      - name: Build project
+        run: ./project --build --type Debug
+
+      - name: Run release
+        run: |
+          ./resources/scripts/package_lib libfiff out/Release/libs/*fiff* src/lib/fiff
+          ./resources/scripts/header_only_lib src/lib/fiff fiff.hpp
+      
+      - name: Deploy binaries with dev release on Github
+        uses: svenstaro/upload-release-action@v1-release
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: "*.tar.gz"
+          tag: dev_build
+          overwrite: true

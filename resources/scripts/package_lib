@@ -1,0 +1,29 @@
+#!/bin/bash
+
+FOLDER_NAME=$1
+LIB=$(realpath $2)
+HEADER_DIR=$(realpath $3)
+
+mkdir ${FOLDER_NAME}   
+mkdir ${FOLDER_NAME}/lib
+mkdir ${FOLDER_NAME}/include
+cp ${LIB} ${FOLDER_NAME}/lib
+
+FILES=$(find ${HEADER_DIR} -print | grep -Eo '.+(\.hpp|\.h)$')
+
+for FILE in ${FILES}; do
+    cp ${FILE} ${FOLDER_PATH}/include
+done
+
+OS_NAME=""
+
+if [ "$(uname)" == "Darwin" ]; then
+    OS_NAME="Mac"
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+    OS_NAME="Linux"
+fi
+
+ARCHITECTURE=$(uname -m)
+
+tar cfvz ${FOLDER_NAME}_${OS_NAME}_${ARCHITECTURE}.tar.gz ${FOLDER_NAME}
+

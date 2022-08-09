@@ -1,4 +1,4 @@
-name: CI
+name: Test CI
 
 # Controls when the workflow will run
 on:
@@ -11,7 +11,6 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   Tests:
     runs-on: ${{ matrix.os }}
@@ -21,9 +20,11 @@ jobs:
         os: [ ubuntu-latest, macos-latest ]
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Repo
+        uses: actions/checkout@v2
 
-      - name: Download core utils
+      - name: Download core utils for Mac
+        if: (matrix.os == 'macos-latest')
         run: brew install coreutils
 
       - name: Build project
