@@ -1,3 +1,5 @@
+#!/bin/bash
+
 DIR=$1
 OUTFILE=$2
 
@@ -5,7 +7,7 @@ if [ "${OUTFILE}" == "" ]; then
     OUTFILE="header_out.hpp"
 fi
 
-FILES=$(find ${DIR} -print | grep -Eo '.+(\.hpp|\.cpp|.h|.cc|.c)$')
+FILES=$(find ${DIR} -print | grep -Eo '.+(\.hpp|\.cpp|\.h|\.cc|\.c)$')
 ALL_DEP=$(echo "${FILES}" | grep -Eo '[^\/]+\.\w+(\s+|$)' | sed 's/\./\\\./g')
 
 DONE=0

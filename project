@@ -1,4 +1,5 @@
 #!/bin/bash
+
 RETURN_VAL=0
 SCRIPT_PATH=${BASH_SOURCE[0]:-$0}
 SCRIPT_DIR=$(realpath $(dirname "${SCRIPT_PATH}"))
