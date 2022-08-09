@@ -1,5 +1,15 @@
 #!/bin/bash
 
+GREP_FLAGS=""
+SED_FLAGS=""
+if [ "$(uname)" == "Darwin" ]; then
+    GREP_FLAGS="-E"
+    SED_FLAGS="-i \'\'"
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+    GREP_FLAGS="-P"
+    SED_FLAGS="-i"
+fi
+
 DIR=$1
 OUTFILE=$2
 
@@ -7,8 +17,8 @@ if [ "${OUTFILE}" == "" ]; then
     OUTFILE="header_out.hpp"
 fi
 
-FILES=$(find ${DIR} -print | grep -Eo '.+(\.hpp|\.cpp|\.h|\.cc|\.c)$')
-ALL_DEP=$(echo "${FILES}" | grep -Eo '[^\/]+\.\w+(\s+|$)' | sed 's/\./\\\./g')
+FILES=$(find ${DIR} -print | grep ${GREP_FLAGS}o '.+(\.hpp|\.cpp|\.h|\.cc|\.c)$')
+ALL_DEP=$(echo "${FILES}" | grep ${GREP_FLAGS}o '[^\/]+\.\w+(\s+|$)' | sed 's/\./\\\./g')
 
 DONE=0
 PASS_NUM=0
@@ -16,7 +26,7 @@ PASS_NUM=0
 while [ ${DONE} == 0 ]; do
     echo "PASS ${PASS_NUM}"
 
-    FILE_NAMES=$(echo "${FILES}" | grep -Eo '[^\/]+\.\w+(\s+|$)') 
+    FILE_NAMES=$(echo "${FILES}" | grep ${GREP_FLAGS}o '[^\/]+\.\w+(\s+|$)') 
     NEXT_FILES=""
 
     for FILE in ${FILES}; do
@@ -24,7 +34,7 @@ while [ ${DONE} == 0 ]; do
         DEP=0
         for DEPENDENCY in ${FILE_NAMES}; do
             ESCAPED=$(echo ${DEPENDENCY} | sed 's/\./\\\./g')
-            if [ "$(grep -E "\#include (\<|\")${ESCAPED}(\>|\")" ${FILE})" != "" ]; then
+            if [ "$(grep ${GREP_FLAGS} "\#include (\<|\")${ESCAPED}(\>|\")" ${FILE})" != "" ]; then
                 echo "depends on ${DEPENDENCY}"
                 DEP=1
             fi
@@ -48,5 +58,5 @@ done
 echo "${ALL_DEP}"
 
 for DEP in ${ALL_DEP}; do
-    sed -E -i '' "/\#include (\<|\")${DEP}(\>|\")/d" ${OUTFILE}
+    sed -E ${SED_FLAGS} "/\#include (\<|\")${DEP}(\>|\")/d" ${OUTFILE}
 done
