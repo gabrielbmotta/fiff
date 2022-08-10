@@ -1,5 +1,7 @@
 # Fiff
 
+[![Test CI](https://github.com/gabrielbmotta/fiff/actions/workflows/main.yml/badge.svg)](https://github.com/gabrielbmotta/fiff/actions/workflows/main.yml)
+[![Release CI](https://github.com/gabrielbmotta/fiff/actions/workflows/release.yml/badge.svg)](https://github.com/gabrielbmotta/fiff/actions/workflows/release.yml)
 ## Building
 
 On mac, the build script might require the installation of the gnu core utils. This can be done through homebrew with `brew install coreutils`
