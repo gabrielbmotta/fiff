@@ -11,7 +11,6 @@ BUILD_TYPE="Release"
 BUILD_NAME_SET=0
 BUILD_NAME=""
 
-
 build_project() {
     if [ ${BUILD_NAME_SET} == 0 ]; then
         BUILD_NAME=${BUILD_TYPE}
@@ -56,9 +55,15 @@ build_project() {
 
 cleanup_project() {
     echo "Let me get that for you..."
-    rm -rf ${SCRIPT_DIR}/build
-    rm -rf ${SCRIPT_DIR}/out
-    echo "All clear!"
+    if [ ${BUILD_NAME_SET} != 0 ]; then
+        rm -rf ${SCRIPT_DIR}/build/${BUILD_NAME}
+        rm -rf ${SCRIPT_DIR}/out/${BUILD_NAME}
+        echo "${BUILD_NAME} cleared!"
+    else 
+        rm -rf ${SCRIPT_DIR}/build
+        rm -rf ${SCRIPT_DIR}/out
+        echo "All clear!"
+    fi
 }
 
 help_text() {
