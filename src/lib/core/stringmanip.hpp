@@ -7,8 +7,8 @@
 #include <sstream>
 #include <vector>
 
-#ifndef FIFFFILEEXPLORER_STRINGMANIP_HPP
-#define FIFFFILEEXPLORER_STRINGMANIP_HPP
+#ifndef FIFF_LIBCORE_STRINGMANIP_HPP
+#define FIFF_LIBCORE_STRINGMANIP_HPP
 namespace Core{
 namespace StringManipulation {
 
@@ -33,4 +33,4 @@ namespace StringManipulation {
 }
 }
 
-#endif //FIFFFILEEXPLORER_STRINGMANIP_HPP
+#endif //FIFF_LIBCORE_STRINGMANIP_HPP

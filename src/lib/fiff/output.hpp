@@ -2,8 +2,8 @@
 // Created by Gabriel Motta on 3/24/22.
 //
 
-#ifndef FIFFFILEEXPLORER_OUTPUT_HPP
-#define FIFFFILEEXPLORER_OUTPUT_HPP
+#ifndef FIFF_LIBFIFF_OUTPUT_HPP
+#define FIFF_LIBFIFF_OUTPUT_HPP
 
 #include "tag.hpp"
 #include "../core/endian.hpp"
@@ -36,4 +36,4 @@ protected:
 };
 }//namespace
 
-#endif //FIFFFILEEXPLORER_OUTPUT_HPP
+#endif //FIFF_LIBFIFF_OUTPUT_HPP

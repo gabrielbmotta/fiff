@@ -2,8 +2,8 @@
 // Created by Gabriel Motta on 3/4/22.
 //
 
-#ifndef FIFFFILEEXPLORER_FIFFTAG_HPP
-#define FIFFFILEEXPLORER_FIFFTAG_HPP
+#ifndef FIFF_LIBFIFF_FIFFTAG_HPP
+#define FIFF_LIBFIFF_FIFFTAG_HPP
 
 #include "types.hpp"
 #include "data.hpp"
@@ -25,4 +25,4 @@ struct Tag {
 void endswapTagData(Tag& tag);
 }//namespace
 
-#endif //FIFFFILEEXPLORER_FIFFTAG_HPP
+#endif //FIFF_LIBFIFF_FIFFTAG_HPP

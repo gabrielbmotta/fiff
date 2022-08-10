@@ -2,8 +2,8 @@
 // Created by Gabriel Motta on 4/7/22.
 //
 
-#ifndef FIFFFILEEXPLORER_DATA_HPP
-#define FIFFFILEEXPLORER_DATA_HPP
+#ifndef FIFF_LIBFIFF_DATA_HPP
+#define FIFF_LIBFIFF_DATA_HPP
 
 #include "types.hpp"
 
@@ -226,4 +226,4 @@ private:
 };
 }
 
-#endif //FIFFFILEEXPLORER_DATA_HPP
+#endif //FIFF_LIBFIFF_DATA_HPP

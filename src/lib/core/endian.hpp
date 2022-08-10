@@ -2,8 +2,8 @@
 // Created by Gabriel Motta on 3/4/22.
 //
 
-#ifndef FIFFFILEEXPLORER_ENDIAN_HPP
-#define FIFFFILEEXPLORER_ENDIAN_HPP
+#ifndef FIFF_LIBCORE_ENDIAN_HPP
+#define FIFF_LIBCORE_ENDIAN_HPP
 
 #include <algorithm>
 
@@ -30,4 +30,4 @@ void endswap(T *objp)
   std::reverse(memp, memp + sizeof(T));
 }
 
-#endif //FIFFFILEEXPLORER_ENDIAN_HPP
+#endif //FIFF_LIBCORE_ENDIAN_HPP

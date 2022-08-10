@@ -1,5 +1,5 @@
-#ifndef FIFFFILEEXPLORER_TYPES_HPP
-#define FIFFFILEEXPLORER_TYPES_HPP
+#ifndef FIFF_LIBFIFF_TYPES_HPP
+#define FIFF_LIBFIFF_TYPES_HPP
 
 #include <cstdint>
 #include <climits>
@@ -568,4 +568,4 @@ enum{
 }//namespace Block
 
 }//namespace Fiff
-#endif //FIFFFILEEXPLORER_TYPES_HPP
+#endif //FIFF_LIBFIFF_TYPES_HPP
