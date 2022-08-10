@@ -2,7 +2,7 @@
 // Created by Gabriel Motta on 4/6/22.
 //
 
-#ifndef FIFFFILEEXPLORER_EPOCH_HPP
-#define FIFFFILEEXPLORER_EPOCH_HPP
+#ifndef FIFF_EPOCH_HPP
+#define FIFF_EPOCH_HPP
 
-#endif //FIFFFILEEXPLORER_EPOCH_HPP
+#endif //FIFF_EPOCH_HPP

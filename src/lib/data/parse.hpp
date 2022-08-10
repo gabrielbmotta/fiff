@@ -2,10 +2,10 @@
 // Created by Gabriel Motta on 4/6/22.
 //
 
-#ifndef FIFFFILEEXPLORER_PARSE_HPP
-#define FIFFFILEEXPLORER_PARSE_HPP
+#ifndef FIFF_PARSE_HPP
+#define FIFF_PARSE_HPP
 
-#endif //FIFFFILEEXPLORER_PARSE_HPP
+#endif //FIFF_PARSE_HPP
 
 #include <map>
 #include <any>

@@ -2,8 +2,8 @@
 // Created by Gabriel Motta on 3/7/22.
 //
 
-#ifndef FIFFFILEEXPLORER_COMMANDLINEINPUT_HPP
-#define FIFFFILEEXPLORER_COMMANDLINEINPUT_HPP
+#ifndef FIFF_LIBUTILS_COMMANDLINEINPUT_HPP
+#define FIFF_LIBUTILS_COMMANDLINEINPUT_HPP
 
 #include <string>
 #include <vector>
@@ -20,4 +20,4 @@ private:
   std::vector <std::string> args;
 };
 }
-#endif //FIFFFILEEXPLORER_COMMANDLINEINPUT_HPP
+#endif //FIFF_LIBUTILS_COMMANDLINEINPUT_HPP

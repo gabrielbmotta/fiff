@@ -2,8 +2,8 @@
  *  @file   filein.hpp
  **/
 
-#ifndef FIFFFILEEXPLORER_INPUT_HPP
-#define FIFFFILEEXPLORER_INPUT_HPP
+#ifndef FIFF_LIBFIFF_INPUT_HPP
+#define FIFF_LIBFIFF_INPUT_HPP
 
 #include "tag.hpp"
 #include "../core/endian.hpp"
@@ -44,4 +44,4 @@ protected:
 };
 
 } //namespace
-#endif //FIFFFILEEXPLORER_INPUT_HPP
+#endif //FIFF_LIBFIFF_INPUT_HPP

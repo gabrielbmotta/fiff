@@ -2,8 +2,8 @@
 // Created by Gabriel Motta on 3/7/22.
 //
 
-#ifndef FIFFFILEEXPLORER_FORMATTING_HPP
-#define FIFFFILEEXPLORER_FORMATTING_HPP
+#ifndef FIFF_LIBFIFF_FORMATTING_HPP
+#define FIFF_LIBFIFF_FORMATTING_HPP
 
 #if (__cplusplus >= 201103L)
 
@@ -49,4 +49,4 @@ private:
 };
 }
 #endif
-#endif //FIFFFILEEXPLORER_FORMATTING_HPP
+#endif //FIFF_LIBFIFF_FORMATTING_HPP

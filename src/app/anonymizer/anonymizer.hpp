@@ -1,5 +1,5 @@
-#ifndef FIFFFILEEXPLORER_ANONYMIZER_HPP
-#define FIFFFILEEXPLORER_ANONYMIZER_HPP
+#ifndef FIFF_APPANON_ANONYMIZER_HPP
+#define FIFF_APPANON_ANONYMIZER_HPP
 
 #include "../../lib/fiff/input.hpp"
 #include "../../lib/fiff/output.hpp"
@@ -24,4 +24,4 @@ private:
   std::stack<int32_t> m_blockHierarchy;
 };
 
-#endif //FIFFFILEEXPLORER_ANONYMIZER_HPP
+#endif //FIFF_APPANON_ANONYMIZER_HPP
