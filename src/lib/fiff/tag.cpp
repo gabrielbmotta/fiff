@@ -26,7 +26,7 @@ bool Fiff::Tag::operator==(const Fiff::Tag &other) const
  */
 void Fiff::endswapTagData(Tag &tag)
 {
-  switch((tag.type) & Fiff::Type::baseMask)
+  switch((Type::base(tag.type)))
   {
     // 0 bytes / 1 byte
     case Fiff::Type::void_:

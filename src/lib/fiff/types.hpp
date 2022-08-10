@@ -359,6 +359,27 @@ namespace Type {
 
 //==============================================================================
 /**
+ *
+ * @return
+ */
+const uint32_t baseMask = 0x00000FFF;
+
+//==============================================================================
+/**
+ *
+ * @return
+ */
+const uint32_t fsMask = 0xFF000000;
+
+//==============================================================================
+/**
+ *
+ * @return
+ */
+const uint32_t mcMask = 0x00FF0000;
+
+//==============================================================================
+/**
  * The type tells us with what data type to interpret the data.
  */
 enum{
@@ -390,6 +411,10 @@ enum{
   stream_segment_struct_ = 37
 };
 
+uint32_t base(int type){
+  return type & baseMask;
+}
+
 //==============================================================================
 /**
  * Format tells us whether the data is a single scalar value or a matrix
@@ -399,6 +424,10 @@ enum Format{
   scalar = 0x00000000,
   matrix = 0x40000000
 };
+
+uint32_t format(int type){
+  return type & fsMask;
+}
 
 //==============================================================================
 /**
@@ -410,27 +439,9 @@ enum Representation{
   row_compressed_sparse = 0x00200000
 };
 
-//==============================================================================
-/**
- *
- * @return
- */
-const uint32_t baseMask = 0x00000FFF;
-
-//==============================================================================
-/**
- *
- * @return
- */
-const uint32_t fsMask = 0xFF000000;
-
-//==============================================================================
-/**
- *
- * @return
- */
-const uint32_t mcMask = 0x00FF0000;
-
+uint32_t representation(int type){
+  return type & mcMask;
+}
 }//namespace Type
 
 namespace PointDefinition {
