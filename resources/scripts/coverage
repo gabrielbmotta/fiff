@@ -13,7 +13,7 @@ else
     exit 1
 fi
 
-lcov -c -d $source -o cov.info
+lcov -c -d $source --exclude *usr/include/* -o cov.info 
 
 echo Generating html with coverage data...
 if [ "$2" ]

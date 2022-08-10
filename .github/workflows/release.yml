@@ -6,7 +6,8 @@ on:
       - 'main'
 
 jobs:
-  CreateRelease:
+  job1:
+    name: Create Release
     runs-on: ubuntu-latest
     steps:
     - name: Clone repository
@@ -35,7 +36,9 @@ jobs:
         # Create new dev_build release
         hub release create -m "Development Builds" dev_build --prerelease
 
-  ReleaseBuilds:
+  job2:
+    needs: job1
+    name: Release Builds
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -56,10 +59,8 @@ jobs:
       - name: Run release
         run: |
           ./resources/scripts/package_lib libfiff out/Release/libs/*fiff* src/lib/fiff
-          ./resources/scripts/header_only_lib src/lib/fiff fiff.hpp
           echo "BUILD_TAR_NAME=$(find . -name *.tar.gz)" >> $GITHUB_ENV
-          echo "HEADER_LIB_NAME=$(find . -name *.hpp)" >> $GITHUB_ENV
-      
+          
       - name: Deploy binaries with dev release on Github
         uses: svenstaro/upload-release-action@v2
         with:
@@ -68,6 +69,19 @@ jobs:
           tag: dev_build
           overwrite: true
 
+  job3:
+    needs: job1
+    name: Header only
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Combine files
+        run: |
+          ./resources/scripts/header_only_lib src/lib/fiff fiff.hpp
+          echo "HEADER_LIB_NAME=$(find . -name *.hpp)" >> $GITHUB_ENV
+
       - name: Deploy header lib with dev release on Github
         uses: svenstaro/upload-release-action@v2
         with:
@@ -75,3 +89,29 @@ jobs:
           file: ${{ env.HEADER_LIB_NAME }}
           tag: dev_build
           overwrite: true
+
+  job4:
+    name: Doc PDF
+    needs: job1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name : Install Doxygen and pdflatex
+        run: |
+          sudo apt-get install doxygen texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
+      - name: Run Doxygen
+        run: |
+          cd doc
+          doxygen Doxyfile
+          make -Clatex
+          mv latex/refman.pdf .
+          mv refman.pdf fiff_docu.pdf
+      - name: Deploy pdf manual
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: doc/fiff_docu.pdf
+          tag: dev_build
+          overwrite: true
+
