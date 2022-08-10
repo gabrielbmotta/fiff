@@ -411,7 +411,7 @@ enum{
   stream_segment_struct_ = 37
 };
 
-uint32_t base(int type){
+inline uint32_t base(int type){
   return type & baseMask;
 }
 
@@ -425,7 +425,7 @@ enum Format{
   matrix = 0x40000000
 };
 
-uint32_t format(int type){
+inline uint32_t format(int type){
   return type & fsMask;
 }
 
@@ -439,7 +439,7 @@ enum Representation{
   row_compressed_sparse = 0x00200000
 };
 
-uint32_t representation(int type){
+inline uint32_t representation(int type){
   return type & mcMask;
 }
 }//namespace Type
