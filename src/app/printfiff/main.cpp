@@ -5,6 +5,9 @@
 #include <iostream>
 #include <string>
 
+void printByTags(Fiff::Input& in,  std::vector<int> &tag_set);
+void printByBlocks(Fiff::Input& in);
+
 int main(int argc, char* argv[])
 {
   Core::CommandLineInput cmdin(argc, argv);
@@ -21,6 +24,7 @@ int main(int argc, char* argv[])
     return 0;
   }
 
+  bool printBlocks = cmdin.tagExists("--blocks");
   std::string tags = cmdin.getValueForTag("--tag-kind", "-k").second;
 
   std::vector<int> tag_set;
@@ -30,11 +34,21 @@ int main(int argc, char* argv[])
 
   auto inFile = Fiff::Input::fromFile(filePath);
 
-  std::string padding = "    ";
-  int indent = 0;
+  if(printBlocks){
+    printByBlocks(inFile);
+  } else {
+    printByTags(inFile, tag_set);
+  }
 
-  while(!inFile.atEnd()){
-    auto tag = inFile.getTag();
+  return 0;
+}
+
+void printByTags(Fiff::Input& in,  std::vector<int> &tag_set)
+{
+  std::string padding = "  ";
+  int indent = 0;
+  while(!in.atEnd()){
+    auto tag = in.getTag();
     if(!tag_set.empty() &&  std::find(tag_set.begin(), tag_set.end(), static_cast<int32_t>(tag.kind)) == tag_set.end()){
       continue;
     }
@@ -51,6 +65,25 @@ int main(int argc, char* argv[])
       ++indent;
     }
   }
-
-  return 0;
 }
+
+void printByBlocks(Fiff::Input& in)
+{
+  std::string padding = "  ";
+  int indent = 0;
+  while(!in.atEnd()){
+    auto tag = in.getTag();
+      
+      if (tag.kind == Fiff::Kind::block_start){
+        for (int i = 0 ; i < indent ; ++i){
+          std::cout << padding;
+        }
+        std::cout << Fiff::Formatting::getMapValue(Fiff::Formatting::blockIds(), static_cast<int>(tag.data))<< " [" << static_cast<int>(tag.data) << "]" << "\n";
+        indent++;
+      }
+      else if(tag.kind == Fiff::Kind::block_end){
+        indent--;
+      }
+  }
+}
+

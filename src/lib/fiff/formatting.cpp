@@ -748,7 +748,32 @@ const std::map<int, std::string> Fiff::Formatting::_blockID
          {123, "status_subsystem"},
          {124, "device_info"},
          {125, "helium_info"},
-         {126, "channel_info"}};
+         {126, "channel_info"},
+         {200, "structural_data"},
+         {201, "volume_data"},
+         {202, "volume_slice"},
+         {203, "scenery"},
+         {204, "scene"},
+         {205, "mri_seg"},
+         {206, "mri_seg_region"},
+         {300, "sphere"},
+         {310, "bem"},
+         {311, "bem_surf"},
+         {312, "conductor_model"},
+         {313, "xfit_proj"},
+         {314, "xfit_proj_item"},
+         {315, "xfit_aux"},
+         {359, "bad_channels"},
+         {400, "vol_info"},
+         {500, "data_correction"},
+         {501, "channels_decoupler"},
+         {502, "sss_info"},
+         {503, "sss_cal_adjust"},
+         {504, "sss_st_info"},
+         {505, "sss_bases"},
+         {510, "maxshield"},
+         {900, "processing_history"},
+         {901, "processing_record"}};
 
 
 //==============================================================================

@@ -12,9 +12,11 @@ namespace Core {
 class CommandLineInput {
 public:
   CommandLineInput(int &argc, char *argv[]);
-  std::pair<bool, std::string> getValueForTag(const std::string &option, const std::string &shortoption = "") const;
+  std::pair<bool, std::string> getValueForTag(const std::string &option) const;
+  std::pair<bool, std::string> getValueForTag(const std::string &option, const std::string &shortoption) const;
   std::string getValueThatEndsWith(const std::string& substr);
-  bool tagExists(const std::string &option, const std::string &shortoption = "") const;
+  bool tagExists(const std::string &option) const;
+  bool tagExists(const std::string &option, const std::string &shortoption) const;
 
 private:
   std::vector <std::string> args;
