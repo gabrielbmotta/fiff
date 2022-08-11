@@ -208,15 +208,25 @@ std::string Fiff::Formatting::formatTagMetaData(const Fiff::Tag &tag)
 
   stream << "[" << static_cast<int32_t>(tag.kind) << "]" << getMapValue(_tagKind, static_cast<int32_t>(tag.kind));
   stream << ", ";
-  stream << "[" << static_cast<int32_t>(tag.type) << "]" << getMapValue(_tagType, static_cast<int32_t>(tag.type));
+  if (Fiff::Type::format(tag.type) == Fiff::Type::Format::scalar){
+    stream << "[" << static_cast<int32_t>(tag.type) << "]" << getMapValue(_tagType, static_cast<int32_t>(tag.type));
+  } else {
+    stream << "[" << static_cast<int32_t>(Fiff::Type::base(tag.type)) << "]" << getMapValue(_tagType, static_cast<int32_t>(Fiff::Type::base(tag.type)));
+    if (Fiff::Type::representation(tag.type) == Fiff::Type::Representation::dense){
+      stream << " dense ";
+    } else {
+      stream << " sparse ";
+    }
+    stream << "matrix";
+  }
   stream << ", ";
   stream << tag.size << "B";
   int KB = tag.size/1000;
   int MB = KB/1000;
   if(MB){
-    stream << "(" << MB <<  "MB)";
+    stream << "(" << MB << "MB)";
   }  else if (KB){
-    stream << "(" << KB <<  "KB)";
+    stream << "(" << KB << "KB)";
   }
   if(tag.next)
   {
