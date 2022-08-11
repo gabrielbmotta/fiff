@@ -34,9 +34,9 @@ public:
   static const std::map<int,std::string>& tagTypes();
   static const std::map<int,std::string>& blockIds();
 
-private:
   static std::string getMapValue(const std::map<int,std::string>& map,
                                  int id);
+private:
 
   static std::string formatTagMetaData(const Fiff::Tag& tag);
   static std::string formatTagData(const Fiff::Tag& tag);

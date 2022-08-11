@@ -12,6 +12,19 @@ Core::CommandLineInput::CommandLineInput(int &argc, char *argv[])
     this->args.push_back(std::string(argv[i]));
 }
 
+std::pair<bool, std::string> Core::CommandLineInput::getValueForTag(const std::string &option) const
+{
+  auto itr = std::find(this->args.begin(), this->args.end(), option);
+  if(itr != this->args.end() && (itr+1) != this->args.end())
+  {
+    return {true,*(itr+1)};
+  } else if(itr != this->args.end()){
+    return {true, {}};
+  }
+
+  return {false,{}};
+}
+
 std::pair<bool, std::string> Core::CommandLineInput::getValueForTag(const std::string &option, const std::string &shortoption) const
 {
   auto itr = std::find(this->args.begin(), this->args.end(), option);
@@ -31,6 +44,11 @@ std::pair<bool, std::string> Core::CommandLineInput::getValueForTag(const std::s
   }
 
   return {false,{}};
+}
+
+bool Core::CommandLineInput::tagExists(const std::string &option) const
+{
+  return std::find(this->args.begin(), this->args.end(), option) != this->args.end();
 }
 
 bool Core::CommandLineInput::tagExists(const std::string &option, const std::string &shortoption) const
