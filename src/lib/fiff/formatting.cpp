@@ -44,7 +44,7 @@ const std::map<int, std::string> &Fiff::Formatting::blockIds()
 std::string Fiff::Formatting::asString(const Fiff::Tag& tag){
   std::stringstream stream;
 
-  stream << formatTagMetaData(tag) << ", " << formatTagData(tag);
+  stream << metaDataAsString(tag) << ", " << dataAsString(tag);
 
   return stream.str();
 }
@@ -198,42 +198,68 @@ std::string Fiff::Formatting::getMapValue(const std::map<int,std::string>& map,
 }
 
 //==============================================================================
+
+std::string Fiff::Formatting::kindAsString(const Fiff::Tag& tag)
+{
+  return "[" +
+        std::to_string(static_cast<int32_t>(tag.kind)) +
+        "]" +
+        getMapValue(_tagKind, static_cast<int32_t>(tag.kind));
+}
+
+//==============================================================================
+
+std::string Fiff::Formatting::typeAsString(const Fiff::Tag& tag)
+{
+  if (Fiff::Type::format(tag.type) == Fiff::Type::Format::scalar){
+    return "[" +
+          std::to_string(static_cast<int32_t>(tag.type)) +
+          "]" + getMapValue(_tagType, static_cast<int32_t>(tag.type));
+  } else {
+    std::string mat_type;
+    if (Fiff::Type::representation(tag.type) == Fiff::Type::Representation::dense){
+      mat_type = " dense ";
+    } else {
+      mat_type = " sparse ";
+    }
+    return "[" +
+          std::to_string(static_cast<int32_t>(Fiff::Type::base(tag.type))) +
+          "]" + getMapValue(_tagType, static_cast<int32_t>(Fiff::Type::base(tag.type))) + 
+          mat_type +
+          "matrix";
+  }
+}
+
+//==============================================================================
+
+std::string Fiff::Formatting::sizeAsString(const Fiff::Tag& tag)
+{
+  int KB = tag.size/1000;
+  int MB = KB/1000;
+  std::string human_readable;
+  if(MB){
+    human_readable = "(" + std::to_string(MB) + "MB)";
+  }  else if (KB){
+    human_readable = "(" + std::to_string(KB) + "KB)";
+  }
+
+  return std::to_string(tag.size) + "B" + human_readable;
+}
+
+//==============================================================================
 /**
  * Formats tag metadata as a string.
  * @param tag   tag to be formatted as a string.
  */
-std::string Fiff::Formatting::formatTagMetaData(const Fiff::Tag &tag)
+std::string Fiff::Formatting::metaDataAsString(const Fiff::Tag &tag)
 {
-  std::stringstream stream;
-
-  stream << "[" << static_cast<int32_t>(tag.kind) << "]" << getMapValue(_tagKind, static_cast<int32_t>(tag.kind));
-  stream << ", ";
-  if (Fiff::Type::format(tag.type) == Fiff::Type::Format::scalar){
-    stream << "[" << static_cast<int32_t>(tag.type) << "]" << getMapValue(_tagType, static_cast<int32_t>(tag.type));
-  } else {
-    stream << "[" << static_cast<int32_t>(Fiff::Type::base(tag.type)) << "]" << getMapValue(_tagType, static_cast<int32_t>(Fiff::Type::base(tag.type)));
-    if (Fiff::Type::representation(tag.type) == Fiff::Type::Representation::dense){
-      stream << " dense ";
-    } else {
-      stream << " sparse ";
-    }
-    stream << "matrix";
-  }
-  stream << ", ";
-  stream << tag.size << "B";
-  int KB = tag.size/1000;
-  int MB = KB/1000;
-  if(MB){
-    stream << "(" << MB << "MB)";
-  }  else if (KB){
-    stream << "(" << KB << "KB)";
-  }
+  std::string next;
   if(tag.next)
   {
-    stream << ", next: " << tag.next;
+    next = ", next: " + std::to_string(tag.next);
   }
 
-  return stream.str();
+  return kindAsString(tag) + ", " + typeAsString(tag) + ", " + sizeAsString(tag) + next; 
 }
 
 //==============================================================================
@@ -241,7 +267,7 @@ std::string Fiff::Formatting::formatTagMetaData(const Fiff::Tag &tag)
  * Formats tag data as a string.
  * @param tag   tag to be formatted as a string.
  */
-std::string Fiff::Formatting::formatTagData(const Fiff::Tag& tag)
+std::string Fiff::Formatting::dataAsString(const Fiff::Tag& tag)
 {
   if(tag.data.byteArray == nullptr){
     return {};

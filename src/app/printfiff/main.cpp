@@ -78,7 +78,7 @@ void printByBlocks(Fiff::Input& in)
         for (int i = 0 ; i < indent ; ++i){
           std::cout << padding;
         }
-        std::cout << Fiff::Formatting::getMapValue(Fiff::Formatting::blockIds(), static_cast<int>(tag.data))<< " [" << static_cast<int>(tag.data) << "]" << "\n";
+        std::cout << Fiff::Formatting::dataAsString(tag) << "\n";
         indent++;
       }
       else if(tag.kind == Fiff::Kind::block_end){

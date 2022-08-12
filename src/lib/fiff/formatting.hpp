@@ -30,16 +30,20 @@ public:
   static std::string asString(const Julian&);
   static std::string asString(const CoordinateTransformation&);
 
+  static std::string kindAsString(const Fiff::Tag&);
+  static std::string typeAsString(const Fiff::Tag&);
+  static std::string sizeAsString(const Fiff::Tag&);
+
+  static std::string metaDataAsString(const Fiff::Tag& tag);
+  static std::string dataAsString(const Fiff::Tag& tag);
+
   static const std::map<int,std::string>& tagKinds();
   static const std::map<int,std::string>& tagTypes();
   static const std::map<int,std::string>& blockIds();
 
+private:
   static std::string getMapValue(const std::map<int,std::string>& map,
                                  int id);
-private:
-
-  static std::string formatTagMetaData(const Fiff::Tag& tag);
-  static std::string formatTagData(const Fiff::Tag& tag);
 
   static const std::map<int,std::string> _tagKind;
   static const std::map<int,std::string> _tagType;
