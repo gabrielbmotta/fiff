@@ -41,23 +41,44 @@ struct tag_node{
 
 struct FiffSource{
     std::string name;
+    std::string path;
+    Endian::Absolute endianness;
+
     std::list<tag_node> tags;
 
     void printTags(unsigned int detail, const std::vector<int>& id_match = {});
     void printBlocks();
     void printMatching();
     void indexNodes();
+
+    friend std::ostream& operator<<(std::ostream& os, const FiffSource& dt);
 };
+
+std::ostream& operator<<(std::ostream& os, const FiffSource& fs)
+{
+    os << "Name: " << fs.name << "\n";
+    os << "Path: " << fs.path << "\n";
+    os << "Endian: ";
+    if(fs.endianness == Endian::Absolute::big) {
+        os << "big";
+    } else if (fs.endianness == Endian::Absolute::little){
+        os << "little";
+    } else {
+        os << "unknown";
+    }
+    return os;
+}
 
 std::list<LogEntry> activity_log;
 std::vector<FiffSource*> fiff_sources;
+bool continue_running = true;
 
 int main(int argc, char* argv[])
 {
     (void)argc;
     (void)argv;
 
-    bool continue_running = true;
+    
 
     while(continue_running){
         std::string cmd;
@@ -65,7 +86,9 @@ int main(int argc, char* argv[])
         std::getline(std::cin, cmd);
         std::cout << "Command: " << cmd << "\n";
         processUserCommand(cmd);
-    }   
+    }
+
+    return 0;
 }
 
 void processUserCommand(const std::string& command)
@@ -79,6 +102,8 @@ void processUserCommand(const std::string& command)
         load(command.substr(index + 1));
     } else if(cmd == "show"){
         show(command.substr(index + 1));
+    } else if(cmd == "exit" || cmd == "quit"){
+        exit(command.substr(index + 1));
     }
 }
 
@@ -99,6 +124,8 @@ void load(const std::string& command)
     }
 
     source->name = command;
+    source->path = command;
+    source->endianness = inFile.getEndianess();
     source->indexNodes();
 
     fiff_sources.push_back(source);
@@ -118,12 +145,9 @@ void show(const std::string& command)
     if(cmd == "detail" && Core::StringManipulation::isNumber(rest)){
         detail = std::stoi(rest);
     } else if(cmd == "match") {
-        auto str_vec = Core::StringManipulation::getVectorFrom<std::string>(rest, ',');
-        for(auto& element : str_vec){
-            std::cout << "srt_vec: " << element << " "; 
-            if(Core::StringManipulation::isNumber(element)){
-                match.push_back(std::stoi(element));
-            }
+        auto vec = Core::StringManipulation::getVectorFrom<int>(rest, '.');
+        for(auto& element : vec){
+            match.push_back(element);
         }
     }
 
@@ -133,12 +157,7 @@ void show(const std::string& command)
         }
     } else {
         for(auto& source : fiff_sources){
-            std::cout<<"match:";
-            for(auto& thing : match)
-                std::cout << thing;
-            // source->printTags(detail, match);
-            (void)source;
-            (void)detail;
+            source->printTags(detail, match);
         }
     }
 }
@@ -155,9 +174,12 @@ void list(const std::string& command)
         std::cout << " files";
 
     std::cout << " open.\n";
-    
-    for(auto element : fiff_sources){
-        std::cout << " - " << element->name << "\n";
+
+    if(size){
+        std::cout << "\n----------\n";
+        for(auto* element : fiff_sources){
+            std::cout << *element << "\n----------\n";
+        }
     }
 }
 
@@ -193,7 +215,7 @@ void close(const std::string& command)
 void exit(const std::string& command)
 {
     (void)command;
-
+    continue_running = false;
 }
 
 void FiffSource::indexNodes()
@@ -224,7 +246,7 @@ void FiffSource::printTags(unsigned int detail, const std::vector<int>& id_match
         if(node.tag->kind == Fiff::Kind::block_start || 
         node.tag->kind == Fiff::Kind::block_end){
             print_data = true;
-        } else if(detail < node.id.size() || id_match.size() > node.id.size()) {
+        } else if(detail < (node.id.size()) || id_match.size() > node.id.size()) {
             continue;
         }
 
