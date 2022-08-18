@@ -3,6 +3,8 @@ project(fiffdoctor)
 
 set(SOURCES
         main.cpp
+        docapp.cpp
+        fiffsource.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
