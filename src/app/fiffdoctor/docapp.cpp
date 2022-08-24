@@ -1,5 +1,6 @@
 #include "docapp.hpp"
 #include "fiffsource.hpp"
+#include "color.h"
 
 #include <core/stringmanip.hpp>
 
@@ -23,7 +24,7 @@ DocApp::DocApp()
 void DocApp::run()
 {
     while(_running){
-        std::cout << "<<< ";
+        std::cout << COLOR_GREEN << "<<< " << COLOR_DEFAULT;
         std::string userInput;
         std::getline(std::cin, userInput);
         processUserInput(userInput);

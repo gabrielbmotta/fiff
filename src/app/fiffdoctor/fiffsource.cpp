@@ -4,6 +4,13 @@
 
 #include <deque>
 
+int FiffSource::id_count = 0;
+
+FiffSource::FiffSource()
+:id(++id_count)
+{  
+}
+
 void FiffSource::indexNodes()
 {
     std::deque<int> index_stack;

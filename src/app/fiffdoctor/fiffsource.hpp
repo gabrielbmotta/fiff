@@ -14,10 +14,14 @@ struct tag_node{
 };
 
 struct FiffSource{
+
+    FiffSource();
+    
+    int id;
+    static int id_count;
     std::string name;
     std::string path;
     Endian::Absolute endianness;
-
     std::list<tag_node> tags;
 
     void printTags(unsigned int detail, const std::vector<int>& id_match = {});
