@@ -1,9 +1,9 @@
 #ifndef FIFF_APPANON_ANONYMIZER_HPP
 #define FIFF_APPANON_ANONYMIZER_HPP
 
-#include "../../lib/fiff/input.hpp"
-#include "../../lib/fiff/output.hpp"
-#include "../../lib/fiff/types.hpp"
+#include <fiff/input.hpp>
+#include <fiff/output.hpp>
+#include <fiff/types.hpp>
 
 #include <string>
 #include <stack>

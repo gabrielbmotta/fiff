@@ -4,7 +4,7 @@
 
 #include "tag.hpp"
 
-#include "../core/endian.hpp"
+#include <core/endian.hpp>
 
 //==============================================================================
 /**

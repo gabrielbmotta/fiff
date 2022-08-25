@@ -6,7 +6,7 @@
 #define FIFF_LIBFIFF_INPUT_HPP
 
 #include "tag.hpp"
-#include "../core/endian.hpp"
+#include <core/endian.hpp>
 
 #include <fstream>
 #include <memory>
