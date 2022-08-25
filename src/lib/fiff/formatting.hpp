@@ -9,7 +9,7 @@
 
 #include "tag.hpp"
 #include "input.hpp"
-#include "../core/endian.hpp"
+#include <core/endian.hpp>
 
 #include <string>
 #include <sstream>

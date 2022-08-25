@@ -9,6 +9,7 @@ compile_commands.json
 .vscode/
 cmake-build-*/
 .cache/
+.ccls-cache/
 
 # MacOS 
 .DS_Store
