@@ -2,10 +2,10 @@
 // Created by Gabriel Motta on 4/12/22.
 //
 
-#include "../../lib/fiff/input.hpp"
-#include "../../lib/fiff/output.hpp"
-#include "utils/commandlineinput.hpp"
-#include "../../lib/core/stringmanip.hpp"
+#include <fiff/input.hpp>
+#include <fiff/output.hpp>
+#include <utils/commandlineinput.hpp>
+#include <core/stringmanip.hpp>
 #include <iostream>
 #include <string>
 
