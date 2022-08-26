@@ -23,6 +23,12 @@ public:
 
   Tag getTag();
   Tag peekTag();
+  void skipTag();
+
+  int32_t peekKind();
+  int32_t peekType();
+  int32_t peekSize();
+  int32_t peekNext();
 
   void goToReadPosition(std::streampos pos);
   std::streampos currentReadPosition() const;
@@ -38,6 +44,8 @@ protected:
 
   void readMetaData(Tag& tag);
   void readData(Tag& tag);
+
+  int getMetaDataElementAtOffset(int offset);
 
   Endian::Relative m_relativeEndian;
   std::istream* m_istream;
