@@ -51,6 +51,45 @@ Fiff::Tag Fiff::Input::peekTag()
 }
 
 //==============================================================================
+
+void Fiff::Input::skipTag()
+{
+  m_istream->seekg(2 * sizeof(int32_t), std::ios::cur);
+
+  int32_t size;
+  m_istream->read(reinterpret_cast<char*>(&size), sizeof(int32_t));
+  m_istream->seekg(sizeof(int32_t) + size, std::ios::cur);
+}
+
+//==============================================================================
+
+int32_t Fiff::Input::peekKind()
+{
+  return getMetaDataElementAtOffset(0);
+}
+
+//==============================================================================
+
+int32_t Fiff::Input::peekType()
+{
+  return getMetaDataElementAtOffset(sizeof(int32_t));
+}
+
+//==============================================================================
+
+int32_t Fiff::Input::peekSize()
+{
+  return getMetaDataElementAtOffset(2 * sizeof(int32_t));
+}
+
+//==============================================================================
+
+int32_t Fiff::Input::peekNext()
+{
+  return getMetaDataElementAtOffset(3 * sizeof(int32_t));
+}
+
+//==============================================================================
 /**
  * Moves the read head to a position given by input parameter.
  * @param pos   Where to move the read head.
@@ -218,4 +257,19 @@ void Fiff::Input::readData(Fiff::Tag &tag)
   {
     endswapTagData(tag);
   }
+}
+
+//==============================================================================
+
+int Fiff::Input::getMetaDataElementAtOffset(int offset)
+{
+  int32_t element;
+
+  std::streampos originalPosition = m_istream->tellg();
+  m_istream->seekg(offset, std::ios::cur);
+
+  m_istream->read(reinterpret_cast<char*>(&element), sizeof(int32_t));
+  m_istream->seekg(originalPosition);
+
+  return element;
 }
