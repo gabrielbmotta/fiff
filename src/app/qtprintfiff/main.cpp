@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <string>
+#include <cmath>
 
 #include <timeseriesview.hpp>
 
@@ -52,7 +53,7 @@ int main(int argc, char* argv[])
     float my_data[array_size];
 
     for(size_t i = 0; i < array_size; ++i){
-        my_data[i] = static_cast<float>(i);
+        my_data[i] = std::sin(i);
     }
 
     DataSource data_source;
@@ -65,10 +66,14 @@ int main(int argc, char* argv[])
     data_view_param.source = &data_source;
     data_view_param.min_domain = 0;
     data_view_param.max_domain = array_size;
-    data_view_param.scale = 100;
+    data_view_param.scale = 5;
 
 
     TimeSeriesView view;
+
+    view.views.push_back(&data_view_param);
+    view.views.push_back(&data_view_param);
+    view.views.push_back(&data_view_param);
     view.views.push_back(&data_view_param);
     view.show();
 

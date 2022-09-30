@@ -8,36 +8,46 @@
 
 TimeSeriesView::TimeSeriesView()
 {
-    this->setLayout(new QVBoxLayout());
-    this->layout()->addWidget(new QLabel("Test Label"));
 }
 
 void TimeSeriesView::paintEvent(QPaintEvent* event)
 {
     if (!views.empty()){
-        auto* view = views.front();
-        QPainter painter(this);
+
+        int number_of_views = views.size();
 
         auto rectangle = this->rect();
 
-        auto bottom_left = rectangle.bottomLeft();
-        auto top_right = rectangle.topRight();
+        float view_offset = static_cast<double>(rectangle.height()) / static_cast<double>(number_of_views + 1);
 
-        auto center_left = QPoint(bottom_left.rx(), (bottom_left.ry() + top_right.ry()) / 2);
-        float x_offeset = center_left.rx();
-        float y_offeset = center_left.ry();
-        float x_step = static_cast<float>(view->max_domain) - static_cast<float>(view->min_domain) / static_cast<float>(rectangle.width());
+        QPainter painter(this);
+        painter.setBrush(QBrush(Qt::white));
+        painter.drawRect(rectangle);
 
-        QPainterPath path;
+        for(auto h = 0; h < number_of_views; ++h){
+            auto* view = views[h];
 
-        float current_x = x_offeset;
-        path.moveTo(static_cast<double>(current_x), static_cast<double>(static_cast<float*>(view->source->data_ptr)[0] * view->scale * -1 + y_offeset));
-        for(auto i = 1; i < view->max_domain - view->min_domain; ++i){
-            current_x += x_step;
-            path.lineTo(static_cast<double>(current_x), static_cast<double>(static_cast<float*>(view->source->data_ptr)[i] * view->scale * -1 + y_offeset));
+            auto center_left = QPoint(rectangle.bottomLeft().rx(), view_offset * (h + 1));
+
+            float x_offeset = center_left.rx();
+            float y_offeset = center_left.ry();
+            float x_step = static_cast<float>(rectangle.width() / static_cast<float>(view->max_domain) - static_cast<float>(view->min_domain));
+
+            QPainterPath path;
+
+            float current_x = x_offeset;
+            path.moveTo(static_cast<double>(current_x), static_cast<double>(static_cast<float*>(view->source->data_ptr)[0] * view->scale * -1 + y_offeset));
+            for(auto i = 1; i < view->max_domain - view->min_domain; ++i){
+                if(i >= (int)view->source->length){
+                    break;
+                }
+                current_x += x_step;
+                path.lineTo(static_cast<double>(current_x), static_cast<double>(static_cast<float*>(view->source->data_ptr)[i] * view->scale * -1 + y_offeset));
+            }
+
+            painter.setBrush(QBrush(Qt::blue));
+            painter.drawPath(path);
         }
-
-        painter.drawPath(path);
     }
 
     (void)event;
