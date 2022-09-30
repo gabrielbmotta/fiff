@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
     data_view_param.source = &data_source;
     data_view_param.min_domain = 0;
     data_view_param.max_domain = array_size;
-    data_view_param.scale = 5;
+    data_view_param.scale = 10;
 
 
     TimeSeriesView view;

@@ -44,8 +44,13 @@ public:
     TimeSeriesView();
     virtual void paintEvent(QPaintEvent* event) override;
 
-
     std::vector<DataViewParam*> views;
+
+private:
+    void paintBackground(QPainter* painter);
+    void paintAxis(QPainter* painter, float x_offset, float y_offset);
+    void paintTimeSeries(QPainter* painter, DataViewParam* param, float x_offset, float y_offset);
+    void paintName(QPainter* painter, float x_offset, float y_offset);
 };
 
 #endif // TIMESERIESVIEW_H
