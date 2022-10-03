@@ -13,6 +13,7 @@ TimeSeriesView::TimeSeriesView()
 ,background_color(Qt::white)
 ,axis_color(Qt::lightGray)
 ,text_color(Qt::black)
+,max_channels_shown(15)
 {
     MNE_TRACE();
 }
@@ -25,8 +26,12 @@ void TimeSeriesView::paintEvent(QPaintEvent* event)
         QPainter painter(this);
         auto rectangle = paintPlotArea(&painter);
 
-        int number_of_views = views.size();
+        int number_of_views = std::min(static_cast<int>(views.size()), max_channels_shown);
         float separation = static_cast<double>(rectangle.height()) / static_cast<double>(number_of_views + 1);
+
+        QPixmap map(rectangle.width(), rectangle.height());
+        map.fill(background_color);
+        QPainter pixmap_painter(&map);
 
         for(auto h = 0; h < number_of_views; ++h){
             auto* view = views[h];
@@ -39,10 +44,11 @@ void TimeSeriesView::paintEvent(QPaintEvent* event)
                 break;
             }
 
-            paintAxis(&painter, &rectangle, x_offset, y_offset);
-            paintTimeSeries(&painter, &rectangle, view, x_offset, y_offset);
+            paintAxis(&pixmap_painter, &rectangle, x_offset, y_offset);
+            paintTimeSeries(&pixmap_painter, &rectangle, view, x_offset, y_offset);
             paintName(&painter, x_offset, y_offset, separation);
         }
+        painter.drawPixmap(rectangle, map);
     }
 
     (void)event;
@@ -61,40 +67,35 @@ void TimeSeriesView::paintAxis(QPainter* painter, QRect* rect, float x_offset, f
 {
     MNE_TRACE();
 
-    QPainterPath path;
+    x_offset -= rect->left();
+    y_offset -= rect->top();
 
-    path.moveTo(static_cast<double>(x_offset), static_cast<double>(y_offset));
-    path.lineTo(rect->right(), static_cast<double>(y_offset));
-
-    painter->setBrush(QBrush(Qt::transparent));
     painter->setPen(axis_color);
-    painter->drawPath(path);
+    painter->setBrush(Qt::transparent);
+    painter->drawLine(static_cast<double>(x_offset), static_cast<double>(y_offset),rect->width(), static_cast<double>(y_offset));
 }
 
 void TimeSeriesView::paintTimeSeries(QPainter* painter, QRect* rect, DataViewParam* param, float x_offset, float y_offset)
 {
     MNE_TRACE();
 
-    double x_step = static_cast<double>(rect->width() / static_cast<double>(param->max_domain) - static_cast<double>(param->min_domain));
+    painter->setPen(plot_line_color);
+    painter->setBrush(Qt::transparent);
 
-    QPainterPath path;
+    x_offset -= rect->left();
+    y_offset -= rect->top();
+    double x_step = static_cast<double>(rect->width() / static_cast<double>(param->max_domain) - static_cast<double>(param->min_domain));
     double current_x = static_cast<double>(x_offset);
 
     auto limit = std::min(param->max_domain - param->min_domain, (int)param->source->length);
 
-    painter->setBrush(QBrush(Qt::transparent));
-    painter->setPen(plot_line_color);
-
     QPointF last = QPointF(static_cast<double>(current_x), static_cast<double>(static_cast<float*>(param->source->data_ptr)[0] * param->scale * -1 + y_offset));
-
-    path.moveTo(static_cast<double>(current_x), static_cast<double>(static_cast<float*>(param->source->data_ptr)[0] * param->scale * -1 + y_offset));
     for(auto i = 1; i < limit; ++i){
         MNE_TRACE();
         current_x += x_step;
         QPointF next = QPointF(current_x, static_cast<double>(static_cast<float*>(param->source->data_ptr)[i] * param->scale * -1 + y_offset));
         painter->drawLine({last, next});
         last = next;
-//        path.lineTo(current_x, static_cast<double>(static_cast<float*>(param->source->data_ptr)[i] * param->scale * -1 + y_offset));
     }
 }
 
@@ -113,6 +114,8 @@ void TimeSeriesView::paintName(QPainter* painter, float x_offset, float y_offset
 QRect TimeSeriesView::paintPlotArea(QPainter* painter)
 {
     MNE_TRACE();
+
+    (void)painter;
 
     int long_diff = this->rect().width() * 0.05;
     int short_diff = this->rect().height() * 0.02;

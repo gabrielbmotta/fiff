@@ -58,6 +58,8 @@ private:
     QColor background_color;
     QColor axis_color;
     QColor text_color;
+
+    int max_channels_shown;
 };
 
 #endif // TIMESERIESVIEW_H

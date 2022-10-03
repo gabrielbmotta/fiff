@@ -39,7 +39,7 @@
 // MACRO DEFINITIONS
 //=============================================================================================================
 
-#define TRACE
+//#define TRACE
 
 #ifdef TRACE
 #define MNE_TRACE() MNETracer _mneTracer__LINE__(__FILE__,__func__,__LINE__);
