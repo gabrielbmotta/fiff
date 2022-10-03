@@ -21,6 +21,8 @@ if(DEFINED QT_APPS)
         main.cpp
         timeseriesview.cpp
         timeseriesview.hpp
+        tracer.cpp
+        tracer.hpp
         )
 
     if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

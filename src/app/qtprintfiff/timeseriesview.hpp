@@ -48,9 +48,16 @@ public:
 
 private:
     void paintBackground(QPainter* painter);
-    void paintAxis(QPainter* painter, float x_offset, float y_offset);
-    void paintTimeSeries(QPainter* painter, DataViewParam* param, float x_offset, float y_offset);
-    void paintName(QPainter* painter, float x_offset, float y_offset);
+    void paintAxis(QPainter* painter, QRect* rect, float x_offset, float y_offset);
+    void paintTimeSeries(QPainter* painter, QRect* rect, DataViewParam* param, float x_offset, float y_offset);
+    void paintName(QPainter* painter, float x_offset, float y_offset, float space);
+
+    QRect paintPlotArea(QPainter* );
+
+    QColor plot_line_color;
+    QColor background_color;
+    QColor axis_color;
+    QColor text_color;
 };
 
 #endif // TIMESERIESVIEW_H

@@ -11,6 +11,10 @@ if(CMAKE_BUILD_TYPE MATCHES "Debug")
     add_subdirectory(test)
 endif()
 
+if(CMAKE_BUILD_TYPE MATCHES "Release")
+    add_compile_options(-O3)
+endif()
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_subdirectory(lib)
