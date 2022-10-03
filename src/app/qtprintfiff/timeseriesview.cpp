@@ -82,16 +82,19 @@ void TimeSeriesView::paintTimeSeries(QPainter* painter, QRect* rect, DataViewPar
 
     auto limit = std::min(param->max_domain - param->min_domain, (int)param->source->length);
 
+    painter->setBrush(QBrush(Qt::transparent));
+    painter->setPen(plot_line_color);
+
+    QPointF last = QPointF(static_cast<double>(current_x), static_cast<double>(static_cast<float*>(param->source->data_ptr)[0] * param->scale * -1 + y_offset));
+
     path.moveTo(static_cast<double>(current_x), static_cast<double>(static_cast<float*>(param->source->data_ptr)[0] * param->scale * -1 + y_offset));
     for(auto i = 1; i < limit; ++i){
         MNE_TRACE();
         current_x += x_step;
-        path.lineTo(current_x, static_cast<double>(static_cast<float*>(param->source->data_ptr)[i] * param->scale * -1 + y_offset));
-    }
-
-    {
-        MNE_TRACE()
-        painter->strokePath(path, QPen(plot_line_color));
+        QPointF next = QPointF(current_x, static_cast<double>(static_cast<float*>(param->source->data_ptr)[i] * param->scale * -1 + y_offset));
+        painter->drawLine({last, next});
+        last = next;
+//        path.lineTo(current_x, static_cast<double>(static_cast<float*>(param->source->data_ptr)[i] * param->scale * -1 + y_offset));
     }
 }
 
