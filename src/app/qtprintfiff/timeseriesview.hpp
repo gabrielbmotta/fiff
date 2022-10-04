@@ -6,6 +6,7 @@
 
 #include <string>
 #include <QPaintDevice>
+#include <QVBoxLayout>
 
 struct DataSource{
     enum DataType{
@@ -36,12 +37,12 @@ struct DataViewParam{
     std::string title;
 };
 
-class TimeSeriesView : public QWidget
+class TimeSeriesViewCanvas : public QWidget
 {
     Q_OBJECT
 
 public:
-    TimeSeriesView();
+    TimeSeriesViewCanvas();
     virtual void paintEvent(QPaintEvent* event) override;
 
     std::vector<DataViewParam*> views;
@@ -60,6 +61,19 @@ private:
     QColor text_color;
 
     int max_channels_shown;
+    int max_points_shown;
 };
+
+class TimeSeriesView : public QWidget
+{
+    Q_OBJECT
+
+public:
+    TimeSeriesView(QWidget* parent = nullptr);
+
+    TimeSeriesViewCanvas* vc;
+    QVBoxLayout* layout;
+};
+
 
 #endif // TIMESERIESVIEW_H

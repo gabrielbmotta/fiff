@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
 
     int num_channels = 32;
     for (int i = 0; i < num_channels; ++i){
-        view.views.push_back(&data_view_param);
+        view.vc->views.push_back(&data_view_param);
     }
 
     view.show();

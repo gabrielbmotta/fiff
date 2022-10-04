@@ -1,6 +1,7 @@
 #include "timeseriesview.hpp"
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QScrollBar>
 
 #include <QPainter>
 #include <QPainterPath>
@@ -8,17 +9,23 @@
 
 #include "tracer.hpp"
 
-TimeSeriesView::TimeSeriesView()
+TimeSeriesViewCanvas::TimeSeriesViewCanvas()
 :plot_line_color(Qt::blue)
 ,background_color(Qt::white)
 ,axis_color(Qt::lightGray)
 ,text_color(Qt::black)
 ,max_channels_shown(15)
+,max_points_shown(300)
 {
     MNE_TRACE();
 }
 
-void TimeSeriesView::paintEvent(QPaintEvent* event)
+class TimeSeriesViewScrollBar : QScrollBar
+{
+
+};
+
+void TimeSeriesViewCanvas::paintEvent(QPaintEvent* event)
 {
     MNE_TRACE();
 
@@ -54,7 +61,7 @@ void TimeSeriesView::paintEvent(QPaintEvent* event)
     (void)event;
 }
 
-void TimeSeriesView::paintBackground(QPainter* painter)
+void TimeSeriesViewCanvas::paintBackground(QPainter* painter)
 {
     MNE_TRACE();
 
@@ -63,7 +70,7 @@ void TimeSeriesView::paintBackground(QPainter* painter)
     painter->drawRect(this->rect());
 }
 
-void TimeSeriesView::paintAxis(QPainter* painter, QRect* rect, float x_offset, float y_offset)
+void TimeSeriesViewCanvas::paintAxis(QPainter* painter, QRect* rect, float x_offset, float y_offset)
 {
     MNE_TRACE();
 
@@ -75,7 +82,7 @@ void TimeSeriesView::paintAxis(QPainter* painter, QRect* rect, float x_offset, f
     painter->drawLine(static_cast<double>(x_offset), static_cast<double>(y_offset),rect->width(), static_cast<double>(y_offset));
 }
 
-void TimeSeriesView::paintTimeSeries(QPainter* painter, QRect* rect, DataViewParam* param, float x_offset, float y_offset)
+void TimeSeriesViewCanvas::paintTimeSeries(QPainter* painter, QRect* rect, DataViewParam* param, float x_offset, float y_offset)
 {
     MNE_TRACE();
 
@@ -99,7 +106,7 @@ void TimeSeriesView::paintTimeSeries(QPainter* painter, QRect* rect, DataViewPar
     }
 }
 
-void TimeSeriesView::paintName(QPainter* painter, float x_offset, float y_offset, float space)
+void TimeSeriesViewCanvas::paintName(QPainter* painter, float x_offset, float y_offset, float space)
 {
     MNE_TRACE();
 
@@ -111,7 +118,7 @@ void TimeSeriesView::paintName(QPainter* painter, float x_offset, float y_offset
     painter->drawText(bounding_rect, Qt::AlignRight | Qt::AlignVCenter,"TEST");
 }
 
-QRect TimeSeriesView::paintPlotArea(QPainter* painter)
+QRect TimeSeriesViewCanvas::paintPlotArea(QPainter* painter)
 {
     MNE_TRACE();
 
@@ -133,4 +140,16 @@ QRect TimeSeriesView::paintPlotArea(QPainter* painter)
     return inner_rect;
 }
 
+TimeSeriesView::TimeSeriesView(QWidget* parent)
+: QWidget(parent)
+, vc(new TimeSeriesViewCanvas)
+, layout(new QVBoxLayout())
+{
+    this->setLayout(layout);
+    layout->addWidget(vc);
+    layout->setSpacing(0);
+    layout->setMargin(0);
+
+    layout->addWidget(new QScrollBar(Qt::Horizontal));
+}
 
