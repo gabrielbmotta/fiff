@@ -10,16 +10,17 @@
 #include "tracer.hpp"
 
 TimeSeriesViewCanvas::TimeSeriesViewCanvas()
-:plot_line_color(Qt::blue)
-,background_color(Qt::white)
-,axis_color(Qt::lightGray)
-,text_color(Qt::black)
-,max_channels_shown(15)
-,max_points_shown(300)
+: plot_line_color(Qt::blue)
+, background_color(Qt::white)
+, axis_color(Qt::lightGray)
+, text_color(Qt::black)
+, sample_freq(500)
+, max_channels_shown(32)
+, max_points_shown(2000)
+, spacer_separation(100)
 {
     MNE_TRACE();
 }
-
 
 void TimeSeriesViewCanvas::paintEvent(QPaintEvent* event)
 {
@@ -36,13 +37,13 @@ void TimeSeriesViewCanvas::paintEvent(QPaintEvent* event)
         QPixmap map(rectangle.width(), rectangle.height());
         map.fill(background_color);
         QPainter pixmap_painter(&map);
+        paintSpacers(&pixmap_painter, &rectangle);
 
         for(auto h = 0; h < number_of_views; ++h){
             auto* view = views[h];
 
             auto offset = QPoint(rectangle.left(), rectangle.top() + separation * (h + 1));
-            float x_offset = offset.rx();
-            float y_offset = offset.ry();
+            float x_offset = offset.x(), y_offset = offset.y();
 
             if(y_offset + 1 >= rectangle.height()){
                 break;
@@ -52,19 +53,11 @@ void TimeSeriesViewCanvas::paintEvent(QPaintEvent* event)
             paintTimeSeries(&pixmap_painter, &rectangle, view, x_offset, y_offset);
             paintName(&painter, x_offset, y_offset, separation);
         }
+
         painter.drawPixmap(rectangle, map);
     }
 
     (void)event;
-}
-
-void TimeSeriesViewCanvas::paintBackground(QPainter* painter)
-{
-    MNE_TRACE();
-
-    painter->setBrush(QBrush(Qt::white));
-    painter->setPen(Qt::white);
-    painter->drawRect(this->rect());
 }
 
 void TimeSeriesViewCanvas::paintAxis(QPainter* painter, QRect* rect, float x_offset, float y_offset)
@@ -116,6 +109,35 @@ void TimeSeriesViewCanvas::paintName(QPainter* painter, float x_offset, float y_
     painter->drawText(bounding_rect, Qt::AlignRight | Qt::AlignVCenter,"TEST");
 }
 
+void TimeSeriesViewCanvas::paintSpacers(QPainter* painter, QRect* rect)
+{
+    double domain = static_cast<double>(max_points_shown);
+    double x_step = static_cast<double>(rect->width() / domain);
+
+    int draw_point = -1;
+
+    for(auto i = 1; i < max_points_shown; ++i){
+        MNE_TRACE();
+        if(!((i + starting_point) % spacer_separation)){
+            draw_point = i;
+            break;
+        }
+    }
+    double current_x = x_step * draw_point;
+
+    painter->setBrush(Qt::transparent);
+    QPen pen;
+    pen.setColor(Qt::gray);
+    pen.setStyle(Qt::DashLine);
+    painter->setPen(pen);
+    while(draw_point < max_points_shown){
+        painter->drawLine(static_cast<int>(current_x), rect->top(), static_cast<int>(current_x), rect->bottom());
+        draw_point += spacer_separation;
+        current_x += x_step * spacer_separation;
+    }
+}
+
+
 QRect TimeSeriesViewCanvas::paintPlotArea(QPainter* painter)
 {
     MNE_TRACE();
@@ -164,7 +186,7 @@ TimeSeriesView::TimeSeriesView(QWidget* parent)
 
     scrollbar = new QScrollBar(Qt::Horizontal);
     layout->addWidget(scrollbar);
-    scrollbar->setRange(0, 999);
+    scrollbar->setRange(0, 50000 - 2000);
 
     connect(scrollbar, &QAbstractSlider::sliderMoved,
             vc, &TimeSeriesViewCanvas::setStartingPoint);

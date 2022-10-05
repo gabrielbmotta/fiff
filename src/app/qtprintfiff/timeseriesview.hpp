@@ -52,21 +52,24 @@ public:
 
     std::vector<DataViewParam*> views;
 
-    void paintBackground(QPainter* painter);
     void paintAxis(QPainter* painter, QRect* rect, float x_offset, float y_offset);
     void paintTimeSeries(QPainter* painter, QRect* rect, DataViewParam* param, float x_offset, float y_offset);
     void paintName(QPainter* painter, float x_offset, float y_offset, float space);
+    void paintSpacers(QPainter* painter, QRect* rect);
 
-    QRect paintPlotArea(QPainter* );
+    QRect paintPlotArea(QPainter* painter);
 
     QColor plot_line_color;
     QColor background_color;
     QColor axis_color;
     QColor text_color;
 
+    float sample_freq;
+
     int max_channels_shown;
     int max_points_shown;
     int starting_point;
+    int spacer_separation;
 
 public slots:
     void setStartingPoint(int start_offset);
@@ -87,6 +90,5 @@ public:
 signals:
     void viewWidthChanged(int view_width);
 };
-
 
 #endif // TIMESERIESVIEW_H

@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 
     QApplication a(argc, argv);
 
-    constexpr size_t array_size = 1000;
+    constexpr size_t array_size = 50000;
     float my_data[array_size];
 
     for(size_t i = 0; i < array_size; ++i){
