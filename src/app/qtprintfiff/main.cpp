@@ -37,8 +37,6 @@ int main(int argc, char* argv[])
 
     DataViewParam data_view_param;
     data_view_param.source = &data_source;
-    data_view_param.min_domain = 0;
-    data_view_param.max_domain = array_size;
     data_view_param.scale = 10;
     data_view_param.title = "TEST";
 

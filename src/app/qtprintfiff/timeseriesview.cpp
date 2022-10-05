@@ -20,16 +20,13 @@ TimeSeriesViewCanvas::TimeSeriesViewCanvas()
     MNE_TRACE();
 }
 
-class TimeSeriesViewScrollBar : QScrollBar
-{
-
-};
 
 void TimeSeriesViewCanvas::paintEvent(QPaintEvent* event)
 {
     MNE_TRACE();
 
     if (!views.empty()){
+
         QPainter painter(this);
         auto rectangle = paintPlotArea(&painter);
 
@@ -91,16 +88,17 @@ void TimeSeriesViewCanvas::paintTimeSeries(QPainter* painter, QRect* rect, DataV
 
     x_offset -= rect->left();
     y_offset -= rect->top();
-    double x_step = static_cast<double>(rect->width() / static_cast<double>(param->max_domain) - static_cast<double>(param->min_domain));
+    double domain = static_cast<double>(max_points_shown);
+    double x_step = static_cast<double>(rect->width() / domain);
     double current_x = static_cast<double>(x_offset);
 
-    auto limit = std::min(param->max_domain - param->min_domain, (int)param->source->length);
+    auto limit = std::min(max_points_shown, (int)param->source->length - starting_point);
 
-    QPointF last = QPointF(static_cast<double>(current_x), static_cast<double>(static_cast<float*>(param->source->data_ptr)[0] * param->scale * -1 + y_offset));
+    QPointF last = QPointF(static_cast<double>(current_x), static_cast<double>(static_cast<float*>(param->source->data_ptr)[starting_point] * param->scale * -1 + y_offset));
     for(auto i = 1; i < limit; ++i){
         MNE_TRACE();
         current_x += x_step;
-        QPointF next = QPointF(current_x, static_cast<double>(static_cast<float*>(param->source->data_ptr)[i] * param->scale * -1 + y_offset));
+        QPointF next = QPointF(current_x, static_cast<double>(static_cast<float*>(param->source->data_ptr)[i + starting_point] * param->scale * -1 + y_offset));
         painter->drawLine({last, next});
         last = next;
     }
@@ -125,10 +123,12 @@ QRect TimeSeriesViewCanvas::paintPlotArea(QPainter* painter)
     (void)painter;
 
     int long_diff = this->rect().width() * 0.05;
-    int short_diff = this->rect().height() * 0.02;
-
-    auto inner_rect = this->rect().adjusted(long_diff, short_diff,
-                                            -short_diff, -short_diff);
+//    int short_diff = this->rect().height() * 0.02;
+//
+//    auto inner_rect = this->rect().adjusted(long_diff, short_diff,
+//                                            -short_diff, -short_diff);
+    auto inner_rect = this->rect().adjusted(long_diff, 0,
+                                            -0, -0);
 
     painter->setBrush(background_color.darker(130));
     painter->setPen(Qt::black);
@@ -138,6 +138,18 @@ QRect TimeSeriesViewCanvas::paintPlotArea(QPainter* painter)
     painter->drawRect(inner_rect);
 
     return inner_rect;
+}
+
+void TimeSeriesViewCanvas::setStartingPoint(int start_offset)
+{
+    starting_point = start_offset;
+    this->repaint();
+}
+
+void TimeSeriesViewCanvas::setMaxNumPointsShown(int num_points)
+{
+    max_points_shown = num_points;
+    this->repaint();
 }
 
 TimeSeriesView::TimeSeriesView(QWidget* parent)
@@ -150,6 +162,14 @@ TimeSeriesView::TimeSeriesView(QWidget* parent)
     layout->setSpacing(0);
     layout->setMargin(0);
 
-    layout->addWidget(new QScrollBar(Qt::Horizontal));
+    scrollbar = new QScrollBar(Qt::Horizontal);
+    layout->addWidget(scrollbar);
+    scrollbar->setRange(0, 999);
+
+    connect(scrollbar, &QAbstractSlider::sliderMoved,
+            vc, &TimeSeriesViewCanvas::setStartingPoint);
+
+    connect(this, &TimeSeriesView::viewWidthChanged,
+            vc, &TimeSeriesViewCanvas::setMaxNumPointsShown);
 }
 

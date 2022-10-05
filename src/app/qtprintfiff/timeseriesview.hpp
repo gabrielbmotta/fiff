@@ -7,6 +7,7 @@
 #include <string>
 #include <QPaintDevice>
 #include <QVBoxLayout>
+#include <QScrollBar>
 
 struct DataSource{
     enum DataType{
@@ -29,12 +30,16 @@ struct DataViewParam{
 
     double min_range;
     double max_range;
-    int min_domain;
-    int max_domain;
 
     float scale;
 
     std::string title;
+};
+
+
+class TimeSeriesViewScrollBar : QScrollBar
+{
+    TimeSeriesViewScrollBar();
 };
 
 class TimeSeriesViewCanvas : public QWidget
@@ -47,7 +52,6 @@ public:
 
     std::vector<DataViewParam*> views;
 
-private:
     void paintBackground(QPainter* painter);
     void paintAxis(QPainter* painter, QRect* rect, float x_offset, float y_offset);
     void paintTimeSeries(QPainter* painter, QRect* rect, DataViewParam* param, float x_offset, float y_offset);
@@ -62,6 +66,11 @@ private:
 
     int max_channels_shown;
     int max_points_shown;
+    int starting_point;
+
+public slots:
+    void setStartingPoint(int start_offset);
+    void setMaxNumPointsShown(int num_points);
 };
 
 class TimeSeriesView : public QWidget
@@ -73,6 +82,10 @@ public:
 
     TimeSeriesViewCanvas* vc;
     QVBoxLayout* layout;
+    QScrollBar* scrollbar;
+
+signals:
+    void viewWidthChanged(int view_width);
 };
 
 
