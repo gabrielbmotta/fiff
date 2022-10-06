@@ -15,9 +15,10 @@ TimeSeriesViewCanvas::TimeSeriesViewCanvas()
 , axis_color(Qt::lightGray)
 , text_color(Qt::black)
 , sample_freq(500)
-, max_channels_shown(32)
+, max_channels_shown(10)
 , max_points_shown(2000)
-, spacer_separation(100)
+, starting_point(0)
+, spacer_separation(600)
 {
     MNE_TRACE();
 }
@@ -186,7 +187,6 @@ TimeSeriesView::TimeSeriesView(QWidget* parent)
 
     scrollbar = new QScrollBar(Qt::Horizontal);
     layout->addWidget(scrollbar);
-    scrollbar->setRange(0, 50000 - 2000);
 
     connect(scrollbar, &QAbstractSlider::sliderMoved,
             vc, &TimeSeriesViewCanvas::setStartingPoint);

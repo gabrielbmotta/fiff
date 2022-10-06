@@ -58,6 +58,12 @@ void Fiff::Input::skipTag()
 
   int32_t size;
   m_istream->read(reinterpret_cast<char*>(&size), sizeof(int32_t));
+
+  if(m_relativeEndian == Endian::different_from_system)
+  {
+    endswap(&size);
+  }
+
   m_istream->seekg(sizeof(int32_t) + size, std::ios::cur);
 }
 
@@ -270,6 +276,11 @@ int Fiff::Input::getMetaDataElementAtOffset(int offset)
 
   m_istream->read(reinterpret_cast<char*>(&element), sizeof(int32_t));
   m_istream->seekg(originalPosition);
+
+  if(m_relativeEndian == Endian::different_from_system)
+  {
+    endswap(&element);
+  }
 
   return element;
 }

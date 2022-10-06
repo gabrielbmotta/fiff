@@ -28,9 +28,6 @@ struct DataSource{
 struct DataViewParam{
     DataSource* source;
 
-    double min_range;
-    double max_range;
-
     float scale;
 
     std::string title;
