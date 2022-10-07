@@ -91,41 +91,41 @@ int main(int argc, char* argv[])
 
     TimeSeriesView view;
     
-//    for(size_t i = 0; i < channels.size(); ++i){
-//        DataSource* src = new DataSource();
-//        src->data_type = DataSource::DataType::type_float_32;
-//        src->length = data[i].size();
-//        src->offset = 0;
-//        src->data_ptr = data[i].data();
+    for(size_t i = 0; i < channels.size(); ++i){
+        DataSource* src = new DataSource();
+        src->data_type = DataSource::DataType::type_float_32;
+        src->length = data[i].size();
+        src->offset = 0;
+        src->data_ptr = data[i].data();
 
-//        DataViewParam* param = new DataViewParam();
-//        param->source = src;
-//        param->title = channels[i].ch_name.data();
-//        param->scale = 10;
+        DataViewParam* param = new DataViewParam();
+        param->source = src;
+        param->title = channels[i].ch_name.data();
+        param->scale = (1.f / channels[i].cal) * 1000;
 
-//        view.vc->views.push_back(param);
-//    }
+        view.vc->views.push_back(param);
+    }
 
-    DataSource* src = new DataSource();
-    src->data_type = DataSource::DataType::type_float_32;
-    src->length = data.front().size();
-    src->offset = 0;
-    src->data_ptr = data.front().data();
+//    DataSource* src = new DataSource();
+//    src->data_type = DataSource::DataType::type_float_32;
+//    src->length = data.front().size();
+//    src->offset = 0;
+//    src->data_ptr = data.front().data();
 
-    DataViewParam* param = new DataViewParam();
-    param->source = src;
-    param->title = "test";
-    param->scale = 10;
+//    DataViewParam* param = new DataViewParam();
+//    param->source = src;
+//    param->title = "test";
+//    param->scale = 10;
 
-    view.vc->views.push_back(param);
+//    view.vc->views.push_back(param);
 
 //    int num_channels = 32;
 //    for (int i = 0; i < num_channels; ++i){
 //        view.vc->views.push_back(&data_view_param);
 //    }
 
-    view.vc->max_points_shown = 2000;
-    view.scrollbar->setRange(0, data.front().size() - 2000);
+    view.vc->max_points_shown = 20000;
+    view.scrollbar->setRange(0, data.front().size() - 20000);
 
     view.show();
 
