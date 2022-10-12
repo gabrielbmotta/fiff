@@ -123,15 +123,21 @@ int main(int argc, char* argv[])
         case Fiff::CoilType::vv_mag_t3:
             param->tags.push_back("mag");
             break;
+        case Fiff::CoilType::none:
+            param->tags.push_back("none");
+            break;
+        case Fiff::CoilType::eeg:
+            param->tags.push_back("eeg");
         }
 
         view.vc->channels.push_back(param);
     }
 
-    view.vc->max_points_shown = 20000;
-    view.scrollbar->setRange(0, data.front().size() - 20000);
+    view.setMaxChannelsShown(32);
+    view.setMaxPointsShown(10000);
 
     view.show();
+
     auto* settings = view.getSettings();
     settings->show();
 

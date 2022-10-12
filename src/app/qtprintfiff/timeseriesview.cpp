@@ -7,6 +7,7 @@
 #include <QPainterPath>
 #include <QBrush>
 #include <QDoubleSpinBox>
+#include <QGridLayout>
 
 #include <set>
 
@@ -35,16 +36,18 @@ void TimeSeriesViewCanvas::paintEvent(QPaintEvent* event)
         QPainter painter(this);
         auto rectangle = paintPlotArea(&painter);
 
-        int number_of_views = std::min(static_cast<int>(channels.size()), max_channels_shown);
-        float separation = static_cast<double>(rectangle.height()) / static_cast<double>(number_of_views + 1);
+        int number_of_channels = std::min(static_cast<int>(channels.size()), max_channels_shown);
+        float separation = static_cast<double>(rectangle.height()) / static_cast<double>(number_of_channels + 1);
 
         QPixmap map(rectangle.width(), rectangle.height());
         map.fill(background_color);
         QPainter pixmap_painter(&map);
         paintSpacers(&pixmap_painter, &rectangle);
 
-        for(auto h = 0; h < number_of_views; ++h){
-            auto* view = channels[h];
+        auto offset = (static_cast<int>(channels.size()) >= starting_channel + max_channels_shown) ? starting_channel : 0;
+
+        for(auto h = 0; h < number_of_channels; ++h){
+            auto* view = channels[h + offset];
 
             auto offset = QPoint(rectangle.left(), rectangle.top() + separation * (h + 1));
             float x_offset = offset.x(), y_offset = offset.y();
@@ -55,7 +58,7 @@ void TimeSeriesViewCanvas::paintEvent(QPaintEvent* event)
 
             paintAxis(&pixmap_painter, &rectangle, x_offset, y_offset);
             paintTimeSeries(&pixmap_painter, &rectangle, view, x_offset, y_offset);
-            paintName(&painter, x_offset, y_offset, separation);
+            paintName(&painter, view, x_offset, y_offset, separation);
         }
 
         painter.drawPixmap(rectangle, map);
@@ -101,7 +104,7 @@ void TimeSeriesViewCanvas::paintTimeSeries(QPainter* painter, QRect* rect, DataC
     }
 }
 
-void TimeSeriesViewCanvas::paintName(QPainter* painter, float x_offset, float y_offset, float space)
+void TimeSeriesViewCanvas::paintName(QPainter* painter, DataChannel* param, float x_offset, float y_offset, float space)
 {
     MNE_TRACE();
 
@@ -110,7 +113,7 @@ void TimeSeriesViewCanvas::paintName(QPainter* painter, float x_offset, float y_
     painter->setBrush(QBrush(Qt::transparent));
     painter->setPen(text_color);
 
-    painter->drawText(bounding_rect, Qt::AlignRight | Qt::AlignVCenter,"TEST");
+    painter->drawText(bounding_rect, Qt::AlignRight | Qt::AlignVCenter, QString::fromStdString(param->title));
 }
 
 void TimeSeriesViewCanvas::paintSpacers(QPainter* painter, QRect* rect)
@@ -172,6 +175,12 @@ void TimeSeriesViewCanvas::setStartingPoint(int start_offset)
     this->repaint();
 }
 
+void TimeSeriesViewCanvas::setStartingChannel(int chan_offset)
+{
+    starting_channel = chan_offset;
+    this->repaint();
+}
+
 void TimeSeriesViewCanvas::setMaxNumPointsShown(int num_points)
 {
     max_points_shown = num_points;
@@ -181,19 +190,28 @@ void TimeSeriesViewCanvas::setMaxNumPointsShown(int num_points)
 TimeSeriesView::TimeSeriesView(QWidget* parent)
 : QWidget(parent)
 , vc(new TimeSeriesViewCanvas)
-, layout(new QVBoxLayout())
 , settings(nullptr)
 {
+    auto* layout = new QGridLayout();
+    layout->addWidget(vc,0,0);
+
     this->setLayout(layout);
-    layout->addWidget(vc);
     layout->setSpacing(0);
     layout->setMargin(0);
 
-    scrollbar = new QScrollBar(Qt::Horizontal);
-    layout->addWidget(scrollbar);
+    hor_scrollbar = new QScrollBar(Qt::Horizontal);
+    layout->addWidget(hor_scrollbar);
+    layout->addWidget(hor_scrollbar,1,0);
 
-    connect(scrollbar, &QAbstractSlider::sliderMoved,
+    ver_scrollbar = new QScrollBar(Qt::Vertical);
+    layout->addWidget(ver_scrollbar);
+    layout->addWidget(ver_scrollbar,0,1);
+
+    connect(hor_scrollbar, &QAbstractSlider::sliderMoved,
             vc, &TimeSeriesViewCanvas::setStartingPoint);
+
+    connect(ver_scrollbar, &QAbstractSlider::sliderMoved,
+            vc, &TimeSeriesViewCanvas::setStartingChannel);
 
     connect(this, &TimeSeriesView::viewWidthChanged,
             vc, &TimeSeriesViewCanvas::setMaxNumPointsShown);
@@ -234,5 +252,18 @@ void TimeSeriesView::setScaleForTag(float scale, std::string tag)
         }
     }
 
+    this->repaint();
+}
+
+void TimeSeriesView::setMaxChannelsShown(int chans)
+{
+    vc->max_channels_shown = chans;
+    ver_scrollbar->setRange(0, vc->channels.size() - chans);
+}
+
+void TimeSeriesView::setMaxPointsShown(int points)
+{
+    vc->max_points_shown = points;
+    hor_scrollbar->setRange(0, vc->channels.front()->source->length - points);
     this->repaint();
 }

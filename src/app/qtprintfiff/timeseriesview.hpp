@@ -50,7 +50,7 @@ public:
 
     void paintAxis(QPainter* painter, QRect* rect, float x_offset, float y_offset);
     void paintTimeSeries(QPainter* painter, QRect* rect, DataChannel* param, float x_offset, float y_offset);
-    void paintName(QPainter* painter, float x_offset, float y_offset, float space);
+    void paintName(QPainter* painter, DataChannel* param, float x_offset, float y_offset, float space);
     void paintSpacers(QPainter* painter, QRect* rect);
 
     QRect paintPlotArea(QPainter* painter);
@@ -65,10 +65,12 @@ public:
     int max_channels_shown;
     int max_points_shown;
     int starting_point;
+    int starting_channel;
     int spacer_separation;
 
 public slots:
     void setStartingPoint(int start_offset);
+    void setStartingChannel(int chan_offset);
     void setMaxNumPointsShown(int num_points);
 };
 
@@ -80,8 +82,8 @@ public:
     TimeSeriesView(QWidget* parent = nullptr);
 
     TimeSeriesViewCanvas* vc;
-    QVBoxLayout* layout;
-    QScrollBar* scrollbar;
+    QScrollBar* hor_scrollbar;
+    QScrollBar* ver_scrollbar;
 
     QWidget* getSettings();
 
@@ -93,6 +95,8 @@ signals:
 
 public slots:
     void setScaleForTag(float scale, std::string tag);
+    void setMaxChannelsShown(int chans);
+    void setMaxPointsShown(int points);
 };
 
 #endif // TIMESERIESVIEW_H
