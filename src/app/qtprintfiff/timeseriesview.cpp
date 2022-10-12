@@ -6,6 +6,9 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QBrush>
+#include <QDoubleSpinBox>
+
+#include <set>
 
 #include "tracer.hpp"
 
@@ -27,12 +30,12 @@ void TimeSeriesViewCanvas::paintEvent(QPaintEvent* event)
 {
     MNE_TRACE();
 
-    if (!views.empty()){
+    if (!channels.empty()){
 
         QPainter painter(this);
         auto rectangle = paintPlotArea(&painter);
 
-        int number_of_views = std::min(static_cast<int>(views.size()), max_channels_shown);
+        int number_of_views = std::min(static_cast<int>(channels.size()), max_channels_shown);
         float separation = static_cast<double>(rectangle.height()) / static_cast<double>(number_of_views + 1);
 
         QPixmap map(rectangle.width(), rectangle.height());
@@ -41,7 +44,7 @@ void TimeSeriesViewCanvas::paintEvent(QPaintEvent* event)
         paintSpacers(&pixmap_painter, &rectangle);
 
         for(auto h = 0; h < number_of_views; ++h){
-            auto* view = views[h];
+            auto* view = channels[h];
 
             auto offset = QPoint(rectangle.left(), rectangle.top() + separation * (h + 1));
             float x_offset = offset.x(), y_offset = offset.y();
@@ -73,7 +76,7 @@ void TimeSeriesViewCanvas::paintAxis(QPainter* painter, QRect* rect, float x_off
     painter->drawLine(static_cast<double>(x_offset), static_cast<double>(y_offset),rect->width(), static_cast<double>(y_offset));
 }
 
-void TimeSeriesViewCanvas::paintTimeSeries(QPainter* painter, QRect* rect, DataViewParam* param, float x_offset, float y_offset)
+void TimeSeriesViewCanvas::paintTimeSeries(QPainter* painter, QRect* rect, DataChannel* param, float x_offset, float y_offset)
 {
     MNE_TRACE();
 
@@ -179,6 +182,7 @@ TimeSeriesView::TimeSeriesView(QWidget* parent)
 : QWidget(parent)
 , vc(new TimeSeriesViewCanvas)
 , layout(new QVBoxLayout())
+, settings(nullptr)
 {
     this->setLayout(layout);
     layout->addWidget(vc);
@@ -195,3 +199,40 @@ TimeSeriesView::TimeSeriesView(QWidget* parent)
             vc, &TimeSeriesViewCanvas::setMaxNumPointsShown);
 }
 
+QWidget* TimeSeriesView::getSettings()
+{
+    if(!settings){
+        settings = new QWidget();
+        settings->setLayout(new QVBoxLayout());
+
+        std::set<std::string> used_tags;
+        for (auto& channel : vc->channels){
+            for (auto& tag : channel->tags){
+                used_tags.insert(tag);
+            }
+        }
+
+        for (auto& tag : used_tags){
+            settings->layout()->addWidget(new QLabel(QString::fromStdString(tag)));
+            auto spin_box = new QDoubleSpinBox();
+            spin_box->setMinimum(1);
+            spin_box->setMaximum(10000000000000000);
+            settings->layout()->addWidget(spin_box);
+            connect(spin_box, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+                    [tag, this](double val){setScaleForTag(val, tag);});
+        }
+    }
+
+    return settings;
+}
+
+void TimeSeriesView::setScaleForTag(float scale, std::string tag)
+{
+    for(auto& channel : vc->channels){
+        if(std::find(channel->tags.begin(),channel->tags.end(), tag) != channel->tags.end()){
+            channel->scale = scale;
+        }
+    }
+
+    this->repaint();
+}

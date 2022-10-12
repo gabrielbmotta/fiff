@@ -25,12 +25,11 @@ struct DataSource{
     size_t offset;
 };
 
-struct DataViewParam{
+struct DataChannel{
     DataSource* source;
-
     float scale;
-
     std::string title;
+    std::vector<std::string> tags;
 };
 
 
@@ -47,10 +46,10 @@ public:
     TimeSeriesViewCanvas();
     virtual void paintEvent(QPaintEvent* event) override;
 
-    std::vector<DataViewParam*> views;
+    std::vector<DataChannel*> channels;
 
     void paintAxis(QPainter* painter, QRect* rect, float x_offset, float y_offset);
-    void paintTimeSeries(QPainter* painter, QRect* rect, DataViewParam* param, float x_offset, float y_offset);
+    void paintTimeSeries(QPainter* painter, QRect* rect, DataChannel* param, float x_offset, float y_offset);
     void paintName(QPainter* painter, float x_offset, float y_offset, float space);
     void paintSpacers(QPainter* painter, QRect* rect);
 
@@ -84,8 +83,16 @@ public:
     QVBoxLayout* layout;
     QScrollBar* scrollbar;
 
+    QWidget* getSettings();
+
+private:
+    QWidget* settings;
+
 signals:
     void viewWidthChanged(int view_width);
+
+public slots:
+    void setScaleForTag(float scale, std::string tag);
 };
 
 #endif // TIMESERIESVIEW_H

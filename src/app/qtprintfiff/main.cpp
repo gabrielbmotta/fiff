@@ -7,10 +7,14 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <set>
 
 #include <timeseriesview.hpp>
 
 #include <QApplication>
+#include <QDoubleSpinBox>
+#include <QLabel>
+#include <QObject>
 
 void printByTags(Fiff::Input& in,  std::vector<int> &tag_set);
 void printByBlocks(Fiff::Input& in);
@@ -90,6 +94,8 @@ int main(int argc, char* argv[])
     QApplication a(argc, argv);
 
     TimeSeriesView view;
+
+    std::set<std::string> used_tags;
     
     for(size_t i = 0; i < channels.size(); ++i){
         DataSource* src = new DataSource();
@@ -98,36 +104,36 @@ int main(int argc, char* argv[])
         src->offset = 0;
         src->data_ptr = data[i].data();
 
-        DataViewParam* param = new DataViewParam();
+        DataChannel* param = new DataChannel();
         param->source = src;
         param->title = channels[i].ch_name.data();
-        param->scale = (1.f / channels[i].cal) * 1000;
 
-        view.vc->views.push_back(param);
+        param->scale = 1.f;
+
+        switch(channels[i].chpos.coil_type){
+        case Fiff::CoilType::vv_planar_w:
+        case Fiff::CoilType::vv_planar_t1:
+        case Fiff::CoilType::vv_planar_t2:
+        case Fiff::CoilType::vv_planar_t3:
+            param->tags.push_back("grad");
+            break;
+        case Fiff::CoilType::vv_mag_w:
+        case Fiff::CoilType::vv_mag_t1:
+        case Fiff::CoilType::vv_mag_t2:
+        case Fiff::CoilType::vv_mag_t3:
+            param->tags.push_back("mag");
+            break;
+        }
+
+        view.vc->channels.push_back(param);
     }
-
-//    DataSource* src = new DataSource();
-//    src->data_type = DataSource::DataType::type_float_32;
-//    src->length = data.front().size();
-//    src->offset = 0;
-//    src->data_ptr = data.front().data();
-
-//    DataViewParam* param = new DataViewParam();
-//    param->source = src;
-//    param->title = "test";
-//    param->scale = 10;
-
-//    view.vc->views.push_back(param);
-
-//    int num_channels = 32;
-//    for (int i = 0; i < num_channels; ++i){
-//        view.vc->views.push_back(&data_view_param);
-//    }
 
     view.vc->max_points_shown = 20000;
     view.scrollbar->setRange(0, data.front().size() - 20000);
 
     view.show();
+    auto* settings = view.getSettings();
+    settings->show();
 
     auto ret = a.exec();
 
