@@ -14,4 +14,3 @@ add_subdirectory(fiffdoctor)
 if(DEFINED QT_APPS)
     add_subdirectory(qtprintfiff)
 endif()
-
