@@ -70,24 +70,6 @@ int main(int argc, char* argv[])
         }
     }
 
-//    constexpr size_t array_size = 50000;
-//    float my_data[array_size];
-
-//    for(size_t i = 0; i < array_size; ++i){
-//        my_data[i] = std::sin(i);
-//    }
-
-//    DataSource data_source;
-//    data_source.data_ptr = my_data;
-//    data_source.data_type = DataSource::type_float_32;
-//    data_source.length = array_size;
-//    data_source.offset = 0;
-
-//   DataViewParam data_view_param;
-//    data_view_param.source = &data_source;
-//    data_view_param.scale = 10;
-//    data_view_param.title = "TEST";
-
     std::cout << "Num Channels " << channels.size() << ", " << data.size() << "\n";
     std::cout << "Num samples " << data.front().size() << "\n";
 

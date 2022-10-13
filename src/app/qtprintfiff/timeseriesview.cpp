@@ -2,7 +2,9 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QScrollBar>
+#include <QHBoxLayout>
 
+#include <QGroupBox>
 #include <QPainter>
 #include <QPainterPath>
 #include <QBrush>
@@ -23,6 +25,7 @@ TimeSeriesViewCanvas::TimeSeriesViewCanvas()
 , max_points_shown(2000)
 , starting_point(0)
 , spacer_separation(600)
+, channel_title_margin_percentage(.06f)
 {
     MNE_TRACE();
 }
@@ -172,19 +175,19 @@ QRect TimeSeriesViewCanvas::paintPlotArea(QPainter* painter)
 void TimeSeriesViewCanvas::setStartingPoint(int start_offset)
 {
     starting_point = start_offset;
-    this->repaint();
+    repaint();
 }
 
 void TimeSeriesViewCanvas::setStartingChannel(int chan_offset)
 {
     starting_channel = chan_offset;
-    this->repaint();
+    repaint();
 }
 
 void TimeSeriesViewCanvas::setMaxNumPointsShown(int num_points)
 {
     max_points_shown = num_points;
-    this->repaint();
+    repaint();
 }
 
 TimeSeriesView::TimeSeriesView(QWidget* parent)
@@ -220,28 +223,101 @@ TimeSeriesView::TimeSeriesView(QWidget* parent)
 QWidget* TimeSeriesView::getSettings()
 {
     if(!settings){
-        settings = new QWidget();
-        settings->setLayout(new QVBoxLayout());
-
-        std::set<std::string> used_tags;
-        for (auto& channel : vc->channels){
-            for (auto& tag : channel->tags){
-                used_tags.insert(tag);
-            }
-        }
-
-        for (auto& tag : used_tags){
-            settings->layout()->addWidget(new QLabel(QString::fromStdString(tag)));
-            auto spin_box = new QDoubleSpinBox();
-            spin_box->setMinimum(1);
-            spin_box->setMaximum(10000000000000000);
-            settings->layout()->addWidget(spin_box);
-            connect(spin_box, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
-                    [tag, this](double val){setScaleForTag(val, tag);});
-        }
+        createSettings();
     }
 
     return settings;
+}
+
+void TimeSeriesView::createSettings()
+{
+    settings = new QWidget();
+    settings->setLayout(new QVBoxLayout());
+
+    auto* view_section = createViewSettings();
+    if(view_section){
+        settings->layout()->addWidget(view_section);
+    }
+
+    auto* scale_section = createScaleSettings();
+    if(scale_section){
+        settings->layout()->addWidget(scale_section);
+    }
+}
+
+QWidget* TimeSeriesView::createScaleSettings()
+{
+    std::set<std::string> used_tags;
+    for (auto& channel : vc->channels){
+        for (auto& tag : channel->tags){
+            used_tags.insert(tag);
+        }
+    }
+
+    if (!used_tags.empty()){
+        auto* scale_section = new QGroupBox("Scale");
+        scale_section->setLayout(new QVBoxLayout());
+        settings->layout()->addWidget(scale_section);
+
+        for (auto& tag : used_tags){
+            auto control_widget = createFloatControls(tag, 1, 10000000000000000, 1);
+            scale_section->layout()->addWidget(control_widget.widget);
+            connect(control_widget.spin_box, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+                    [tag, this](double val){setScaleForTag(val, tag);});
+        }
+        return scale_section;
+    }
+    return nullptr;
+}
+
+QWidget* TimeSeriesView::createViewSettings()
+{
+    auto* view_section = new QGroupBox("View");
+    view_section->setLayout(new QVBoxLayout());
+    settings->layout()->addWidget(view_section);
+
+    auto num_samples_controls = createIntControls("Samples shown", 1, INT_MAX, vc->max_points_shown);
+    connect(num_samples_controls.spin_box, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            this, &TimeSeriesView::setMaxPointsShown);
+    view_section->layout()->addWidget(num_samples_controls.widget);
+
+    auto num_channels_controls = createIntControls("Channels shown", 1, INT_MAX, vc->max_channels_shown);
+    connect(num_channels_controls.spin_box, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            this, &TimeSeriesView::setMaxChannelsShown);
+    view_section->layout()->addWidget(num_channels_controls.widget);
+
+
+    return view_section;
+}
+
+FloatControl TimeSeriesView::createFloatControls(std::string name, size_t min, size_t max, float default_val)
+{
+    auto* control_widget = new QWidget();
+    control_widget->setLayout(new QHBoxLayout());
+    control_widget->layout()->addWidget(new QLabel(QString::fromStdString(name)));
+
+    auto* spin_box = new QDoubleSpinBox();
+    spin_box->setMinimum(min);
+    spin_box->setMaximum(max);
+    spin_box->setValue(static_cast<double>(default_val));
+    control_widget->layout()->addWidget(spin_box);
+
+    return {control_widget, spin_box};
+}
+
+IntControl TimeSeriesView::createIntControls(std::string name, size_t min, size_t max, int default_val)
+{
+    auto* control_widget = new QWidget();
+    control_widget->setLayout(new QHBoxLayout());
+    control_widget->layout()->addWidget(new QLabel(QString::fromStdString(name)));
+
+    auto* spin_box = new QSpinBox();
+    spin_box->setMinimum(min);
+    spin_box->setMaximum(max);
+    spin_box->setValue(static_cast<double>(default_val));
+    control_widget->layout()->addWidget(spin_box);
+
+    return {control_widget, spin_box};
 }
 
 void TimeSeriesView::setScaleForTag(float scale, std::string tag)
@@ -251,19 +327,19 @@ void TimeSeriesView::setScaleForTag(float scale, std::string tag)
             channel->scale = scale;
         }
     }
-
-    this->repaint();
+    repaint();
 }
 
 void TimeSeriesView::setMaxChannelsShown(int chans)
 {
     vc->max_channels_shown = chans;
     ver_scrollbar->setRange(0, vc->channels.size() - chans);
+    repaint();
 }
 
 void TimeSeriesView::setMaxPointsShown(int points)
 {
     vc->max_points_shown = points;
     hor_scrollbar->setRange(0, vc->channels.front()->source->length - points);
-    this->repaint();
+    repaint();
 }

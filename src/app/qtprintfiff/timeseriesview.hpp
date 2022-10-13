@@ -8,6 +8,9 @@
 #include <QPaintDevice>
 #include <QVBoxLayout>
 #include <QScrollBar>
+#include <QSpinBox>
+#include <QDoubleSpinBox>
+
 
 struct DataSource{
     enum DataType{
@@ -23,6 +26,16 @@ struct DataSource{
     DataType data_type;
     size_t length;
     size_t offset;
+};
+
+struct FloatControl{
+    QWidget* widget;
+    QDoubleSpinBox* spin_box;
+};
+
+struct IntControl{
+    QWidget* widget;
+    QSpinBox* spin_box;
 };
 
 struct DataChannel{
@@ -48,12 +61,7 @@ public:
 
     std::vector<DataChannel*> channels;
 
-    void paintAxis(QPainter* painter, QRect* rect, float x_offset, float y_offset);
-    void paintTimeSeries(QPainter* painter, QRect* rect, DataChannel* param, float x_offset, float y_offset);
-    void paintName(QPainter* painter, DataChannel* param, float x_offset, float y_offset, float space);
-    void paintSpacers(QPainter* painter, QRect* rect);
 
-    QRect paintPlotArea(QPainter* painter);
 
     QColor plot_line_color;
     QColor background_color;
@@ -67,6 +75,15 @@ public:
     int starting_point;
     int starting_channel;
     int spacer_separation;
+    float channel_title_margin_percentage;
+
+private:
+    void paintAxis(QPainter* painter, QRect* rect, float x_offset, float y_offset);
+    void paintTimeSeries(QPainter* painter, QRect* rect, DataChannel* param, float x_offset, float y_offset);
+    void paintName(QPainter* painter, DataChannel* param, float x_offset, float y_offset, float space);
+    void paintSpacers(QPainter* painter, QRect* rect);
+
+    QRect paintPlotArea(QPainter* painter);
 
 public slots:
     void setStartingPoint(int start_offset);
@@ -88,6 +105,13 @@ public:
     QWidget* getSettings();
 
 private:
+    void createSettings();
+    QWidget* createScaleSettings();
+    QWidget* createViewSettings();
+
+    FloatControl createFloatControls(std::string name, size_t min, size_t max, float default_val);
+    IntControl createIntControls(std::string name, size_t min, size_t max, int default_val);
+
     QWidget* settings;
 
 signals:
