@@ -13,8 +13,6 @@
 
 #include <set>
 
-#include "tracer.hpp"
-
 TimeSeriesViewCanvas::TimeSeriesViewCanvas()
 : plot_line_color(Qt::blue)
 , background_color(Qt::white)
@@ -27,12 +25,12 @@ TimeSeriesViewCanvas::TimeSeriesViewCanvas()
 , spacer_separation(600)
 , channel_title_margin_percentage(.06f)
 {
-    MNE_TRACE();
+
 }
 
 void TimeSeriesViewCanvas::paintEvent(QPaintEvent* event)
 {
-    MNE_TRACE();
+    (void)event;
 
     if (!channels.empty()){
 
@@ -66,14 +64,10 @@ void TimeSeriesViewCanvas::paintEvent(QPaintEvent* event)
 
         painter.drawPixmap(rectangle, map);
     }
-
-    (void)event;
 }
 
 void TimeSeriesViewCanvas::paintAxis(QPainter* painter, QRect* rect, float x_offset, float y_offset)
 {
-    MNE_TRACE();
-
     x_offset -= rect->left();
     y_offset -= rect->top();
 
@@ -84,8 +78,6 @@ void TimeSeriesViewCanvas::paintAxis(QPainter* painter, QRect* rect, float x_off
 
 void TimeSeriesViewCanvas::paintTimeSeries(QPainter* painter, QRect* rect, DataChannel* param, float x_offset, float y_offset)
 {
-    MNE_TRACE();
-
     painter->setPen(plot_line_color);
     painter->setBrush(Qt::transparent);
 
@@ -99,7 +91,7 @@ void TimeSeriesViewCanvas::paintTimeSeries(QPainter* painter, QRect* rect, DataC
 
     QPointF last = QPointF(static_cast<double>(current_x), static_cast<double>(static_cast<float*>(param->source->data_ptr)[starting_point] * param->scale * -1 + y_offset));
     for(auto i = 1; i < limit; ++i){
-        MNE_TRACE();
+
         current_x += x_step;
         QPointF next = QPointF(current_x, static_cast<double>(static_cast<float*>(param->source->data_ptr)[i + starting_point] * param->scale * -1 + y_offset));
         painter->drawLine({last, next});
@@ -109,8 +101,6 @@ void TimeSeriesViewCanvas::paintTimeSeries(QPainter* painter, QRect* rect, DataC
 
 void TimeSeriesViewCanvas::paintName(QPainter* painter, DataChannel* param, float x_offset, float y_offset, float space)
 {
-    MNE_TRACE();
-
     auto bounding_rect = QRect(this->rect().left(), y_offset - (space / 4), x_offset - 1, space / 2);
 
     painter->setBrush(QBrush(Qt::transparent));
@@ -127,7 +117,7 @@ void TimeSeriesViewCanvas::paintSpacers(QPainter* painter, QRect* rect)
     int draw_point = -1;
 
     for(auto i = 1; i < max_points_shown; ++i){
-        MNE_TRACE();
+
         if(!((i + starting_point) % spacer_separation)){
             draw_point = i;
             break;
@@ -150,17 +140,9 @@ void TimeSeriesViewCanvas::paintSpacers(QPainter* painter, QRect* rect)
 
 QRect TimeSeriesViewCanvas::paintPlotArea(QPainter* painter)
 {
-    MNE_TRACE();
+    int long_diff = this->rect().width() * channel_title_margin_percentage;
 
-    (void)painter;
-
-    int long_diff = this->rect().width() * 0.05;
-//    int short_diff = this->rect().height() * 0.02;
-//
-//    auto inner_rect = this->rect().adjusted(long_diff, short_diff,
-//                                            -short_diff, -short_diff);
-    auto inner_rect = this->rect().adjusted(long_diff, 0,
-                                            -0, -0);
+    auto inner_rect = this->rect().adjusted(long_diff, 0,-0, -0);
 
     painter->setBrush(background_color.darker(130));
     painter->setPen(Qt::black);

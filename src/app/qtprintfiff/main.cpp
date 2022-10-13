@@ -2,28 +2,20 @@
 #include <fiff/formatting.hpp>
 #include <utils/commandlineinput.hpp>
 #include <core/stringmanip.hpp>
-#include "tracer.hpp"
+#include <qtui/timeseriesview.hpp>
 
 #include <iostream>
 #include <string>
 #include <cmath>
 #include <set>
 
-#include <timeseriesview.hpp>
-
 #include <QApplication>
-#include <QDoubleSpinBox>
-#include <QLabel>
-#include <QObject>
 
 void printByTags(Fiff::Input& in,  std::vector<int> &tag_set);
 void printByBlocks(Fiff::Input& in);
 
 int main(int argc, char* argv[])
 {
-    MNE_TRACER_ENABLE(mne_trace_disp.json);
-    MNE_TRACE();
-
     Core::CommandLineInput cmdin(argc, argv);
 
     std::string filePath = cmdin.getValueThatEndsWith(".fif");
@@ -124,8 +116,6 @@ int main(int argc, char* argv[])
     settings->show();
 
     auto ret = a.exec();
-
-    MNE_TRACER_DISABLE;
 
     return ret;
 }

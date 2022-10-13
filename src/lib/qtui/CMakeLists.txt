@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(qtprintfiff VERSION 0.1 LANGUAGES CXX)
+project(qtui VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -14,11 +14,12 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
-    main.cpp
+    timeseriesview.cpp
+    timeseriesview.hpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(${PROJECT_NAME}
+    qt_add_library(${PROJECT_NAME}
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
     )
@@ -34,13 +35,16 @@ else()
     # Define properties for Android with Qt 5 after find_package() calls as:
     #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
 else()
-    add_executable(${PROJECT_NAME}
+    add_library(${PROJECT_NAME}
         ${PROJECT_SOURCES}
     )
 endif()
 endif()
 
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets core fiff utils qtui)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets core fiff utils)
+
+target_include_directories( ${PROJECT_NAME}
+        PUBLIC ${PROJECT_SOURCE_DIR}/..)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
@@ -51,5 +55,5 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 )
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(${PROJECT_NAME})
+    qt_finalize_library(${PROJECT_NAME})
 endif()

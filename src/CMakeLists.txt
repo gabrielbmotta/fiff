@@ -3,6 +3,8 @@ project(src)
 
 set(CMAKE_CXX_STANDARD 14)
 
+set(QT_APPS 1)
+
 add_compile_options(-Wall -Wextra -Wpedantic -Wdouble-promotion -Werror)
 
 if(CMAKE_BUILD_TYPE MATCHES "Debug")

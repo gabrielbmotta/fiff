@@ -6,9 +6,12 @@ if(NOT ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} STREQUAL "")
 endif()
 
 add_subdirectory(printfiff)
-add_subdirectory(qtprintfiff)
 add_subdirectory(qfiff)
 add_subdirectory(anonymizer)
 add_subdirectory(fiffsplice)
 add_subdirectory(fiffdoctor)
+
+if(DEFINED QT_APPS)
+    add_subdirectory(qtprintfiff)
+endif()
 

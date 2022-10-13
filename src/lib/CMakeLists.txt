@@ -12,3 +12,7 @@ endif()
 add_subdirectory(core)
 add_subdirectory(fiff)
 add_subdirectory(utils)
+
+if(DEFINED QT_APPS)
+    add_subdirectory(qtui)
+endif()
