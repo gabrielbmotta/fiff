@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
             }
         }
     }
-    while(auto kind = inFile.peekKind() != Fiff::Kind::data_buffer){
+    while(inFile.peekKind() != Fiff::Kind::data_buffer){
         inFile.skipTag();
     }
     done = false;
