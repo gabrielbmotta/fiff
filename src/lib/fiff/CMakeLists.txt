@@ -13,6 +13,8 @@ set(SOURCES
         formatting.cpp
         data.hpp
         data.cpp
+        json.hpp
+        json.cpp
 )
 
 add_library(${PROJECT_NAME} ${SOURCES})

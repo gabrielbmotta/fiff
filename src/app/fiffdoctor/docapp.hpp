@@ -3,44 +3,45 @@
 
 #include "fiffsource.hpp"
 
-#include <string>
-#include <map>
 #include <chrono>
+#include <map>
+#include <string>
 
-class DocApp{
+class DocApp {
 public:
-    DocApp();
+  DocApp();
 
-    void run();    
+  void run();
 
 private:
-    void processUserInput(const std::string& command);
-    
-    //Commands
-    void load(const std::string& command);
-    void show(const std::string& command);
-    void list(const std::string& command);
-    void edit(const std::string& command);
-    void create(const std::string& command);
-    void copy(const std::string& command);
-    void remove(const std::string& command);
-    void close(const std::string& command);
-    void exit(const std::string& command);
+  void processUserInput(const std::string &command);
 
-    typedef void (DocApp::*CmdFunc)(const std::string&);
+  // Commands
+  void load(const std::string &command);
+  void show(const std::string &command);
+  void list(const std::string &command);
+  void edit(const std::string &command);
+  void create(const std::string &command);
+  void copy(const std::string &command);
+  void remove(const std::string &command);
+  void close(const std::string &command);
+  void exit(const std::string &command);
+  void exportJSON(const std::string &command);
 
-    std::map<std::string, CmdFunc> _commandFnMap;
+  typedef void (DocApp::*CmdFunc)(const std::string &);
 
-    std::vector<FiffSource*> fiff_sources;
+  std::map<std::string, CmdFunc> _commandFnMap;
 
-    bool _running;
+  std::vector<FiffSource *> fiff_sources;
+
+  bool _running;
 };
 
 #endif
 
-    // struct LogEntry{
-    //     std::chrono::time_point<std::chrono::system_clock> time;
-    //     std::string user_command;
-    //     std::string result;
-    // };
-    // std::list<LogEntry> activity_log;
+// struct LogEntry{
+//     std::chrono::time_point<std::chrono::system_clock> time;
+//     std::string user_command;
+//     std::string result;
+// };
+// std::list<LogEntry> activity_log;
