@@ -2,7 +2,12 @@
 
 RETURN_VAL=0
 SCRIPT_PATH=${BASH_SOURCE[0]:-$0}
-SCRIPT_DIR=$(realpath $(dirname "${SCRIPT_PATH}"))
+SCRIPT_DIR="$(
+        cd "$(dirname "$0")" >/dev/null 2>&1
+        pwd -P
+    )"
+BASE_PATH=${SCRIPT_PATH}/../..
+
 BUILD_COMMAND=0
 CLEAN_COMMAND=0
 
