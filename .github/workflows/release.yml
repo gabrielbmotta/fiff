@@ -90,28 +90,28 @@ jobs:
           tag: dev_build
           overwrite: true
 
-  job4:
-    name: Doc PDF
-    needs: job1
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2
-      - name : Install Doxygen and pdflatex
-        run: |
-          sudo apt-get install doxygen texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
-      - name: Run Doxygen
-        run: |
-          cd doc
-          doxygen Doxyfile
-          make -Clatex
-          mv latex/refman.pdf .
-          mv refman.pdf fiff_docu.pdf
-      - name: Deploy pdf manual
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: doc/fiff_docu.pdf
-          tag: dev_build
-          overwrite: true
-
+  # job4:
+  #   name: Doc PDF
+  #   needs: job1
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout Repo
+  #       uses: actions/checkout@v2
+  #     - name : Install Doxygen and pdflatex
+  #       run: |
+  #         sudo apt-get install doxygen texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
+  #     - name: Run Doxygen
+  #       run: |
+  #         cd doc
+  #         doxygen Doxyfile
+  #         make -Clatex
+  #         mv latex/refman.pdf .
+  #         mv refman.pdf fiff_docu.pdf
+  #     - name: Deploy pdf manual
+  #       uses: svenstaro/upload-release-action@v2
+  #       with:
+  #         repo_token: ${{ secrets.GITHUB_TOKEN }}
+  #         file: doc/fiff_docu.pdf
+  #         tag: dev_build
+  #         overwrite: true
+  #
