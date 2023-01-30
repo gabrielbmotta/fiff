@@ -12,6 +12,15 @@ BUILD_NAME_SET=0
 BUILD_NAME=""
 
 build_project() {
+
+    NUM_PARALLEL=2
+
+    if [ "$(uname)" == "Darwin" ]; then
+        NUM_PARALLEL=$(sysctl -n hw.physicalcpu)
+    else 
+        NUM_PARALLEL=$(expr $(nproc --all) / 2)
+    fi
+
     if [ ${BUILD_NAME_SET} == 0 ]; then
         BUILD_NAME=${BUILD_TYPE}
     fi
@@ -31,7 +40,7 @@ build_project() {
     ln -sf ${BUILD_PATH}/compile_commands.json ${SCRIPT_DIR}/compile_commands.json
 
     echo "cmake --build ${BUILD_PATH}"
-    cmake --build ${BUILD_PATH}
+    cmake --build ${BUILD_PATH} --parallel ${NUM_PARALLEL}
     if [ $? -ne 0 ]; then
         echo "Looks like something went wrong while building."
         RETURN_VAL=1
