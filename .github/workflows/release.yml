@@ -48,11 +48,11 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
-
-      - name: Download core utils for Mac
-        if: (matrix.os == 'macos-latest')
-        run: brew install coreutils
-
+      #
+      # - name: Download core utils for Mac
+      #   if: (matrix.os == 'macos-latest')
+      #   run: brew install coreutils
+      #
       - name: Build project
         run: ./project --build
 
