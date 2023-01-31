@@ -36,26 +36,12 @@ std::string fiffTagToJson(Fiff::Tag tag) {
 
   std::stringstream stream;
   static int indent_ammout = 1;
-  std::stringstream indent_stream;
-  std::string indent = indent_stream.str();
+  std::string indent = std::string(indent_ammout * 2, ' ');
 
   if (tag.kind == Fiff::Kind::block_start) {
-    for (int i = 0; i < indent_ammout; ++i) {
-      indent_stream << "  ";
-    }
-    indent = indent_stream.str();
     stream << indent << "{\"tags\" : [\n";
-    indent_stream << "  ";
-    indent = indent_stream.str();
     ++indent_ammout;
-  } else {
-    for (int i = 0; i < indent_ammout; ++i) {
-      indent_stream << "  ";
-    }
-    indent = indent_stream.str();
-  }
-
-  if (tag.kind == Fiff::Kind::block_start) {
+    indent = std::string(indent_ammout * 2, ' ');
   }
 
   stream << indent << "{\n";
@@ -67,11 +53,7 @@ std::string fiffTagToJson(Fiff::Tag tag) {
 
   if (tag.kind == Fiff::Kind::block_end) {
     --indent_ammout;
-    std::stringstream indent_stream_post;
-    for (int i = 0; i < indent_ammout; ++i) {
-      indent_stream_post << "  ";
-    }
-    indent = indent_stream_post.str();
+    indent = std::string(indent_ammout * 2, ' ');
     stream << "\n" << indent << "]}";
   }
 
