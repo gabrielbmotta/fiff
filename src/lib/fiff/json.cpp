@@ -23,15 +23,38 @@ void addTagData(std::stringstream &stream, const Fiff::Tag &tag,
 
 // void jsonTagToFiff();
 //==============================================================================
-//
-// static std::string asJson(const ChannelPosition &, int indent);
-// static std::string asJson(const ChannelInfo &, int indent);
-// static std::string asJson(const ID &, int indent);
-// static std::string asJson(const DirectoryEntry &, int indent);
-// static std::string asJson(const DigitizerPoint &, int indent);
-// static std::string asJson(const DigitizerString &, int indent);
-// static std::string asJson(const Julian &, int indent);
-// static std::string asJson(const CoordinateTransformation &, int indent);
+
+std::string asJson(Fiff::Data data, int indent);
+std::string asJson(char value, int indent);
+std::string asJson(char *array, int len, int indent);
+std::string asJson(int16_t value, int indent);
+std::string asJson(int16_t *array, int len, int indent);
+std::string asJson(int32_t value, int indent);
+std::string asJson(int32_t *array, int len, int indent);
+std::string asJson(float value, int indent);
+std::string asJson(float *array, int len, int indent);
+std::string asJson(double value, int indent);
+std::string asJson(double *array, int len, int indent);
+std::string asJson(uint16_t value, int indent);
+std::string asJson(uint16_t *array, int len, int indent);
+std::string asJson(uint32_t value, int indent);
+std::string asJson(uint32_t *array, int len, int indent);
+std::string asJson(uint64_t value, int indent);
+std::string asJson(uint64_t *array, int len, int indent);
+std::string asJson(int64_t value, int indent);
+std::string asJson(int64_t *array, int len, int indent);
+std::string asJson(std::complex<float> value, int indent);
+std::string asJson(std::complex<float> *array, int len, int indent);
+std::string asJson(std::complex<double> value, int indent);
+std::string asJson(std::complex<double> *array, int len, int indent);
+// std::string asJson(const ChannelPosition &, int indent);
+// std::string asJson(const ChannelInfo &, int indent);
+// std::string asJson(const ID &, int indent);
+// std::string asJson(const DirectoryEntry &, int indent);
+// std::string asJson(const DigitizerPoint &, int indent);
+// std::string asJson(const DigitizerString &, int indent);
+// std::string asJson(const Julian &, int indent);
+// std::string asJson(const CoordinateTransformation &, int indent);
 //
 //==============================================================================
 /**
@@ -116,6 +139,53 @@ void addTagData(std::stringstream &stream, const Fiff::Tag &tag,
          << "\"temp_field\""
          << "\n";
 }
+
+std::string asJson(Fiff::Data data, int indent) {}
+
+std::string asJson(char value, int indent) {}
+
+std::string asJson(char *array, int len, int indent) {}
+
+std::string asJson(int16_t value, int indent) {}
+
+std::string asJson(int16_t *array, int len, int indent) {}
+
+std::string asJson(int32_t value, int indent) {}
+
+std::string asJson(int32_t *array, int len, int indent) {}
+
+std::string asJson(float value, int indent) {}
+
+std::string asJson(float *array, int len, int indent) {}
+
+std::string asJson(double value, int indent) {}
+
+std::string asJson(double *array, int len, int indent) {}
+
+std::string asJson(uint16_t value, int indent) {}
+
+std::string asJson(uint16_t *array, int len, int indent) {}
+
+std::string asJson(uint32_t value, int indent) {}
+
+std::string asJson(uint32_t *array, int len, int indent) {}
+
+std::string asJson(uint64_t value, int indent) {}
+
+std::string asJson(uint64_t *array, int len, int indent) {}
+
+std::string asJson(int64_t value, int indent) {}
+
+std::string asJson(int64_t *array, int len, int indent) {}
+
+std::string asJson(std::complex<float> value, int indent) {}
+
+std::string asJson(std::complex<float> *array, int len, int indent) {}
+
+std::string asJson(std::complex<double> value, int indent) {}
+
+std::string asJson(std::complex<double> *array, int len, int indent) {}
+
 //
 // //==============================================================================
 // /**
