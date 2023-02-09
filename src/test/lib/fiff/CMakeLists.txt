@@ -7,9 +7,11 @@ set(SOURCES
         u_output.cpp
         u_tag.cpp
         u_data.cpp
+        u_json.cpp
         i_inputoutput.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE fiff core)
+

@@ -4,8 +4,8 @@
 
 #include "catch.hpp"
 
-#include "fiff/output.hpp"
 #include "core/endian.hpp"
+#include "fiff/output.hpp"
 
 #include <iostream>
 
@@ -15,8 +15,7 @@ static const auto testSize = 4;
 static const auto testNext = 0;
 static const auto testData = 12345;
 
-static Fiff::Tag testTag()
-{
+static Fiff::Tag testTag() {
   Fiff::Tag tag;
   tag.kind = testKind;
   tag.type = testType;
@@ -27,8 +26,7 @@ static Fiff::Tag testTag()
   return tag;
 }
 
-TEST_CASE("Create output to file", "[output file]")
-{
+TEST_CASE("Create output to file", "[output file]") {
   auto file = Fiff::Output::toFile("test_create.fif");
 
   std::ifstream check("test_create.fif");
@@ -36,8 +34,7 @@ TEST_CASE("Create output to file", "[output file]")
   REQUIRE(check.is_open());
 }
 
-TEST_CASE("Write tag", "[output tag]")
-{
+TEST_CASE("Write tag", "[output tag]") {
   {
     auto file = Fiff::Output::toFile("test_write.fif");
     Fiff::Tag tag = testTag();
@@ -45,31 +42,31 @@ TEST_CASE("Write tag", "[output tag]")
   }
   std::ifstream check("test_write.fif", std::ios::binary);
 
-  char readbuff[std::max({sizeof testKind, sizeof testType, sizeof testSize, sizeof testNext, sizeof testData})];
+  char readbuff[std::max({sizeof testKind, sizeof testType, sizeof testSize,
+                          sizeof testNext, sizeof testData})];
 
   check.read(readbuff, sizeof testKind);
-  auto kind = *static_cast<int32_t *>(static_cast<void*>(readbuff));
+  auto kind = *static_cast<int32_t *>(static_cast<void *>(readbuff));
   REQUIRE(kind == testKind);
 
   check.read(readbuff, sizeof testType);
-  auto type = *static_cast<int32_t *>(static_cast<void*>(readbuff));
+  auto type = *static_cast<int32_t *>(static_cast<void *>(readbuff));
   REQUIRE(type == testType);
 
   check.read(readbuff, sizeof testSize);
-  auto size = *static_cast<int32_t *>(static_cast<void*>(readbuff));
+  auto size = *static_cast<int32_t *>(static_cast<void *>(readbuff));
   REQUIRE(size == testSize);
 
   check.read(readbuff, sizeof testData);
-  auto next = *static_cast<int32_t *>(static_cast<void*>(readbuff));
+  auto next = *static_cast<int32_t *>(static_cast<void *>(readbuff));
   REQUIRE(next == testNext);
 
   check.read(readbuff, 4);
-  auto data = *static_cast<int32_t *>(static_cast<void*>(readbuff));
+  auto data = *static_cast<int32_t *>(static_cast<void *>(readbuff));
   REQUIRE(data == testData);
 }
 
-TEST_CASE("Set endianess", "[output file endianess]")
-{
+TEST_CASE("Set endianess", "[output file endianess]") {
   {
     auto fileBE1 = Fiff::Output::toFile("BE1.fif", Endian::Absolute::big);
     auto fileBE2 = Fiff::Output::toFile("BE2.fif");
@@ -92,24 +89,28 @@ TEST_CASE("Set endianess", "[output file endianess]")
   }
 
   std::ifstream checkBE1("BE1.fif", std::ios::binary);
-  char readBE1[std::max({sizeof testKind, sizeof testType, sizeof testSize, sizeof testNext, sizeof testData})];
+  char readBE1[std::max({sizeof testKind, sizeof testType, sizeof testSize,
+                         sizeof testNext, sizeof testData})];
   checkBE1.read(readBE1, sizeof testKind);
-  auto kindBE1 = *static_cast<int32_t *>(static_cast<void*>(readBE1));
+  auto kindBE1 = *static_cast<int32_t *>(static_cast<void *>(readBE1));
 
   std::ifstream checkBE2("BE2.fif", std::ios::binary);
-  char readBE2[std::max({sizeof testKind, sizeof testType, sizeof testSize, sizeof testNext, sizeof testData})];
+  char readBE2[std::max({sizeof testKind, sizeof testType, sizeof testSize,
+                         sizeof testNext, sizeof testData})];
   checkBE2.read(readBE2, sizeof testKind);
-  auto kindBE2 = *static_cast<int32_t *>(static_cast<void*>(readBE2));
+  auto kindBE2 = *static_cast<int32_t *>(static_cast<void *>(readBE2));
 
   std::ifstream checkLE1("LE1.fif", std::ios::binary);
-  char readLE1[std::max({sizeof testKind, sizeof testType, sizeof testSize, sizeof testNext, sizeof testData})];
+  char readLE1[std::max({sizeof testKind, sizeof testType, sizeof testSize,
+                         sizeof testNext, sizeof testData})];
   checkLE1.read(readLE1, sizeof testKind);
-  auto kindLE1 = *static_cast<int32_t *>(static_cast<void*>(readLE1));
+  auto kindLE1 = *static_cast<int32_t *>(static_cast<void *>(readLE1));
 
   std::ifstream checkLE2("LE2.fif", std::ios::binary);
-  char readLE2[std::max({sizeof testKind, sizeof testType, sizeof testSize, sizeof testNext, sizeof testData})];
+  char readLE2[std::max({sizeof testKind, sizeof testType, sizeof testSize,
+                         sizeof testNext, sizeof testData})];
   checkLE2.read(readLE2, sizeof testKind);
-  auto kindLE2 = *static_cast<int32_t *>(static_cast<void*>(readLE2));
+  auto kindLE2 = *static_cast<int32_t *>(static_cast<void *>(readLE2));
 
   REQUIRE(kindBE1 == kindBE2);
   REQUIRE(kindLE1 == kindLE2);
@@ -124,8 +125,7 @@ TEST_CASE("Set endianess", "[output file endianess]")
   REQUIRE(((endswapKindBE == testKind) || (endswapKindLE == testKind)));
 }
 
-TEST_CASE("Position in output", "[output position]")
-{
+TEST_CASE("Position in output", "[output position]") {
   auto file = Fiff::Output::toFile("pos.fif");
   auto initPos = file.currentWritePosition();
 
