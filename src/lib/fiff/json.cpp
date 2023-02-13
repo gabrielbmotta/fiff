@@ -24,37 +24,37 @@ void addTagData(std::stringstream &stream, const Fiff::Tag &tag,
 // void jsonTagToFiff();
 //==============================================================================
 
-std::string asJson(Fiff::Data data, int indent);
-std::string asJson(char value, int indent);
-std::string asJson(char *array, int len, int indent);
-std::string asJson(int16_t value, int indent);
-std::string asJson(int16_t *array, int len, int indent);
-std::string asJson(int32_t value, int indent);
-std::string asJson(int32_t *array, int len, int indent);
-std::string asJson(float value, int indent);
-std::string asJson(float *array, int len, int indent);
-std::string asJson(double value, int indent);
-std::string asJson(double *array, int len, int indent);
-std::string asJson(uint16_t value, int indent);
-std::string asJson(uint16_t *array, int len, int indent);
-std::string asJson(uint32_t value, int indent);
-std::string asJson(uint32_t *array, int len, int indent);
-std::string asJson(uint64_t value, int indent);
-std::string asJson(uint64_t *array, int len, int indent);
-std::string asJson(int64_t value, int indent);
-std::string asJson(int64_t *array, int len, int indent);
-std::string asJson(std::complex<float> value, int indent);
-std::string asJson(std::complex<float> *array, int len, int indent);
-std::string asJson(std::complex<double> value, int indent);
-std::string asJson(std::complex<double> *array, int len, int indent);
-// std::string asJson(const ChannelPosition &, int indent);
-// std::string asJson(const ChannelInfo &, int indent);
-// std::string asJson(const ID &, int indent);
-// std::string asJson(const DirectoryEntry &, int indent);
-// std::string asJson(const DigitizerPoint &, int indent);
-// std::string asJson(const DigitizerString &, int indent);
-// std::string asJson(const Julian &, int indent);
-// std::string asJson(const CoordinateTransformation &, int indent);
+std::string asJson(Fiff::Data data, int indent_amount);
+std::string asJson(char value, int indent_amount);
+std::string asJson(char *array, int len, int indent_amount);
+std::string asJson(int16_t value, int indent_amount);
+std::string asJson(int16_t *array, int len, int indent_amount);
+std::string asJson(int32_t value, int indent_amount);
+std::string asJson(int32_t *array, int len, int indent_amount);
+std::string asJson(float value, int indent_amount);
+std::string asJson(float *array, int len, int indent_amount);
+std::string asJson(double value, int indent_amount);
+std::string asJson(double *array, int len, int indent_amount);
+std::string asJson(uint16_t value, int indent_amount);
+std::string asJson(uint16_t *array, int len, int indent_amount);
+std::string asJson(uint32_t value, int indent_amount);
+std::string asJson(uint32_t *array, int len, int indent_amount);
+std::string asJson(uint64_t value, int indent_amount);
+std::string asJson(uint64_t *array, int len, int indent_amount);
+std::string asJson(int64_t value, int indent_amount);
+std::string asJson(int64_t *array, int len, int indent_amount);
+std::string asJson(std::complex<float> value, int indent_amount);
+std::string asJson(std::complex<float> *array, int len, int indent_amount);
+std::string asJson(std::complex<double> value, int indent_amount);
+std::string asJson(std::complex<double> *array, int len, int indent_amount);
+// std::string asJson(const ChannelPosition &, int indent_amount);
+// std::string asJson(const ChannelInfo &, int indent_amount);
+// std::string asJson(const ID &, int indent_amount);
+// std::string asJson(const DirectoryEntry &, int indent_amount);
+// std::string asJson(const DigitizerPoint &, int indent_amount);
+// std::string asJson(const DigitizerString &, int indent_amount);
+// std::string asJson(const Julian &, int indent_amount);
+// std::string asJson(const CoordinateTransformation &, int indent_amount);
 //
 //==============================================================================
 /**
@@ -140,58 +140,187 @@ void addTagData(std::stringstream &stream, const Fiff::Tag &tag,
          << "\n";
 }
 
-std::string asJson(Fiff::Data data, int indent) {}
+std::string asJson(Fiff::Data data, int indent_amount) {
+  (void)data;
+  (void)indent_amount;
+  return "data_as_json";
+}
 
-std::string asJson(char value, int indent) {}
+std::string asJson(char value, int indent_amount) {
+  std::string indent(indent_amount * 2, ' ');
 
-std::string asJson(char *array, int len, int indent) {}
+  std::stringstream str;
+  str << indent << value;
 
-std::string asJson(int16_t value, int indent) {}
+  return str.str();
+}
 
-std::string asJson(int16_t *array, int len, int indent) {}
+std::string asJson(char *array, int len, int indent_amount) {
+  std::string indent(indent_amount * 2, ' ');
 
-std::string asJson(int32_t value, int indent) {}
+  std::stringstream str;
+  str << indent;
+  for (int i = 0; i < len; ++i) {
+    str << array[i];
+  }
+  return str.str();
+}
 
-std::string asJson(int32_t *array, int len, int indent) {}
+std::string asJson(int16_t value, int indent_amount) {
+  std::string indent(indent_amount * 2, ' ');
 
-std::string asJson(float value, int indent) {}
+  std::stringstream str;
+  str << indent << value;
 
-std::string asJson(float *array, int len, int indent) {}
+  return str.str();
+}
 
-std::string asJson(double value, int indent) {}
+std::string asJson(int16_t *array, int len, int indent_amount) {
+  std::string indent(indent_amount * 2, ' ');
 
-std::string asJson(double *array, int len, int indent) {}
+  std::stringstream str;
+  str << indent << "[";
+  for (int i = 0; i < len; ++i) {
+    str << array[i];
+    if (i != len - 1) {
+      str << ", ";
+    }
+  }
+  str << "]";
+  return str.str();
+}
 
-std::string asJson(uint16_t value, int indent) {}
+std::string asJson(int32_t value, int indent_amount) {
+  std::string indent(indent_amount * 2, ' ');
 
-std::string asJson(uint16_t *array, int len, int indent) {}
+  std::stringstream str;
+  str << indent << value;
 
-std::string asJson(uint32_t value, int indent) {}
+  return str.str();
+}
 
-std::string asJson(uint32_t *array, int len, int indent) {}
+std::string asJson(int32_t *array, int len, int indent_amount) {
+  std::string indent(indent_amount * 2, ' ');
 
-std::string asJson(uint64_t value, int indent) {}
+  std::stringstream str;
+  str << indent << "[";
+  for (int i = 0; i < len; ++i) {
+    str << array[i];
+    if (i != len - 1) {
+      str << ", ";
+    }
+  }
+  str << "]";
+  return str.str();
+}
 
-std::string asJson(uint64_t *array, int len, int indent) {}
+std::string asJson(float value, int indent_amount) {
+  std::string indent(indent_amount * 2, ' ');
 
-std::string asJson(int64_t value, int indent) {}
+  std::stringstream str;
+  str << indent << value;
 
-std::string asJson(int64_t *array, int len, int indent) {}
+  return str.str();
+}
 
-std::string asJson(std::complex<float> value, int indent) {}
+std::string asJson(float *array, int len, int indent_amount) {
+  std::string indent(indent_amount * 2, ' ');
 
-std::string asJson(std::complex<float> *array, int len, int indent) {}
+  std::stringstream str;
+  str << indent << "[";
+  for (int i = 0; i < len; ++i) {
+    str << array[i];
+    if (i != len - 1) {
+      str << ", ";
+    }
+  }
+  str << "]";
+  return str.str();
+}
 
-std::string asJson(std::complex<double> value, int indent) {}
+std::string asJson(double value, int indent_amount) {
+  std::string indent(indent_amount * 2, ' ');
 
-std::string asJson(std::complex<double> *array, int len, int indent) {}
+  std::stringstream str;
+  str << indent << value;
+
+  return str.str();
+}
+
+std::string asJson(double *array, int len, int indent_amount) {}
+
+std::string asJson(uint16_t value, int indent_amount) {
+  std::string indent(indent_amount * 2, ' ');
+
+  std::stringstream str;
+  str << indent << value;
+
+  return str.str();
+}
+
+std::string asJson(uint16_t *array, int len, int indent_amount) {}
+
+std::string asJson(uint32_t value, int indent_amount) {
+  std::string indent(indent_amount * 2, ' ');
+
+  std::stringstream str;
+  str << indent << value;
+
+  return str.str();
+}
+
+std::string asJson(uint32_t *array, int len, int indent_amount) {}
+
+std::string asJson(uint64_t value, int indent_amount) {
+  std::string indent(indent_amount * 2, ' ');
+
+  std::stringstream str;
+  str << indent << value;
+
+  return str.str();
+}
+
+std::string asJson(uint64_t *array, int len, int indent_amount) {}
+
+std::string asJson(int64_t value, int indent_amount) {
+  std::string indent(indent_amount * 2, ' ');
+
+  std::stringstream str;
+  str << indent << value;
+
+  return str.str();
+}
+
+std::string asJson(int64_t *array, int len, int indent_amount) {}
+
+std::string asJson(std::complex<float> value, int indent_amount) {
+  std::string indent(indent_amount * 2, ' ');
+
+  std::stringstream str;
+  str << indent << value;
+
+  return str.str();
+}
+
+std::string asJson(std::complex<float> *array, int len, int indent_amount) {}
+
+std::string asJson(std::complex<double> value, int indent_amount) {
+  std::string indent(indent_amount * 2, ' ');
+
+  std::stringstream str;
+  str << indent << value;
+
+  return str.str();
+}
+
+std::string asJson(std::complex<double> *array, int len, int indent_amount) {}
 
 //
 // //==============================================================================
 // /**
 //  * Formats channel position object as human-readable string.
 //  */
-// std::string asJson(const Fiff::ChannelPosition &pos, int indent) {
+// std::string asJson(const Fiff::ChannelPosition &pos, int indent_amount) {
 //   (void)indent;
 //   std::stringstream stream;
 //
@@ -213,7 +342,7 @@ std::string asJson(std::complex<double> *array, int len, int indent) {}
 // /**
 //  * Formats channel info object as human-readable string.
 //  */
-// std::string asJson(const Fiff::ChannelInfo &info, int indent) {
+// std::string asJson(const Fiff::ChannelInfo &info, int indent_amount) {
 //   (void)indent;
 //   std::stringstream stream;
 //
@@ -235,7 +364,7 @@ std::string asJson(std::complex<double> *array, int len, int indent) {}
 // /**
 //  * Formats id object as human-readable string.
 //  */
-// std::string asJson(const Fiff::ID &id, int indent) {
+// std::string asJson(const Fiff::ID &id, int indent_amount) {
 //   (void)indent;
 //   std::stringstream stream;
 //   stream << "Fiff version " << ((id.version & 0xFFFF0000) >> 16) << "."
@@ -250,7 +379,7 @@ std::string asJson(std::complex<double> *array, int len, int indent) {}
 // /**
 //  * Formats directory entry object as human-readable string.
 //  */
-// std::string asJson(const Fiff::DirectoryEntry &dirEntr, int indent) {
+// std::string asJson(const Fiff::DirectoryEntry &dirEntr, int indent_amount) {
 //   (void)indent;
 //   (void)dirEntr;
 //
@@ -261,7 +390,7 @@ std::string asJson(std::complex<double> *array, int len, int indent) {}
 // /**
 //  * Formats digitizer position object as human-readable string.
 //  */
-// std::string asJson(const Fiff::DigitizerPoint &dig, int indent) {
+// std::string asJson(const Fiff::DigitizerPoint &dig, int indent_amount) {
 //   (void)indent;
 //   std::stringstream stream;
 //   stream.precision(3);
@@ -275,7 +404,7 @@ std::string asJson(std::complex<double> *array, int len, int indent) {}
 // /**
 //  * Formats digitizer string object as human-readable string.
 //  */
-// std::string asJson(const Fiff::DigitizerString &dig, int indent) {
+// std::string asJson(const Fiff::DigitizerString &dig, int indent_amount) {
 //   (void)indent;
 //   (void)dig;
 //   return std::string();
@@ -285,7 +414,7 @@ std::string asJson(std::complex<double> *array, int len, int indent) {}
 // /**
 //  * Formats Julian date as human-readable string.
 //  */
-// std::string asJson(const Fiff::Julian &jul, int indent) {
+// std::string asJson(const Fiff::Julian &jul, int indent_amount) {
 //   (void)indent;
 //   (void)jul;
 //   return std::string();
@@ -294,7 +423,8 @@ std::string asJson(std::complex<double> *array, int len, int indent) {}
 // /**
 //  * Formats Coordinate transformation into human-readable string.
 //  */
-// std::string asJson(const Fiff::CoordinateTransformation &coord, int indent) {
+// std::string asJson(const Fiff::CoordinateTransformation &coord, int
+// indent_amount) {
 //   (void)indent;
 //   (void)coord;
 //
